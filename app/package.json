@@ -1,0 +1,24 @@
+{
+  "name": "ccchat",
+  "version": "1.0.0",
+  "description": "chat for cloud computing class",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0K5/CCChat.git"
+  },
+  "author": "Leonid Immel, Oliver Schneider",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/0K5/CCChat/issues"
+  },
+  "homepage": "https://github.com/0K5/CCChat#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "passport": "^0.4.0",
+    "socket.io": "^2.0.4"
+  }
+}

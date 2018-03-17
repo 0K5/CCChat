@@ -1,0 +1,136 @@
+% vim:ft=tex:
+%
+\documentclass[10pt,a4paper,landscape]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{kpfonts}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks = true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+
+\title{CCChat Documentation}
+\date{\today}
+\author{Leonid Immel and Oliver Schneider}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Node Modules (Serverside)}
+\begin{tabularx}{\textwidth}{ll}
+    \textbf{Module} & \textbf{Benefit}               \\
+    \toprule
+    express         & Web application framework that includes several useful features for web applications. \\ 
+    \midrule
+    passport        & Authentication middleware for session management. \\
+    \midrule
+    socket.io       & Realtime event-based bidirectional communication. \\
+    \midrule
+    winston         & Logger. \\
+    \midrule
+    body-parser     & Handles http post requests. Extracts body of http to req.body. \\
+    \midrule
+    serve-favicon   & Handles the requests from browsers for the favicon and caches the favicon. \\
+    \midrule
+    handlebars      & Builds semantic templates \\
+    \midrule
+    mongoose        & For MongoDB modeling \\
+    \midrule
+    mocha           & Testframework \\
+    \bottomrule
+\end{tabularx}
+
+\section{Vendor Libraries (Clientside)}
+\begin{tabularx}{\textwidth}{ll}
+    \textbf{Library}& \textbf{Benefit}       \\
+    \toprule
+    bootstrap       & Responsive website programming for mobile-first implementation.\\
+    \midrule
+    reactjs         & Helps to create user interfaces \\
+    \bottomrule
+\end{tabularx}
+    
+\section{Project Structure}
+\begin{itemize}
+        \renewcommand{\labelitemi}{$--$}
+        \renewcommand{\labelitemii}{$--$}
+        \renewcommand{\labelitemiii}{$--$}
+        \renewcommand{\labelitemiv}{$--$}
+        \item
+            app\\
+            \begin{itemize}
+                    \item
+                        public (all static served files)\\
+                        \begin{itemize}
+                                \item
+                                    js\\
+                                \item 
+                                    css\\
+                                \item 
+                                    html\\
+                                \item
+                                    libs\\
+                        \end{itemize}
+                    \item
+                        views (handlebar views)\\
+                    \item
+                        models (handles data, logic and storage of the app)\\
+                    \item
+                        controllers (defines the routes within the app)\\
+                    \item
+                        middleware (processes incoming requests before they are passed to the routes (loginauthentication))\\
+                    \item
+                        helpers (functionality and code shared in the whole app (regex- or renderoperations))\\
+                    \item
+                        tests (all tests for the application)\\
+            \end{itemize}
+\end{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
+\renewcommand{\labelitemii}{$\cdot$}
+\renewcommand{\labelitemiii}{$\diamond$}
+\renewcommand{\labelitemiv}{$\ast$}
+
+\section{Rules in documentation and formatting}
+\subsection{Documentation}
+\begin{description}
+        \item[modules]
+            The functionality of modules is described within a comment on top of the js-file.\\
+        \item[functions]
+            Functions with complex implementations or unclear names (should never happen!) need a commentation\\
+            Simpler functions are not commented to produce more readable code\\
+        \item[variables]
+            Variables require clear and good naming, never comment a variable unless absolutely necessary.\\ 
+            You should think a littel longer and find a better name.\\
+\end{description}
+\section{Logger}
+\section{Error Handling}
+\section{Useful websites}
+\begin{itemize}
+        \item
+            \href{https://socket.io/get-started/chat/}{Simple chat with socket.io}
+        \item
+            \href{www.handlebars.com}{Handlebars}
+        \item 
+            \href{https://www.packtpub.com/books/content/getting-started-react-and-bootstrap}{Combine Bootstrap and ReactJS}
+        \item
+            \href{http://mongoosejs.com/docs/guide.html}{Mongoose}
+        \item
+            \href{https://github.com/phutchins/pipo}{Example of secure chat in production}
+\end{itemize}
+\end{document}
