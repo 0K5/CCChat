@@ -2,9 +2,8 @@
   "name": "ccchat",
   "version": "1.0.0",
   "description": "chat for cloud computing class",
-  "main": "modules/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,13 +18,10 @@
   "homepage": "https://github.com/0K5/CCChat#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "bootstrap": "^4.0.0",
     "express": "^4.16.3",
-    "express-handlebars": "^3.0.0",
-    "jquery": "^1.12.4",
+    "handlebars": "^4.0.11",
     "mongoose": "^5.0.10",
     "passport": "^0.4.0",
-    "popper.js": "^1.14.1",
     "serve-favicon": "^2.4.5",
     "socket.io": "^2.0.4",
     "winston": "^2.4.1"
