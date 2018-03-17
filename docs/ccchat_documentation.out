@@ -1,8 +1,13 @@
 \BOOKMARK [1][-]{section.1}{Node Modules \(Serverside\)}{}% 1
 \BOOKMARK [1][-]{section.2}{Vendor Libraries \(Clientside\)}{}% 2
 \BOOKMARK [1][-]{section.3}{Project Structure}{}% 3
-\BOOKMARK [1][-]{section.4}{Rules in documentation and formatting}{}% 4
-\BOOKMARK [2][-]{subsection.4.1}{Documentation}{section.4}% 5
-\BOOKMARK [1][-]{section.5}{Logger}{}% 6
-\BOOKMARK [1][-]{section.6}{Error Handling}{}% 7
-\BOOKMARK [1][-]{section.7}{Useful websites}{}% 8
+\BOOKMARK [1][-]{section.4}{Documentation}{}% 4
+\BOOKMARK [1][-]{section.5}{Formatting}{}% 5
+\BOOKMARK [1][-]{section.6}{SSL}{}% 6
+\BOOKMARK [2][-]{subsection.6.1}{Create certificate}{section.6}% 7
+\BOOKMARK [2][-]{subsection.6.2}{Allow Certificate in browser for Dev}{section.6}% 8
+\BOOKMARK [3][-]{subsubsection.6.2.1}{Chromium / Chrome 64}{subsection.6.2}% 9
+\BOOKMARK [3][-]{subsubsection.6.2.2}{Firefox 59}{subsection.6.2}% 10
+\BOOKMARK [1][-]{section.7}{Logger}{}% 11
+\BOOKMARK [1][-]{section.8}{Error Handling}{}% 12
+\BOOKMARK [1][-]{section.9}{Useful websites}{}% 13

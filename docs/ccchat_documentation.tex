@@ -22,6 +22,30 @@
     filecolor=magenta,      
     urlcolor=cyan,
 }
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+    language=Java,
+    aboveskip=3mm,
+    belowskip=3mm,
+    showstringspaces=false,
+    columns=flexible,
+    basicstyle={\small\ttfamily},
+    numbers=none,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{dkgreen},
+    stringstyle=\color{mauve},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3
+}
+
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 
 \title{CCChat Documentation}
@@ -62,7 +86,7 @@
     \toprule
     bootstrap       & Responsive website programming for mobile-first implementation.\\
     \midrule
-    reactjs         & Helps to create user interfaces \\
+    jQuery          & Easier handling of javascript \\
     \bottomrule
 \end{tabularx}
     
@@ -106,8 +130,7 @@
 \renewcommand{\labelitemiii}{$\diamond$}
 \renewcommand{\labelitemiv}{$\ast$}
 
-\section{Rules in documentation and formatting}
-\subsection{Documentation}
+\section{Documentation}
 \begin{description}
         \item[modules]
             The functionality of modules is described within a comment on top of the js-file.\\
@@ -118,6 +141,66 @@
             Variables require clear and good naming, never comment a variable unless absolutely necessary.\\ 
             You should think a littel longer and find a better name.\\
 \end{description}
+\section{Formatting}
+We use the Eclipse JS Formatter standart for our code.\\
+\section{SSL}
+\subsection{Create certificate}
+\begin{lstlisting}
+openssl genrsa -out client-key.pem 2048
+openssl req -new -key client-key.pem -out client.csr
+openssl x509 -req -in client.csr -signkey client-key.pem -out client-cert.pem
+\end{lstlisting}
+\subsection{Allow Certificate in browser for Dev}
+\subsubsection{Chromium / Chrome 64}
+Option 1:\\
+\begin{enumerate}
+        \item
+                Go to Settings. Hit the „Advanced“ button on bottom of the page
+        \item
+                Click the „Manage certificates“ button in the „Privacy and security“ Tab
+        \item
+                Click the „Authorities“ Tab
+        \item
+                Click on „Import“
+        \item
+                Navigate to the cert file within your app source code folder.
+        \item
+                Click open and allow what you want to allow
+\end{enumerate}
+Option 2:\\
+\begin{enumerate}
+        \item
+                Open the side explitetly with the url „https://localhost:3000“
+        \item
+                Click the advanced Button
+        \item
+                Allow the certificate
+        \item 
+                Continue with Finish (see a little further down)
+        \item
+                follow option 2 until point 3.
+        \item
+                find your certificate in the list of authorities. 
+        \item
+                click expand on the certificate 
+        \item 
+                click the 3 dots that appear under the certificate
+        \item 
+                click „edit“
+        \item 
+                allow what you want to allow
+\end{enumerate}
+\subsubsection{Firefox 59}
+\begin{enumerate}
+        \item
+                Open the side explitetly with the url „https://localhost:3000“
+        \item
+                Click the „Advanced“ Button
+        \item 
+                Click „Add Exception“
+        \item
+                Click „Confirm Security Exception“
+\end{enumerate}
 \section{Logger}
 \section{Error Handling}
 \section{Useful websites}
@@ -132,5 +215,8 @@
             \href{http://mongoosejs.com/docs/guide.html}{Mongoose}
         \item
             \href{https://github.com/phutchins/pipo}{Example of secure chat in production}
+        \item
+            \href{https://support.securly.com/hc/en-us/articles/206081828-How-to-manually-install-the-Securly-SSL-certificate-in-Chrome}{Add a SSL-Cert in Chrome}
 \end{itemize}
+
 \end{document}
