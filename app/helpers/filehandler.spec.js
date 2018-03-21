@@ -14,24 +14,20 @@ describe('Test FileHandler', () => {
             fs.unlink(file, unlinkCallback);
 	});
     let readCallback = (data) => {
-        it('Read callback successful', async function(){
-            await assert.equal(content, data);
+        it('Read callback successful', function(done){
+            assert.equal(content, data);
             require('fs').unlink(filei, unlinkCallback);
+            done();
         });
     };
-    let readTest = () => {
-        it('Read from file', async function(){
-            await fileHandler.read(readCallback);
-        });
-    };
-    let writeCallback = () => {
-        it('Write callback successful', async function() {
-            await readTest();
-        });
-    };
-    it('Write to file', async function() {
+    it('Read from file', function(done){
+        fileHandler.read(readCallback);
+        done();
+    });
+    it('Write to file', function(done) {
         try {
-            await fileHandler.write(file, content, writeCallback);
+            fileHandler.write(file, content, writeCallback);
+            done();
         } catch (e) {
             assert.fail("Couldn't open ./test.txt", 'Opened ./test.txt', e.message);
         }
