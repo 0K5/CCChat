@@ -1,14 +1,15 @@
 \select@language {german}
-\contentsline {section}{\numberline {1}Node Modules (Serverside)}{2}{section.1}
-\contentsline {section}{\numberline {2}Vendor Libraries (Clientside)}{2}{section.2}
-\contentsline {section}{\numberline {3}Project Structure}{2}{section.3}
-\contentsline {section}{\numberline {4}Documentation}{3}{section.4}
-\contentsline {section}{\numberline {5}Formatting}{3}{section.5}
-\contentsline {section}{\numberline {6}SSL}{3}{section.6}
-\contentsline {subsection}{\numberline {6.1}Create certificate}{3}{subsection.6.1}
-\contentsline {subsection}{\numberline {6.2}Allow Certificate in browser for Dev}{4}{subsection.6.2}
-\contentsline {subsubsection}{\numberline {6.2.1}Chromium / Chrome 64}{4}{subsubsection.6.2.1}
-\contentsline {subsubsection}{\numberline {6.2.2}Firefox 59}{4}{subsubsection.6.2.2}
-\contentsline {section}{\numberline {7}Logger}{5}{section.7}
-\contentsline {section}{\numberline {8}Error Handling}{5}{section.8}
-\contentsline {section}{\numberline {9}Useful websites}{5}{section.9}
+\contentsline {section}{\numberline {1}Up next}{1}{section.1}
+\contentsline {section}{\numberline {2}Node Modules (Serverside)}{2}{section.2}
+\contentsline {section}{\numberline {3}Vendor Libraries (Clientside)}{2}{section.3}
+\contentsline {section}{\numberline {4}Project Structure}{2}{section.4}
+\contentsline {section}{\numberline {5}Documentation}{3}{section.5}
+\contentsline {section}{\numberline {6}Formatting}{3}{section.6}
+\contentsline {section}{\numberline {7}SSL}{4}{section.7}
+\contentsline {subsection}{\numberline {7.1}Create certificate}{4}{subsection.7.1}
+\contentsline {subsection}{\numberline {7.2}Allow Certificate in browser for Dev}{4}{subsection.7.2}
+\contentsline {subsubsection}{\numberline {7.2.1}Chromium / Chrome 64}{4}{subsubsection.7.2.1}
+\contentsline {subsubsection}{\numberline {7.2.2}Firefox 59}{5}{subsubsection.7.2.2}
+\contentsline {section}{\numberline {8}Logger}{5}{section.8}
+\contentsline {section}{\numberline {9}Error Handling}{5}{section.9}
+\contentsline {section}{\numberline {10}Useful websites}{5}{section.10}

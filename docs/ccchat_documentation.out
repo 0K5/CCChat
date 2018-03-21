@@ -1,13 +1,14 @@
-\BOOKMARK [1][-]{section.1}{Node Modules \(Serverside\)}{}% 1
-\BOOKMARK [1][-]{section.2}{Vendor Libraries \(Clientside\)}{}% 2
-\BOOKMARK [1][-]{section.3}{Project Structure}{}% 3
-\BOOKMARK [1][-]{section.4}{Documentation}{}% 4
-\BOOKMARK [1][-]{section.5}{Formatting}{}% 5
-\BOOKMARK [1][-]{section.6}{SSL}{}% 6
-\BOOKMARK [2][-]{subsection.6.1}{Create certificate}{section.6}% 7
-\BOOKMARK [2][-]{subsection.6.2}{Allow Certificate in browser for Dev}{section.6}% 8
-\BOOKMARK [3][-]{subsubsection.6.2.1}{Chromium / Chrome 64}{subsection.6.2}% 9
-\BOOKMARK [3][-]{subsubsection.6.2.2}{Firefox 59}{subsection.6.2}% 10
-\BOOKMARK [1][-]{section.7}{Logger}{}% 11
-\BOOKMARK [1][-]{section.8}{Error Handling}{}% 12
-\BOOKMARK [1][-]{section.9}{Useful websites}{}% 13
+\BOOKMARK [1][-]{section.1}{Up next}{}% 1
+\BOOKMARK [1][-]{section.2}{Node Modules \(Serverside\)}{}% 2
+\BOOKMARK [1][-]{section.3}{Vendor Libraries \(Clientside\)}{}% 3
+\BOOKMARK [1][-]{section.4}{Project Structure}{}% 4
+\BOOKMARK [1][-]{section.5}{Documentation}{}% 5
+\BOOKMARK [1][-]{section.6}{Formatting}{}% 6
+\BOOKMARK [1][-]{section.7}{SSL}{}% 7
+\BOOKMARK [2][-]{subsection.7.1}{Create certificate}{section.7}% 8
+\BOOKMARK [2][-]{subsection.7.2}{Allow Certificate in browser for Dev}{section.7}% 9
+\BOOKMARK [3][-]{subsubsection.7.2.1}{Chromium / Chrome 64}{subsection.7.2}% 10
+\BOOKMARK [3][-]{subsubsection.7.2.2}{Firefox 59}{subsection.7.2}% 11
+\BOOKMARK [1][-]{section.8}{Logger}{}% 12
+\BOOKMARK [1][-]{section.9}{Error Handling}{}% 13
+\BOOKMARK [1][-]{section.10}{Useful websites}{}% 14
