@@ -4,7 +4,7 @@ let log = (logLevel) => {
         transports: [
             new winston.transports.File({
                 level: 'info',
-                filename: './logs/all.log',
+                filename: typeof global.it === 'function' ? './logs/test.log' : './logs/all.log',
                 handleExceptions: true,
                 json: true,
                 maxsize: 5242880,
