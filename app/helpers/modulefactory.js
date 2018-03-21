@@ -1,41 +1,27 @@
-function ModuleFactory() {
+let ModuleFactory = (function ModuleFactory() {
     let modules = {};
 	let path = require('path');
     let fs = require('fs');
-    let addModule = (moduleName, modulePath) => {
-		console.log(moduleName);
-		console.log(modulePath);
-    }
-	function ModuleFinder(dir){
-		let that = this;
-		that.modDir = dir;
-		console.log('ModDir: ' + that.modDir);
-		fs.readdir(modDir , (err, files) => {
-			if(err){
-				throw err
-			}
-			files.forEach((file) => {
-				console.log(file);
-				if (file.endsWith('.js') && !file.endsWith('.spec.js')){
-					modules[file] = that.modDir + file;
-					console.log(that.modDir + file);
-				}else if(fs.statSync('../' + file) && fs.statSync('../' + file).isDirectory()){
-					new ModuleFinder('../' + file);
-				}
-			})
+	let findModules = (dir, filelist) => {
+        let files = fs.readdirSync(dir);
+        filelist = filelist || [];
+        files.forEach((file) => {
+            if(fs.statSync(path.join(dir, file)).isDirectory() && file !== 'node_modules'){
+                filelist = findModules(path.join(dir, file), filelist);
+            }else if(file && filelist && file.endsWith('.js') && !file.endsWith('.spec.js')){
+                filelist.push(path.join(dir, file));
+                modules[file] = dir.endsWith('/') ? dir + file : dir + '/' + file;
+            }
+            return filelist;
 		});
-	}
-	ModuleFinder('../');
-    let logger = require('./logger.js');
-    let filehandler = require('./filehandler.js');
-    let get = (moduleName) => {
-        switch (moduleName) {
-            case 'logger':
-                return require('./logger.js');
-            case 'filehandler':
-                return require('./filehandler.js');
-        }
+    };
+    console.log('Init');
+    findModules('../');
+    return get = (moduleName) => {
+            return modules[moduleName];
     }
-}
+})();
 
-ModuleFactory();
+module.exports = {
+        get : ModuleFactory
+}

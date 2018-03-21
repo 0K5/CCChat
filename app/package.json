@@ -5,7 +5,7 @@
   "main": "modules/index.js",
   "scripts": {
     "start": "app.js",
-    "test": "nodemon --watch . --exec 'mocha ./**/*.spec.js || true'"
+    "test": "mocha ./**/*.spec.js"
   },
   "repository": {
     "type": "git",
