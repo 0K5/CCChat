@@ -43,14 +43,14 @@ let MultipleModulesFactory = (function ModuleFactory() {
     let modules = findModules('.js');
     return get = (moduleEnding) => {
         let mod = moduleEnding.endsWith('.js') ? moduleEnding : moduleEnding + '.js';
-        mod = moduleEnding.startsWidth('.') ? moduleEnding : '.' + moduleEnding;
-        let createdModules = []
+        mod = moduleEnding.startsWith('.') ? moduleEnding : '.' + moduleEnding;
+		let createdModules = {};
         for (modName in modules) {
-            if (modName.includes(moduleEnding)) {
-                createdModules.push(require(modules[mod]));
+            if (modName.includes(mod)) {
+                createdModules[modName] = require(modules[modName]);
             }
-            return createdModules;
         }
+        return createdModules;
     }
 })();
 
