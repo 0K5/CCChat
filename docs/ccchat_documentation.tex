@@ -59,13 +59,9 @@
 \section{Up next}
 \begin{enumerate}
         \item
-                ModuleFactory Test
-        \item   
-                Logger Test
+                routes
         \item
-                FileReader Test
-        \item
-                Login Implementation
+                login
 \end{enumerate}
 
 \section{Node Modules (Serverside)}
@@ -90,7 +86,11 @@
     \midrule
     redis           & For Redis Connection. Saves the cookies. \\
     \midrule
+    session-file-store & Fallback for failed database connections.\\
+    \midrule
     mocha           & Testframework \\
+    \midrule
+    chai            & Helper for testframework \\
     \bottomrule
 \end{tabularx}
 
@@ -126,17 +126,23 @@
                                     libs\\
                         \end{itemize}
                     \item
-                        views (handlebar views)\\
-                    \item
-                        models (handles data, logic and storage of the app)\\
-                    \item
-                        controllers (defines the routes within the app)\\
+                        services\\
+                        \begin{itemize}
+                                \item
+                                    <<servicename>>.route.js (Route)\\
+                                \item
+                                    <<servicename>>.views.js (Handlebars view)\\
+                                \item
+                                    <<servicename>>.spec.js (Test)\\
+                                \item
+                                    <<servicename>>.module.js (Module/Logic)\\
+                        \end{itemize}
                     \item
                         middleware (processes incoming requests before they are passed to the routes (loginauthentication))\\
                     \item
                         helpers (functionality and code shared in the whole app (regex- or renderoperations))\\
                     \item
-                        tests (all tests for the application)\\
+                        tests (applicationtests)\\
             \end{itemize}
 \end{itemize}
 \renewcommand{\labelitemi}{$\bullet$}
