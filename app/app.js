@@ -9,7 +9,7 @@
     logger.logInfo('Setting up App');
     let express = require('express')
     let app = express();
-    let fs = require('fs');
+    let fs = require('fs-extra');
     let forceSsl = require('express-force-ssl');
     let bodyParser = require('body-parser');
     app.use(forceSsl);
@@ -18,12 +18,6 @@
         extended: true
     }));
 
-    logger.logInfo('Setting up routes');
-	let router = express.Router();
-	let routes = require('./helpers/modulefactory.js').getAll('.route.js');
-	for(route in routes){
-		app.use(route,routes[route]);
-	}
 
     logger.logInfo('Setting up Server');
     let https = require('https');
@@ -37,10 +31,18 @@
     let http = require('http');
     let httpServ = http.createServer(app).listen(port);
 
-    logger.logInfo('Setting up redisstore');
+	let setUpSessionStorage = () => {
+    logger.logInfo('Setting up storage for sessions');
     let session = require('express-session');
 	let redisStore = require('connect-redis')(session);
 	let redis = require('redis');
+	let FileStore = require('session-file-store')(session);
+	let storage = new FileStore({
+                path: './tmp/sessions/',
+                useAsync: 6479,
+                reapInterval: 5000,
+				maxAge: 10000
+            });
     //TODO: With valid ssl certificate comment in
     //let tls = require('tls');
     //let ssl = {
@@ -63,42 +65,30 @@
 		client.end(true);
 			client = redis.createClient();
 			client.on('error', function(){
-				client.end(true);
 				logger.logWarn("Connection to locale redis database couldn't be established");
-				setUpLocalSession();
+				client.end(true);
+				setUpSession(storage,session);
 			});
 	});
     client.on('connect', function() {
-        logger.logInfo('Connected to Redislabs');
-		setUpRedisSession();
-	});
-	let setUpRedisSession = () => {
-		app.use(session({
-            secret: '14gty8i9oph1q45o;pgh3p0[987oui2dh3q2l4iugfrh',
-            store: new redisStore({
+		storage = new redisStore({
                 host: 'localhost',
                 port: 6479,
                 client,
                 ttl: 260
-            }),
-            saveUninitialized: false,
-            resave: false
-        }));
-		setUpSockets();
+            });
+		setUpSession(storage,session);
+	});
 	};
-	let setUpLocalSession = () => {
-		let FileStore = require('session-file-store')(session);
+	setUpSessionStorage();
+	let setUpSession = (storage, session) => {
 		app.use(session({
-            secret: 'saSD3049##fuyhguwvFDFVAeu4#$%ii232394923df',
-            store: new FileStore({
-                path: './tmp/sessions/',
-                useAsync: 6479,
-                reapInterval: 5000,
-				maxAge: 10000
-            }),
+            secret: '14gty8i9oph1q45o;pgh3p0[987oui2dh3q2l4iugfrh',
+            store: storage,
             saveUninitialized: false,
             resave: false
         }));
+        logger.logInfo('Sessions handled over redis storage');
 		setUpSockets();
 	};
 	let setUpSockets = () => {
@@ -107,21 +97,47 @@
     	io.on('connection', (socket) => {
 			logger.logInfo('Socket connected with id '+socket.id)
     	});
-
+		setUpHandlebars();
+	};
+	let setUpHandlebars = () => {
     	logger.logInfo('Setting up handlebars');
-    	app.engine('hbs', handlebars({
-    	    extname: 'hbs',
-    	    defaultLayout: 'main',
-    	    layoutsDir: __dirname + '/views/layouts/'
-    	}));
-    	app.set('views', path.join(__dirname, 'views/'));
-    	app.set('view engine', 'hbs');
-
+		let allViews = fs.readdirSync('./services');
+		allViews = allViews.filter((dir) => fs.statSync('./services/' + dir).isDirectory());
+		allViews = allViews.map((dir) => './services/' + dir + '/' + fs.readdirSync('./services/' + dir));
+		allViews = allViews.filter((dir) => dir.endsWith('.view.hbs'));
+		console.log(allViews);
+		let copyCount = allViews.length;
+		allViews.forEach((dir) => {
+			if(dir.endsWith('.view.hbs')){
+				fs.copy(dir, './tmp/views/' + dir.substring(dir.lastIndexOf('/')), (err) => {
+					if (err) {
+		    		    console.log(err);
+		    		}
+		    		copyCount--;
+		    		if (copyCount === 0) {
+		    		    setViewsToTmp();
+		    		}
+				})
+			}
+		});
+		let setViewsToTmp = () => {
+			allViews = allViews.map((dir) => path.join(__dirname + 'services/' + dir));
+    		app.engine('hbs', handlebars({
+    		    extname: 'hbs',
+    		    defaultLayout: 'main',
+    		    layoutsDir: __dirname + '/layouts/'
+    		}));
+    		app.set('views', path.join(__dirname + '/tmp/views/'));
+    		app.set('view engine', '.hbs');
+			setUpExpress();
+		};
+	};
+	let setUpExpress = () => { 
     	logger.logInfo('Initializing express application');
     	app.use(express.static(path.join(__dirname, '/public')));
     	app.get('/', function(req, res, next) {
     	    logger.logDeb('SessionId: ' + req.session.id);
-    	    res.render('index.hbs', {
+    	    res.render('empty.view.hbs', {
     	        title: 'RPSGame'
     	    });
     	});
