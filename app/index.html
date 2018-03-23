@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css https://fonts.googleapis.com/css?family=Open+Sans%7CPermanent+Marker">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self' https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css https://fonts.googleapis.com/css?family=Open+Sans%7CPermanent+Marker">
+    <meta http-equiv="X-WebKit-CSP" content="default-src 'self'; script-src 'self' https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css https://fonts.googleapis.com/css?family=Open+Sans%7CPermanent+Marker"-->
+	<title>Chat_2018</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<!--link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans%7CPermanent+Marker" integrity="sha384-W3AAwzunQVBmxeKdRTb1USqQ3d37E0qZV9xuUaPUYhKtvWNqxYOXbGZoEipQbatP" crossorigin="anonymous"-->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans%7CPermanent+Marker">
+	<script src="https://code.jquery.com/jquery-latest.min.js" integrity="sha384-UM1JrZIpBwVf5jj9dTKVvGiiZPZTLVoq4sfdvIe9SBumsvCuv6AHDNtEiIb5h1kU" crossorigin="anonymous"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+</head>
+
+<body>
+	<div class="container">
+		<div id="userFormArea" class="row">				
+			<div class="col-md-4" class="forms">
+				<form id="userFormLogin" autocomplete="off">
+					<div class="form-group">
+						<label><h3>Login:</h3></label>
+						<br>
+						<label>Enter Username</label>
+						<input type="text" class="form-control" id="usernameLogin" name="usernameLogin" required>
+						<label>Enter Password</label>
+						<input type="password" class="form-control" id="passwordnameLogin" name="passwordnameLogin" required>
+						<br>
+						<input type="submit" id="userlogin" class="btn btn-primary" value="Login"/>
+					</div>		
+				</form>
+			</div>
+				
+			<div class="col-md-4" class="forms">
+				<form id="userFormRegister" autocomplete="<fieldset class="well the-fieldset">
+					<div class="form-group">
+						<label><h3>Register:</h3></label>
+						<br>
+						<label>Enter Username</label>
+						<input type="text" class="form-control" id="usernameRegister" name="usernameRegister" required>
+						<br>
+						<label>Enter Password</label>
+						<input type="password" class="form-control" id="passwordnameRegister" name="passwordnameRegister" required>
+						<br>
+						<label>Repeat Password</label>
+						<input type="password" class="form-control" id="passwordnameRegisterRepeat" name="passwordnameRegisterRepeat" required>
+						<br>
+						<input type="submit" id="userregister" class="btn btn-primary" value="Register"/>
+					</div>
+				</form>
+			</div>
+		</div>
+			
+		<div id="messageArea" class="row">
+			<div class="col-md-3">				
+				<h3>Online Users</h3>
+				<div class="list-group" id="users"></div>					
+			</div>
+					
+			<div class="col-md-6">
+				<div class="chat" id="chat">
+					<form id="messageForm">
+					<h3>Enter Message</h3>
+						<div class="form-group">
+							<textarea class="form-control" id="message"></textarea>
+							<br>
+							<input type="submit" class="btn btn-primary" value="Send Message"/>
+							<input type="submit" class="btn btn-primary" value="Send File"/>
+						</div>
+					</form>
+				</div>
+			</div>
+			
+			<div class="col-md-3">				
+				<h3>Users</h3>
+				<div class="list-group" id="users"></div>							
+			</div>
+				
+		</div>
+	</div>
+	
+	<script>
+		$(function(){
+			var socket = io.connect();
+			var $messageForm = $('#messageForm');
+			var $message = $('#message');
+			var $chat = $('#chat');
+			var $messageArea = $('#messageArea');
+			var $userFormArea = $('#userFormArea');
+			var $userFormLogin = $('#userFormLogin');
+			var $userFormRegister = $('#userFormRegister');
+			var $users = $('#users');
+			var $usersForPM = $('#usersForPM');
+			var $usernameLogin = $('#usernameLogin');
+			var $passwordnameLogin = $('#passwordnameLogin');
+			var $usernameRegister = $('#usernameRegister');
+			var $passwordnameRegister = $('#passwordnameRegister');
+			var $passwordnameRegisterRepeat = $('#passwordnameRegisterRepeat');
+			
+			$(document).ready(function () {
+				$('#userFormLogin').click(function () {
+					$usernameRegister.prop("disabled", true);
+					$passwordnameRegister.prop("disabled", true);
+					$passwordnameRegisterRepeat.prop("disabled", true);
+					$usernameRegister.val('');
+					$passwordnameRegister.val('');
+					$passwordnameRegisterRepeat.val('');
+					$usernameLogin.prop("disabled", false);
+					$passwordnameLogin.prop("disabled", false);
+				});
+			});
+			
+			$(document).ready(function () {
+				$('#userFormRegister').click(function () {
+					$usernameLogin.prop("disabled", true);
+					$passwordnameLogin.prop("disabled", true);
+					$usernameLogin.val('');
+					$passwordnameLogin.val('');
+					$usernameRegister.prop("disabled", false);
+					$passwordnameRegister.prop("disabled", false);
+					$passwordnameRegisterRepeat.prop("disabled", false);
+				});
+			});
+					
+			$messageForm.submit(function(e){
+				e.preventDefault();
+				socket.emit('send message', $message.val());
+				$message.val('');
+			});
+			
+			socket.on('new message', function(data){
+				$chat.append('<div class="well"><strong>' + data.user +'</strong>'+' (' + data.timestamp +  ')<br>' + data.msg + '</div>');
+			});
+			
+			socket.on('private message', function(data){
+				$chat.append('<i><div class="well" style="background:DeepSkyBlue; color:white"><strong>' + data.user + '</strong> wrote at ' + data.timestamp +  ':<br><br>' + data.msg + '</div></i>');
+			});
+			
+			socket.on('new user enlisted', function(data){
+				$chat.append('<div class="well" style="background:green; color:white"><strong>' + data.user + '</strong> joined the chatroom</div>');
+			});
+			
+			socket.on('user left', function(data){
+				$chat.append('<div class="well" style="background:red; color:white"><strong>' + data.user+ '</strong> left the chatroom</div>');
+			});
+			
+			
+	/*		
+			socket.on('user list', function(data){
+				$chat.append('<div class="well" style="background:purple; color:white">Userlist: <strong><p>' + data.list + '</p></strong></div>');
+			});
+		*/	
+			
+			//login form transmits username and password
+			$userFormLogin.submit(function(e){
+				e.preventDefault();
+				var loginDetails = {
+					username: $usernameLogin.val(),
+					passwordnameLogin: $passwordnameLogin.val()
+				}
+				socket.emit('new user', loginDetails,function(data){
+					if(data){
+						$userFormArea.hide();
+						$messageArea.show();
+					}
+				});
+			});
+		
+			socket.on('get users', function(data){
+				var html = '';
+				for(i=0; i<data.length;i++){
+					html += '<div class="list-group-item">' + data[i] + '</div><br>';
+				}
+				$users.html(html);
+			});
+			
+			
+			//register form transmits username and password
+			$userFormRegister.submit(function(e){
+				e.preventDefault();
+				if($usernameRegister.val().length >= 2){
+					if(($passwordnameRegister.val() == $passwordnameRegisterRepeat.val())&&($passwordnameRegister.val().length >= 5 && $passwordnameRegisterRepeat.val().length >= 5)){
+						//multiple parameters are combined in object
+						var registerDetails = {
+							username: $usernameRegister.val(),
+							passwordnameRegister: $passwordnameRegister.val(),
+							passwordnameRegisterRepeat: $passwordnameRegisterRepeat.val()
+						}
+						socket.emit('new user', registerDetails,function(data){
+							if(data){
+								$userFormArea.hide();
+								$messageArea.show();
+							}
+						});
+						$usernameRegister.val('');
+						$passwordnameRegister.val('');
+						$passwordnameRegisterRepeat.val('');
+					}
+				} else {
+					alert("Please check your given information. A username should be atleast two characters long. The password's length should be five characters or greater.");
+				}
+			});
+		/*	
+			socket.on('get users', function(data){
+				var html = '';
+				for(i=0; i<data.length;i++){
+					html += '<div class="list-group-item">' + data[i] + '</div><br>';
+				}
+				$users.html(html);
+			});
+		*/
+		});
+	
+	</script>
+	
+</body>
+</html>
