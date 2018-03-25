@@ -1,0 +1,12 @@
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+body{
+	margin-top: 30px;
+}
+
+#messageArea{
+	display:none;
+}
+.well li{
+	margin: 10px;
+}
