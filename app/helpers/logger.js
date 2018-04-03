@@ -1,10 +1,16 @@
+let fs = require('fs');
+
 let log = (logLevel) => {
     let winston = require('winston');
+	let dir = './tmp/logs/';
+	if(!fs.existsSync(dir)){
+		fs.mkdirSync(dir);
+	}
     let logger = new winston.Logger({
         transports: [
             new winston.transports.File({
                 level: 'info',
-                filename: typeof global.it === 'function' ? '.tmp/logs/test.log' : './tmp/logs/all.log',
+                filename: typeof global.it === 'function' ? dir + 'test.log' : dir + 'all.log',
                 handleExceptions: true,
                 json: true,
                 maxsize: 5242880,

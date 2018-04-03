@@ -5,7 +5,7 @@ describe('Logger Test', function() {
 	it('Logging Info', () => {
 		let log = 'TestLog';
 		logger.logInfo(log);
-		fs.readFile('./logs/test.log', 'utf8', (err, data) => {
+		fs.readFile('./tmp/logs/test.log', 'utf8', (err, data) => {
 			if(err){
 				chai.assert.fail("Couldn't write log", "Wrote log", err.message);
 			}

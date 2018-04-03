@@ -35,8 +35,16 @@
         let handlebars = require('express-handlebars');
         let allViews = fs.readdirSync('./services');
         allViews = allViews.filter((dir) => fs.statSync('./services/' + dir).isDirectory());
-        allViews = allViews.map((dir) => './services/' + dir + '/' + fs.readdirSync('./services/' + dir));
-        allViews = allViews.filter((dir) => dir.endsWith('.view.hbs'));
+        allViews = allViews.filter((dir) => {
+			try{
+				fs.readFileSync('./services/'+dir+'/'+dir+'.view.hbs');
+				return true;
+			}catch(err){
+				logger.logErr('No view in service "./services/'+dir+'/"');
+				return false;
+			}
+		});
+        allViews = allViews.map((dir) => './services/' + dir + '/' +dir+'.view.hbs');
         let copyCount = allViews.length;
         let setViewsToTmp = () => {
             allViews = allViews.map((dir) => path.join(__dirname + 'services/' + dir));
@@ -53,7 +61,7 @@
             if (dir.endsWith('.view.hbs')) {
                 fs.copy(dir, './tmp/views/' + dir.substring(dir.lastIndexOf('/')), (err) => {
                     if (err) {
-                        console.log(err);
+                        logger.logErr(err);
                     }
                     copyCount--;
                     if (copyCount === 0) {
@@ -64,8 +72,12 @@
         });
     };
 
+	let setUpDatabase = (app, server) => {
+		require('./helpers/database.js').init(app,server, setUpHandlebars);
+	};
+
     let setUpSockets = (app, server) => {
-        require('./helpers/sockets.js').init(app, server, setUpHandlebars);
+        require('./helpers/sockets.js').init(app, server, setUpDatabase);
     };
 
     let setUpSessions = (app, server) => {

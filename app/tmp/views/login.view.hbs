@@ -1,0 +1,40 @@
+<div class="container">
+	<div id="userFormArea" class="row">				
+		<div class="col-md-4" class="forms">
+			<form id="userFormLogin" autocomplete="off">
+				<div class="form-group">
+					<label><h3>Login:</h3></label>
+					<br>
+					<label>Enter Username</label>
+					<input type="text" class="form-control" id="usernameLogin" name="usernameLogin" required>
+					<label>Enter Password</label>
+					<input type="password" class="form-control" id="passwordnameLogin" name="passwordnameLogin" required>
+					<br>
+					<input type="submit" id="userlogin" class="btn btn-primary" value="Login"/>
+				</div>		
+			</form>
+		</div>
+			
+		<div class="col-md-4" class="forms">
+			<form id="userFormRegister" autocomplete='<fieldset class="well the-fieldset"'>
+				<div class="form-group">
+					<label><h3>Register:</h3></label>
+					<br>
+					<label>Enter Username</label>
+					<input type="text" class="form-control" id="usernameRegister" name="usernameRegister" required>
+					<br>
+					<label>Enter Password</label>
+					<input type="password" class="form-control" id="passwordnameRegister" name="passwordnameRegister" required>
+					<br>
+					<label>Repeat Password</label>
+					<input type="password" class="form-control" id="passwordnameRegisterRepeat" name="passwordnameRegisterRepeat" required>
+					<br>
+					<input type="submit" id="userregister" class="btn btn-primary" value="Register"/>
+				</div>
+			</form>
+		</div>
+    </div>
+</div>
+<script type="text/javascript">
+    var socket = io.connect(window.location.href);
+</script>
