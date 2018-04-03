@@ -1,6 +1,0 @@
-/*
- * index.js
- */
-'use strict';
-
-

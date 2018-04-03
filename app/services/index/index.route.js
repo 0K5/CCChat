@@ -1,15 +1,24 @@
 let express = require('express');
 let router = express.Router();
 let logger = require('../../helpers/logger.js');
+let db = require('../../helpers/database.js');
 
 //let Renderer = require('../../helpers/modulefactory.js').get('Renderer.js');
 
-router.get('/', (req, res, next) => {
+function VerifySession (req, res, next){
+	this.callback = function(user){
+		if(user){
+			res.render('chat.view.hbs', {
+				title: 'CCChat'
+			});
+		}else{
+			res.redirect('https://' + req.get('host') + '/login');
+		}
+	};
+}
 
-	logger.logDeb('SessionId: ' + req.session.id);
-    res.render('empty.view.hbs', {
-    title: 'RPSGame'
-	});
+router.get('/', (req, res, next) => {
+	db.read('users', req.session.id, new VerifySession(req,res,next).callback);
 });
 
 module.exports = router;

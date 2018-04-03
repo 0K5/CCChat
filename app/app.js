@@ -15,7 +15,7 @@
     let mimeTypes = {
         ".html": "text/html",
         ".css": "text/css",
-        ".js": "application/javascript",
+        ".js": "text/javascript",
         ".png": "image/png",
         ".gif": "image/gif",
         ".jpg": "image/jpeg",
@@ -24,27 +24,39 @@
         ".babylonmeshdata": "application/babylonmeshdata"
     };
     express.static.mime.define(mimeTypes);
+
+	let getServiceFiles = (fileExtension) => {
+        let allFiles = fs.readdirSync('./services');
+        allFiles = allFiles.filter((dir) => fs.statSync('./services/' + dir).isDirectory());
+        allFiles = allFiles.filter((dir) => {
+			try{
+				fs.readFileSync('./services/'+dir+'/'+dir+fileExtension);
+				return true;
+			}catch(err){
+				logger.logErr('No '+fileExtension+' in service "./services/'+dir+'/"');
+				return false;
+			}
+		});
+        allFiles = allFiles.map((dir) => './services/' + dir + '/' +dir+fileExtension);
+		return allFiles;
+	};
+
     let setUpExpress = (app, server) => {
         logger.logInfo('Initializing express application');
         app.use(express.static(path.join(__dirname, '/public')));
         app.use('/', require('./services/index/index.route.js'));
+		let allRoutes = getServiceFiles('.route.js');
+		allRoutes.forEach((routeFile) => {
+			let route = routeFile.substring(routeFile.lastIndexOf('/'));
+			route = route.substring(0, route.indexOf('.'));
+			app.use(route, require(routeFile));
+		});
     };
 
     let setUpHandlebars = (app, server) => {
         logger.logInfo('Setting up handlebars');
         let handlebars = require('express-handlebars');
-        let allViews = fs.readdirSync('./services');
-        allViews = allViews.filter((dir) => fs.statSync('./services/' + dir).isDirectory());
-        allViews = allViews.filter((dir) => {
-			try{
-				fs.readFileSync('./services/'+dir+'/'+dir+'.view.hbs');
-				return true;
-			}catch(err){
-				logger.logErr('No view in service "./services/'+dir+'/"');
-				return false;
-			}
-		});
-        allViews = allViews.map((dir) => './services/' + dir + '/' +dir+'.view.hbs');
+		let allViews = getServiceFiles('.view.hbs');
         let copyCount = allViews.length;
         let setViewsToTmp = () => {
             allViews = allViews.map((dir) => path.join(__dirname + 'services/' + dir));

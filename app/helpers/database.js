@@ -61,8 +61,12 @@ let create = (dict, id, data, callback) => {
 		}
 	}else{
 		let insertData = () =>{
-		let insData = data;
-		insData['_id'] = id;
+			let insData = data;
+			if('id' in Object.keys(id)){
+				insData['id'] = id._id;
+			} else {
+				insData['id'] = id;
+			}
 			database.collection(dict).insertOne(insData, function(err, res){
 				if(err){
 					update(dict, id, data, callback);
@@ -128,7 +132,7 @@ let update = (dict, id, data, callback) => {
 			callback(false);
 		}
 	}else{
-		database.collection(dict).updateOne({'_id':id},{ $set: data},function(err, res){
+		database.collection(dict).updateOne(id,{ $set: data},function(err, res){
 			if(err){
 				logger.logWarn("Document with id "+id+" couldn't be updated");
 				logger.logErr(err);
