@@ -45,6 +45,21 @@ function loadChats(sessionId, socket){
 		db.read('chats', {id: sessionId}, new chatsLoaded(sessionId, socket).callback);
 	}
 }
+function chatCreated(socket){
+	this.callback = function(chat){
+		socket.emit('openChat',{chat: chat});
+	}
+};
+
+function chatLoaded(socket, chatName){
+	this.callback = function(chat){
+		if(chat){
+			socket.emit('openChat', {chat: chat});
+		} else {
+			db.create('chats',{id: chatName}, new chatCreated(socket).callback);
+		}
+	};
+}
 
 let initIo = () => {
 	let io = sockets.io();
@@ -53,7 +68,12 @@ let initIo = () => {
 			let sessionId = socket.handshake.signedCookies['CCChat2017'];
 			logger.logDeb('Socket connected with id ' + sessionId)
 			loadChats(sessionId, socket);
+			socket.on('loadChat',function(data){
+				let chatName = data.chat;
+				db.read('chats',{id:chat},new chatLoaded(socket, chatName).callback);
+			});
 		});
+
 		io.sockets.on('disconnect', function (socket) {
 			let sessionId = socket.handshake.signedCookies['CCChat2017'];
 		});

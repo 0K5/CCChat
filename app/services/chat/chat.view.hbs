@@ -5,8 +5,18 @@
 <div class="container">
         <div class="row">
             <div class="col-sm-4 frame" id="chatsContainer">
-                    <ul id="chats"></ul>
-                    <ul id="contacts"></ul>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#contactsMenu">Contacts</a></li>
+                    <li><a data-toggle="tab" href="#chatsMenu">Chats</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="contactsMenu" class="tab-pane fade in active">
+                        <ul class="contacts" id="contacts"></ul>
+                    </div>
+                    <div id="chatsMenu" class="tab-pane fade">
+                        <ul class="chats" id="chats"></ul>
+                    </div>
+                </div>
             </div>
             <div class="col-sm-8 frame">
             <ul id="msgs"></ul>
@@ -15,7 +25,6 @@
                     <div class="text text-r" style="background:whitesmoke !important">
                         <input id="msgInput" placeholder="Type a message"/>
                     </div> 
-
                 </div>
                 <div id="sendCntrl" style="padding:10px;">
                     <span id="sendMedia" class="glyphicon glyphicon-film"></span>

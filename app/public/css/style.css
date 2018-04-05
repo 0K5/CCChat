@@ -16,6 +16,9 @@
 .text{
     width:75%;display:flex;flex-direction:column;
 }
+.contact{
+    float:left;background:white;
+}
 .msgText{
     width:100%;margin-top:0;margin-bottom:auto;line-height: 13px;font-size: 12px;
 }
@@ -63,7 +66,7 @@
 #sendCntrl{
     margin:auto;margin-left:1%;
 }
-ul {
+#msgs{
     width:100%;
     list-style-type: none;
     padding:18px;
@@ -74,10 +77,10 @@ ul {
     top:0;
     overflow-y:scroll;
 }
-#chats{ 
+.chats{ 
     bottom:200px;
 }
-#contacts{
+.contacts{
     top: 200px;
 }
 .msj:before{

@@ -13,10 +13,9 @@ function appendMessage(message){
 		media = message.media || null,
 		date = message.date || null,
 		user = message.user || null;
-    let content = '<li style="width:100%;">' +
-        '<div class="msj-rta macro">' +
-        '<div class="text ';
-	content += user ?  'text-l">' : 'text-r"';
+    let content = '<li style="width:100%;">';
+    content += user ? '<div class="msj macro">':'<div class="msj-rta macro">';
+	content += user ?  '<div class="text text-l">' : '<div class="text text-r"';
 	content += text ? '<p class="msgText">' + text + '</p>'  : '';
 	content += media ? '<div class="msgPic" ><img class="img-thumbnail" style="width:100%;" src="'+media+'" /></div>' : '';
 	content += user ? '<p class="msgUser"><small>' + user + '</small></p>' : '';
@@ -29,10 +28,12 @@ function appendChat(chat){
 	let contact = chat.contact || null,
 		group = chat.group || null;
     let content = '<li style="width:100%">' +
-        '<div class="text ';
+        '<div class="msj macro"';
+	content += contact ? 'onclick="openChat(\''+contact+'\')">' : 'onclick="openChat(\''+group+'\')">'; 
+    content += '<div class="text text-l';
 	content += contact ? '<p class="cntName">' + contact + '</p>' : '';
 	content += group ? '<p class="grpName">' + group + '</p>' : '';
-	content += '</div></li>';
+	content += '</div></div></li>';
     $("#chats").append(content).scrollTop($("#chats").prop('scrollHeight'));
 }
 
@@ -40,11 +41,17 @@ function appendContact(contact){
 	let name = contact.name || null,
 		lastOnline = contact.lastOnline || null;
     let content = '<li style="width:100%">' +
-        '<div class="text ';
+        '<div class="msj macro"';
+	content += 'onclick="openChat(\''+name+'\')">';
+    content += '<div class="text text-l';
 	content += name ? '<p class="cntName">' + name + '</p>' : '';
 	content += lastOnline ? '<p class="lastOnline"><small>' + lastOnline + '</small></p>' : '' ;
-	content += '</div></li>';
+	content += '</div></div></li>';
     $("#contacts").append(content).scrollTop($("#contacts").prop('scrollHeight'));
+}
+
+function openChat(name){
+	socket.emit('openChat', {chat: name});
 }
 
 socket.on('message', function(data){
@@ -52,7 +59,7 @@ socket.on('message', function(data){
 });
 
 socket.on('loadChat', function(data){
-	let messages = data.data;
+	let messages = data.messages;
 	messages.forEach((msg) => {
 		appendMessage(msg);
 	});
@@ -76,7 +83,7 @@ socket.on('allContacts', function(data){
 function sendMsg(){
     let text = $('#msgInput').val();
     if (text) {
-		appendMessage({text: text, date: new Date(), user: 'Oli'});
+		appendMessage({text: text, date: new Date()});
 		socket.emit('message', {text: text, date: new Date()});
         $('#msgInput').val('');
     }
