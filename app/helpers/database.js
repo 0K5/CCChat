@@ -52,10 +52,10 @@ let create = (dict, id, data, callback) => {
 		db = getLocal(dict);
 		try{
 			db.setItem(id, JSON.stringify(data));
-			logger.logDeb("Collection "+dict+" created");
+			logger.logDeb("Collection "+JSON.stringify(id)+" created");
 			callback(true);
 		}catch(err){
-			logger.logWarn("Collection "+dict+" couldn't be created");
+			logger.logWarn("Collection "+JSON.stringify(id)+" couldn't be created");
 			logger.logErr(err);
 			callback(false);
 		}
@@ -71,7 +71,7 @@ let create = (dict, id, data, callback) => {
 				if(err){
 					update(dict, id, data, callback);
 				}else{
-					logger.logDeb("Document with id "+id+" created");
+					logger.logDeb("Document with id "+JSON.stringify(id)+" created");
 					callback(res);
 				}
 			});
@@ -79,10 +79,10 @@ let create = (dict, id, data, callback) => {
 		if(!database.collection(dict)){
 			database.createCollection(dict, function(err, res) {
 				if(err){
-					logger.logWarn("Collection "+dict+" couldn't be created");
+					logger.logWarn("Collection "+JSON.stringify(id)+" couldn't be created");
 					logger.logErr(err);
 				}else{
-					logger.logDeb("Collection "+dict+" created");
+					logger.logDeb("Collection "+JSON.stringify(id)+" created");
 					insertData();
 				}
 			});
@@ -96,22 +96,22 @@ let read = (dict, id, callback) => {
 	if(database === undefined){
 		db = getLocal(dict);	
 		try{
-			logger.logDeb("Document with id "+id+" read");
+			logger.logDeb("Document with id "+JSON.stringify(id)+" read");
 			let ret = JSON.parse(db.getItem(id));
 			callback(ret);
 		}catch(err){
-			logger.logWarn("Document with id "+id+" couldn't be read");
+			logger.logWarn("Document with id "+JSON.stringify(id)+" couldn't be read");
 			logger.logErr(err);
 			callback(false);
 		}
 	}else{
-		database.collection(dict).findOne({},function(err, res){
+		database.collection(dict).findOne(id,function(err, res){
 			if(err){
-				logger.logWarn("Document with id "+id+" couldn't be read");
+				logger.logWarn("Document with id "+JSON.stringify(id)+" couldn't be read");
 				logger.logErr(err);
 				callback(false);
 			}else{
-				logger.logDeb("Document with id "+id+" read");
+				logger.logDeb("Document with id "+JSON.stringify(id)+" read");
 				callback(res);
 			}
 		});
@@ -124,21 +124,21 @@ let update = (dict, id, data, callback) => {
 		try{
 			db.setItem(id, JSON.stringify(data))
 			let ret = JSON.parse(db.getItem(id));
-			logger.logDeb("Document with id "+id+" updated");
+			logger.logDeb("Document with id "+JSON.stringify(id)+" updated");
 			callback(ret);
 		}catch(err){
-			logger.logWarn("Document with id "+id+" couldn't be updated");
+			logger.logWarn("Document with id "+JSON.stringify(id)+" couldn't be updated");
 			logger.logErr(err);
 			callback(false);
 		}
 	}else{
 		database.collection(dict).updateOne(id,{ $set: data},function(err, res){
 			if(err){
-				logger.logWarn("Document with id "+id+" couldn't be updated");
+				logger.logWarn("Document with id "+JSON.stringify(id)+" couldn't be updated");
 				logger.logErr(err);
 				callback(false);
 			}else{
-				logger.logDeb("Document with id "+id+" updated");
+				logger.logDeb("Document with id "+JSON.stringify(id)+" updated");
 				callback(res);
 			}
 		});
@@ -149,21 +149,52 @@ let remove = (dict, id, callback) => {
 		db = getLocal(dict);	
 		try{
 			db.removeItem(id);
-			logger.logDeb("Document with id "+id+" deleted");
+			logger.logDeb("Document with id "+JSON.parse(id)+" deleted");
 			callback(true);
 		}catch(err){
-			logger.logWarn("Document with id "+id+" couldn't be deleted");
+			logger.logWarn("Document with id "+JSON.parse(id)+" couldn't be deleted");
 			logger.logErr(err);
 			callback(false);
 		}
 	}else{
 		database.collection(dict).removeOne({'_id':id},function(err,obj){
 			if(err){
-				logger.logWarn("Document with id "+id+" couldn't be deleted");
+				logger.logWarn("Document with id "+JSON.parse(id)+" couldn't be deleted");
 				logger.logErr(err);
 				callback(false);
 			}else{
-				logger.logDeb("Document with id "+id+" deleted");
+				logger.logDeb("Document with id "+JSON.parse(id)+" deleted");
+				callback(res);
+			}
+		});
+	}
+};
+
+let readAll = (dict, callback) => {
+	if(database === undefined){
+		db = getLocal(dict);	
+		try{
+			logger.logDeb("Data in "+JSON.stringify(id)+" read");
+			let ret = {};
+			let i = 0;
+			while(db.key(i)){
+				ret[key(i)] = JSON.parse(db.getItem(key(i)));
+				i++;
+			};
+			callback(ret);
+		}catch(err){
+			logger.logWarn("Data in "+JSON.stringify(dict)+" couldn't be read");
+			logger.logErr(err);
+			callback(false);
+		}
+	} else {
+		database.collection(dict).find({}).toArray(function(err, res){
+			if(err){
+				logger.logWarn("Data in "+JSON.stringify(dict)+" couldn't be read");
+				logger.logErr(err);
+				callback(false);
+			}else{
+				logger.logDeb("Data in "+JSON.stringify(dict)+" read");
 				callback(res);
 			}
 		});
@@ -175,5 +206,6 @@ module.exports = {
 	create : create,
 	read : read,
 	update: update,
-	delete : remove
+	delete : remove,
+	readAll: readAll,
 };

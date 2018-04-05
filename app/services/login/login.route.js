@@ -33,7 +33,8 @@ function loginAttempt(req, res, next){
 			bcrypt.compare(req.body.password, user.password, function(err, ret){
 				if(ret){
 					req.brute.reset(() => { 
-						db.update('users', {'username': req.body.username}, {id: req.session.id}, (user) =>{
+						db.update('users', {'username': req.body.username}, {id: req.session.id, loggedIn: 1}, (user) =>{
+								logger.logDeb("Login successful redirect to chat");
    							 	res.send({url:'chat'});
 							}
 						);

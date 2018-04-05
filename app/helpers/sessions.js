@@ -20,13 +20,21 @@ let options = {};
 let client = undefined;
 
 let setUpSession = (storage, session, app, server, next) => {
-    app.use(session({
+	let sess = session({
+		key: 'CCChat2017',
         secret: '14gty8i9oph1q45o;pgh3p0[987oui2dh3q2l4iugfrh',
         store: storage,
-        saveUninitialized: false,
-        resave: false
-    }));
-	next(app, server);
+        saveUninitialized: true,
+        resave: false,
+		cookie: { 
+			path: '/',
+			httpOnly: false, 
+			secure: false, 
+			maxAge: 365 * 24 * 60 * 60 * 1000 
+		}
+	});
+    app.use(sess);
+	next(app, server, sess, storage);
 }
 
 let setUpSessionStorage = (app, server, next) => {

@@ -15,7 +15,7 @@
     let mimeTypes = {
         ".html": "text/html",
         ".css": "text/css",
-        ".js": "text/javascript",
+        ".js": "application/javascript",
         ".png": "image/png",
         ".gif": "image/gif",
         ".jpg": "image/jpeg",
@@ -88,8 +88,8 @@
 		require('./helpers/database.js').init(app,server, setUpHandlebars);
 	};
 
-    let setUpSockets = (app, server) => {
-        require('./helpers/sockets.js').init(app, server, setUpDatabase);
+    let setUpSockets = (app, server, session, storage) => {
+        require('./helpers/sockets.js').init(app, server, session, storage, setUpDatabase);
     };
 
     let setUpSessions = (app, server) => {
@@ -98,3 +98,4 @@
 
     require('./helpers/server.js').init(app, setUpSessions);
 })();
+
