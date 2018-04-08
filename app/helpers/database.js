@@ -72,7 +72,7 @@ let create = (dict, id, data, callback) => {
 					update(dict, id, data, callback);
 				}else{
 					logger.logDeb("Document with id "+JSON.stringify(id)+" created");
-					callback(res);
+					callback(insData);
 				}
 			});
 		};
@@ -132,7 +132,7 @@ let update = (dict, id, data, callback) => {
 			callback(false);
 		}
 	}else{
-		database.collection(dict).updateOne(id,{ $set: data},function(err, res){
+		database.collection(dict).updateOne(id,{ $set: data},{ "new" : true}, function(err, res){
 			if(err){
 				logger.logWarn("Document with id "+JSON.stringify(id)+" couldn't be updated");
 				logger.logErr(err);

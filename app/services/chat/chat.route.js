@@ -3,7 +3,7 @@ let sockets = require('../../helpers/sockets.js');
 let express = require('express');
 let router = express.Router();
 let db = require('../../helpers/database.js');
-
+let allSockets = {};
 
 function usersLoaded(sessionId, socket){
 	this.callback = function(users){
@@ -25,10 +25,19 @@ function usersLoaded(sessionId, socket){
 	}
 }
 
-function chatsLoaded(sessionId, socket){
+function chatsLoaded(sessionId, socket, user){
 	this.callback = function(chats){
 		if(chats && Object.keys(chats).length !== 0){
-			socket.emit('allChats', {chats: chats});
+			let filteredChats = []
+			for(ki in chats){
+				let users = chats[ki].users;
+				users.forEach((u) => {
+					if(u === user.username){
+						filteredChats.push(chats[ki]);
+					}
+				});
+			}
+			socket.emit('allChats', {chats: filteredChats});
 			logger.logDeb("Chats loaded and emitted");
 		} else {
 			logger.logDeb("No chats to load and emit");
@@ -37,27 +46,59 @@ function chatsLoaded(sessionId, socket){
 	}
 }
 
-function loadChats(sessionId, socket){
-	if(!socket){
-		logger.logErr("Chat socket not defined");
-	} else {
-		logger.logDeb("Chat socket initialized");
-		db.read('chats', {id: sessionId}, new chatsLoaded(sessionId, socket).callback);
-	}
+function initAllChats(sessionId, socket, io){
+	this.callback = function(user){
+		if(!user){
+			logger.logErr("New user in chat not in database");
+		} else {
+			logger.logDeb("New User in chat");
+			io.emit('newUser',{name: user.username});
+			db.readAll('chats', new chatsLoaded(sessionId, socket, user).callback);
+		}
+	};
 }
-function chatCreated(socket){
+
+function emitNewChat(socket){
 	this.callback = function(chat){
-		socket.emit('openChat',{chat: chat});
+		socket.emit('loadChat',{chat: chat});
+		socket.emit('newChat', {chat: chat});
 	}
 };
 
-function chatLoaded(socket, chatName){
+function chatLoaded(socket, clientChat, user){
 	this.callback = function(chat){
 		if(chat){
-			socket.emit('openChat', {chat: chat});
+			socket.emit('loadChat', {chat: chat});
 		} else {
-			db.create('chats',{id: chatName}, new chatCreated(socket).callback);
+			require('crypto').randomBytes(48, function(err, buffer) {
+				let token = buffer.toString('hex');
+				db.create('chats',{id: token}, {
+					token: token, 
+					name: clientChat.users.length === 2 ? clientChat.users[0] : 'GroupChat', 
+					users: clientChat.users, 
+					messages: []
+				}, new emitNewChat(socket).callback);
+			});
 		}
+	};
+}
+
+function userLoadedChat(socket, chat){
+	this.callback = function(user){
+		if(user){
+			if(Array.isArray(chat.users)){
+				chat.users.push(user.username);
+				db.read('chats', {users:chat.users}, new chatLoaded(socket, chat, user).callback);
+			}
+		} else {
+			logger.logErr('User for chat creation not found');
+		}
+	};
+}
+
+function logOut(sessionId){
+	this.callback = function() {
+		//DO SOMETHING ON LOGOUT
 	};
 }
 
@@ -67,18 +108,19 @@ let initIo = () => {
 		io.on('connection', (socket) => {
 			let sessionId = socket.handshake.signedCookies['CCChat2017'];
 			logger.logDeb('Socket connected with id ' + sessionId)
-			loadChats(sessionId, socket);
-			socket.on('loadChat',function(data){
-				let chatName = data.chat;
-				db.read('chats',{id:chat},new chatLoaded(socket, chatName).callback);
+			socket.on('init', function() {
+				db.read('users', {id: sessionId}, new initAllChats(sessionId, io, socket).callback);
+			});
+			socket.on('openChat',function(data){
+				let chat = data;
+				db.read('users', {id: sessionId}, new userLoadedChat(socket, chat).callback);
+			});
+			socket.on('disconnect', function (socket) {
+			//	db.update('users', {id: sessionId},{loggedIn: 0},new logOut(sessionId).callback);
 			});
 		});
-
-		io.sockets.on('disconnect', function (socket) {
-			let sessionId = socket.handshake.signedCookies['CCChat2017'];
-		});
 	}else{
-		logger.logErr('Socket is undefined');
+		logger.logErr('Io is undefined');
 	}
 };
 

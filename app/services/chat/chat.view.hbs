@@ -11,15 +11,17 @@
                 </ul>
                 <div class="tab-content">
                     <div id="contactsMenu" class="tab-pane fade in active">
-                        <ul class="contacts" id="contacts"></ul>
+                        <ul class="contacts cul" id="contacts"></ul>
                     </div>
                     <div id="chatsMenu" class="tab-pane fade">
-                        <ul class="chats" id="chats"></ul>
+                        <ul class="chats cul" id="chats"></ul>
                     </div>
                 </div>
             </div>
             <div class="col-sm-8 frame">
-            <ul id="msgs"></ul>
+            <input type="hidden" id="tokenChat" value="">
+            <p class="text" id="chatName"></p>
+            <ul class="cul" id="msgs"></ul>
             <div id="sendMsgContainer">
                 <div  class="msj-rta macro">                        
                     <div class="text text-r" style="background:whitesmoke !important">
@@ -34,4 +36,4 @@
         </div>       
     </div>
 </div>
-<script src="/scripts/chat.js" type="text/javascript"></script>
+<script src="/scripts/chat.js"></script>

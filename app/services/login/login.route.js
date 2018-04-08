@@ -70,7 +70,7 @@ function registerAttempt(req, res, next){
 				if(err){
 					logger.logErr(err);
 				}else{
-					db.create('users', req.session.id, {username: req.body.username, password: hash}, (user) => {
+					db.create('users', req.session.id, {username: req.body.username, password: hash, loggedIn: 1}, (user) => {
    						res.send({url:'chat'});
 					});
 				}

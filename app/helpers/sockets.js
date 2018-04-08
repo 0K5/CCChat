@@ -32,10 +32,10 @@ let setUpSockets = (app, server, session, sessionStore, next) => {
 };
 
 let getIo = () => {
-	return io;
-}
+    return io;
+};
 
 module.exports = {
     init : setUpSockets,
-	io : getIo 
+	io : getIo
 };
