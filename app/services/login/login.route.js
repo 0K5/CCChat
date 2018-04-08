@@ -20,10 +20,15 @@ let userBruteforce = new ExpressBrute(store, {
     failCallback: failCallback
 });
 
-
 router.get('/', (req, res, next) => {
-	res.render('login.view.hbs',{
-		title: 'CCChat Login'
+	db.read('users',{id:req.session.id},function(user){
+		if(user){
+			res.redirect('chat');
+		}else{
+			res.render('login.view.hbs',{
+				title: 'CCChat Login'
+			});
+		}
 	});
 });
 

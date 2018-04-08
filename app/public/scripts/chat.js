@@ -117,22 +117,21 @@ $(document).ready(function(){
         }
     });
 
-    function openChat(contacts) {
-        socket.emit('openChat', {
-            users: contacts
-        });
+    function openChat(id) {
     }
 
 	$(document).on('click', '.chat', function(e) {
-		openChat(e.target.id);
+		let token = e.target.closest(".chat").id
+        socket.emit('openChat', {
+			token : token 
+        });
 	});
 
 	$(document).on('click', '.contact', function(e) {
-		let c = [];
-		let contact = e.target.closest(".contact").id
-		console.log(contact);
-		c.push(contact);
-		openChat(c);
+		let contact = [e.target.closest(".contact").id]
+        socket.emit('openChat', {
+			contact : contact 
+        });
 	});
 
     $(document).on('click', '#sendMedia', function(e) {

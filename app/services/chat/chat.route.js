@@ -34,6 +34,10 @@ function chatsLoaded(sessionId, socket, user){
 				users.forEach((u) => {
 					if(u === user.username){
 						filteredChats.push(chats[ki]);
+						let fc = filteredChats[filteredChats.length-1];
+						if(fc.users.length === 2){
+							fc.name = fc.users[0] === user.username ? fc.users[1] : fc.users[0];
+						}
 					}
 				});
 			}
@@ -65,20 +69,55 @@ function emitNewChat(socket){
 	}
 };
 
+function chatsByContactsLoaded(socket, clientChat, user){
+	this.callback = function(chats){
+		if(chats){
+			let chatFound = false;
+			let users = [];
+			if(clientChat.contact){
+				users = [clientChat.contact,user.username];
+			}else if(clientChat.contacts){
+				users = clientChat.contacts;
+				users.push(user.username);
+			}
+			users.sort();
+			chats.forEach((c) => {
+				logger.logDeb("Sorted users" + users + " " + c.users.sort())
+				if(users === c.users.sort()){
+					logger.logDeb("Chat found and loaded");
+					if(c.users.length === 2){
+						c.name = c.users[0] === user.username ? c.users[1] : c.users[0];
+					}
+					socket.emit('loadChat',{chat: c});
+					chatFound = true;
+				}
+			});
+			if(!chatFound){
+				require('crypto').randomBytes(48, function(err, buffer) {
+					let token = buffer.toString('hex');
+					logger.logDeb("New chat with users " + clientChat.contact);
+					db.create('chats',{id: token}, {
+						token: token, 
+						name: users.length === 2 ? 
+							(users[0] === user.username ? users[1] : users[0]) : 'GroupChat', 
+						users: users, 
+						messages: []
+					}, new emitNewChat(socket).callback);
+				});
+			}
+		}
+	};
+}
+
 function chatLoaded(socket, clientChat, user){
 	this.callback = function(chat){
 		if(chat){
-			socket.emit('loadChat', {chat: chat});
-		} else {
-			require('crypto').randomBytes(48, function(err, buffer) {
-				let token = buffer.toString('hex');
-				db.create('chats',{id: token}, {
-					token: token, 
-					name: clientChat.users.length === 2 ? clientChat.users[0] : 'GroupChat', 
-					users: clientChat.users, 
-					messages: []
-				}, new emitNewChat(socket).callback);
-			});
+			if(chat.users.length === 2){
+				chat.name = chat.users[0] === user.username ? chat.users[1] : chat.users[0];
+			}
+			socket.emit('loadChat',{chat: chat});	
+		}else{
+			logger.logErr("Chat with token " + clientChat + " couldn't be loaded");
 		}
 	};
 }
@@ -86,9 +125,11 @@ function chatLoaded(socket, clientChat, user){
 function userLoadedChat(socket, chat){
 	this.callback = function(user){
 		if(user){
-			if(Array.isArray(chat.users)){
-				chat.users.push(user.username);
-				db.read('chats', {users:chat.users}, new chatLoaded(socket, chat, user).callback);
+			logger.logDeb("Loading chat by chatid " + chat.id);
+			if(chat.token){
+				db.read('chats', {token: chat.token},new chatLoaded(socket, chat, user).callback);
+			}else{
+				db.readAll('chats', new chatsByContactsLoaded(socket, chat, user).callback);
 			}
 		} else {
 			logger.logErr('User for chat creation not found');
@@ -113,6 +154,7 @@ let initIo = () => {
 			});
 			socket.on('openChat',function(data){
 				let chat = data;
+				logger.logDeb("User with sessionId " + sessionId + "loads chat");
 				db.read('users', {id: sessionId}, new userLoadedChat(socket, chat).callback);
 			});
 			socket.on('disconnect', function (socket) {
