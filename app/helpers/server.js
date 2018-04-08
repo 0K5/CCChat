@@ -1,5 +1,6 @@
 let server = undefined;
 let logger = require('./logger.js');
+let https = true;
 
 let initServers = (app, next) => {
     logger.logInfo('Setting up Server');
@@ -10,7 +11,8 @@ let initServers = (app, next) => {
 	let key = certificates.key;
 	let cert = certificates.cert;
 	let ca = certificates.ca;
-    if (key && cert) {
+    if (key && cert && https) {
+		logger.logInfo('Using https');
         let forceSsl = require('express-force-ssl');
         app.use(forceSsl);
         let options = {
@@ -20,6 +22,7 @@ let initServers = (app, next) => {
         };
         server = https.createServer(options, app).listen(port);
     }else{
+		logger.logInfo('Using http');
 		server = http.createServer(app).listen(port);
 	}
 	return next(app, server);

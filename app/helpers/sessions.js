@@ -25,11 +25,11 @@ let setUpSession = (storage, session, app, server, next) => {
         secret: '14gty8i9oph1q45o;pgh3p0[987oui2dh3q2l4iugfrh',
         store: storage,
         saveUninitialized: true,
-        resave: false,
+        resave: true,
 		cookie: { 
 			path: '/',
 			httpOnly: false, 
-			secure: false, 
+			secure: true, 
 			maxAge: 365 * 24 * 60 * 60 * 1000 
 		}
 	});

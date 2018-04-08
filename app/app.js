@@ -19,9 +19,7 @@
         ".png": "image/png",
         ".gif": "image/gif",
         ".jpg": "image/jpeg",
-        ".fx": "application/fx",
-        ".babylon": "application/babylon",
-        ".babylonmeshdata": "application/babylonmeshdata"
+        ".fx": "application/fx"
     };
     express.static.mime.define(mimeTypes);
 

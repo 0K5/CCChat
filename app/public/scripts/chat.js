@@ -94,21 +94,18 @@ $(document).ready(function(){
 			messageNotification(data);
 		}
     });
-	
 
-    function sendMsg() {
-        let text = $('#msgInput').val();
+    $(document).on('click', '#sendMsg', function(e) {
+        let text = $('#msgInput').val(),
+			token = $('#tokenChat').val();
         if (text) {
             socket.emit('message', {
+				token: token,
                 text: text,
                 date: new Date()
             });
             $('#msgInput').val('');
-        }
-    }
-
-    $(document).on('click', '#sendMsg', function(e) {
-        sendMsg();
+		}
     });
 
     $('#msgInput').keyup((event) => {
@@ -116,9 +113,6 @@ $(document).ready(function(){
             sendMsg();
         }
     });
-
-    function openChat(id) {
-    }
 
 	$(document).on('click', '.chat', function(e) {
 		let token = e.target.closest(".chat").id
