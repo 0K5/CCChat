@@ -28,7 +28,7 @@ function VerifySession (req, res, next){
 }
 
 router.get('/', (req, res, next) => {
-	db.read('users', {id : req.session.id}, new VerifySession(req, res).callback);
+	db.read('users', {sid : req.session.id}, new VerifySession(req, res).callback);
 });
 
 router.use('/messages', require('../messages/messages.route.js'));

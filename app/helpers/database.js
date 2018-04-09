@@ -132,14 +132,14 @@ let update = (dict, id, data, callback) => {
 			callback(false);
 		}
 	}else{
-		database.collection(dict).updateOne(id,{$set: data},{ "new" : true}, function(err, res){
+		database.collection(dict).findOneAndUpdate(id,{$set: data},{ new : true}, function(err, res){
 			if(err){
 				logger.logWarn("Document with id "+JSON.stringify(id)+" couldn't be updated");
 				logger.logErr(err);
 				callback(false);
 			}else{
 				logger.logDeb("Document with id "+JSON.stringify(id)+" updated");
-				callback(res);
+				callback(res.value);
 			}
 		});
 	}

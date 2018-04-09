@@ -7,38 +7,42 @@
 $(document).ready(function(){
     let baseUrl = window.location.protocol + '//' + window.location.host + '/';
     let socket = io.connect(baseUrl,{transports: ['websocket'], upgrade: false});
+	let actUser = undefined;
 
     function appendMessage(message) {
-        let text = message.text || null,
-            media = message.media || null,
-            date = message.date || null,
-            user = message.user || null;
+        let text = message.text || '',
+            media = message.media || '',
+            timestamp = message.timestamp || '',
+            origin = message.origin || '',
+			isReceiver = message.isReceiver || '';
         let content = '<li style="width:100%;">';
-        content += user ? '<div class="msj macro">' : '<div class="msj-rta macro">';
-        content += user ? '<div class="text text-l">' : '<div class="text text-r"';
+        content += isReceiver ? '<div class="msj macro">' : '<div class="msj-rta macro">';
+        content += isReceiver ? '<div class="text text-l">' : '<div class="text text-r"';
         content += text ? '<p class="msgText">' + text + '</p>' : '';
         content += media ? '<div class="msgPic" ><img class="img-thumbnail" style="width:100%;" src="' + media + '" /></div>' : '';
-        content += user ? '<p class="msgUser"><small>' + user + '</small></p>' : '';
-        content += '<p class="msgDate"><small>' + date + '</small></p>';
+        content += isReceiver ? '<p class="msgUser"><small>' + origin + '</small></p>' : '';
+        content += '<p class="msgDate"><small>' + timestamp + '</small></p>';
         content += '</div></div></li>';
         $("#msgs").append(content).scrollTop($("#msgs").prop('scrollHeight'));
     }
 
     function appendChat(chat) {
-        let name = chat.name || null,
-			token = chat.token || null;
+        let name = chat.name || '',
+			token = chat.token || '',
+			notification = chat.notification || '';
         let content = '<li style="width:100%">' +
             '<div class="msj macro chat" ';
         content += token ? 'id="' + token + '">' : '>';
         content += '<div class="text text-l';
         content += name ? '<p class="cntName">' + name + '</p>' : '';
+        content += '<p class="notification"><small>' + notification + '</small></p>';
         content += '</div></div></li>';
         $("#chats").append(content).scrollTop($("#chats").prop('scrollHeight'));
     }
 
     function appendContact(contact) {
-        let name = contact.name || null,
-            lastOnline = contact.lastOnline || null;
+        let name = contact.name || '',
+            lastOnline = contact.lastOnline || '';
         let content = '<li style="width:100%">' +
             '<div class="msj macro contact" ';
         content += 'id="' + name + '">';
@@ -53,6 +57,7 @@ $(document).ready(function(){
     socket.on('loadChat', function(data) {
 		$('#msgs').empty();
 		let chat = data.chat;
+		$('#contacts').find('#'+data.token).find('.notification').val('');
 		$('#chatName').text(chat.name);
 		$('#tokenChat').val(chat.token);
 		if(chat.messages){
@@ -65,7 +70,6 @@ $(document).ready(function(){
     socket.on('allChats', function(data) {
 		$('#chats').empty();
         let chats = data.chats;
-        console.log(JSON.stringify(chats));
         chats.forEach((chat) => {
             appendChat(chat);
         });
@@ -80,18 +84,25 @@ $(document).ready(function(){
     });
 
 	socket.on('newContact', function(data) {
-		appendContact(data.contact);
+		appendContact(data);
 	});
 
 	socket.on('newChat', function(data) {
 		appendChat(data.chat);
 	});
-
-    socket.on('message', function(data) {
-		if(isActiveChat(data.chat)){
-			appendMessage(msg);
+	
+	function messageNotification(token){
+		let notification = $('#contacts').find('#'+token).find('.notification');
+		let current = parseInt((notification.val()||'0'));
+		notification.val(++current);
+	}
+	
+    socket.on('message', function(chat) {
+		console.log(JSON.stringify(chat));
+		if($('#tokenChat').val() === chat.token){
+			appendMessage(chat);
 		}else{
-			messageNotification(data);
+			messageNotification(chat.token);
 		}
     });
 
@@ -101,8 +112,7 @@ $(document).ready(function(){
         if (text) {
             socket.emit('message', {
 				token: token,
-                text: text,
-                date: new Date()
+                text: text
             });
             $('#msgInput').val('');
 		}
@@ -122,7 +132,7 @@ $(document).ready(function(){
 	});
 
 	$(document).on('click', '.contact', function(e) {
-		let contact = [e.target.closest(".contact").id]
+		let contact = e.target.closest(".contact").id
         socket.emit('openChat', {
 			contact : contact 
         });

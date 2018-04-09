@@ -60,16 +60,36 @@ let setUpSockets = (app, server, session, sessionStore, next) => {
     return next(app, server);
 };
 
-let getIo = () => {
-    return io;
+let emit = (sessionId, eventName, data) => {
+	if(sessionId in sockets){
+		sockets[sessionId].emit(eventName, data);
+	}
 };
 
-let getSocket = (sessionId) => {
-	return sockets[sessionId];
-}
+let broadcast = (sessionId, eventName, data) => {
+	if(sessionId in sockets){
+		sockets[sessionId].broadcast.emit(eventName, data);
+	}
+};
+
+let emitRoom = (sessionId, roomId, eventName, data) => {
+	if(sessionId in sockets){
+		sockets[sessionId].broadcast.to(roomId).emit(eventName, data);
+	}
+};
+
+let join = (sessionId, roomId) => {
+	if(sessionId in sockets){
+		sockets[sessionId].join(roomId, function(){
+			logger.logDeb(sessionId + ' joined rooms ' + JSON.stringify(sockets[sessionId].rooms));
+		});
+	}
+};
 
 module.exports = {
     init : setUpSockets,
-	io : getIo,
-	socket: getSocket
+	emit: emit,
+	broadcast: broadcast,
+	emitRoom: emitRoom,
+	join: join
 };

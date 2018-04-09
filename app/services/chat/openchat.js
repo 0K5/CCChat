@@ -2,74 +2,88 @@ let logger = require('../../helpers/logger.js');
 let db = require('../../helpers/database.js');
 let sockets = require('../../helpers/sockets.js');
 
-function emitNewChat(sessionId){
+function informParticipants(chat){
+	this.callback = function(participant){
+		if(participant){
+			if(chat.name === 'PrivateChat'){
+				chat.name = (chat.participants[0] === participant.username ? chat.participants[1] : chat.participants[0]);
+			}
+			sockets.emit(participant.sid, 'newChat', {chat: chat});
+		}
+	}
+}
+function emitNewChat(user, participants){
 	this.callback = function(chat){
-		sockets.socket(sessionId).emit('loadChat',{chat: chat});
-		sockets.socket(sessionId).emit('newChat', {chat: chat});
+		sockets.emit(user.sid, 'loadChat',{chat: chat});
+		for(pi in participants){
+			db.read('users', {username: participants[pi]}, new informParticipants(chat).callback);
+		}
 	}
 };
 
-function chatsByContactsLoaded(sessionId, clientChat, user){
-	this.callback = function(chats){
-		if(chats){
+function chatsByContactsLoaded(user, chat){
+	this.callback = function(allStoredChats){
+		if(allStoredChats){
 			let chatFound = false;
-			let users = [];
-			if(clientChat.contact){
-				users = [clientChat.contact,user.username];
-			}else if(clientChat.contacts){
-				users = clientChat.contacts;
-				users.push(user.username);
+			let participants = [];
+			if(chat.contact){
+				participants = [chat.contact, user.username];
+			}else if(chat.participants){
+				participants = chat.participants;
+				participants.push(user.username);
 			}
-			users.sort();
-			chats.forEach((c) => {
-				logger.logDeb("Sorted users" + users + " " + c.users.sort())
-				if(JSON.stringify(users) === JSON.stringify(c.users.sort())){
+			participants.sort();
+			//Search for chat, if it already exists emit to user
+			allStoredChats.forEach((c) => {
+				logger.logDeb("Sorted users" + participants + " " + c.participants.sort())
+				if(JSON.stringify(participants) === JSON.stringify(c.participants.sort())){
 					logger.logDeb("Chat found and loaded");
-					if(c.users.length === 2){
-						c.name = c.users[0] === user.username ? c.users[1] : c.users[0];
+					if(c.participants.length === 2){
+						c.name = c.participants[0] === user.username ? c.participants[1] : c.participants[0];
 					}
-					sockets.socket(sessionId).emit('loadChat',{chat: c});
+					sockets.emit(user.sid, 'loadChat',{chat: c});
 					chatFound = true;
 				}
 			});
+			//Otherwise create a new chat and save it in the database
 			if(!chatFound){
 				require('crypto').randomBytes(48, function(err, buffer) {
 					let token = buffer.toString('hex');
-					logger.logDeb("New chat with users " + clientChat.contact);
+					logger.logDeb("New chat with users " + chat.contact);
+					sockets.join(user.sid, token);
 					db.create('chats',{id: token}, {
 						token: token, 
-						name: users.length === 2 ? 
-							(users[0] === user.username ? users[1] : users[0]) : 'GroupChat', 
-						users: users, 
+						name: participants.length === 2 ? 'PrivateChat' : 'GroupChat', 
+						participants: participants, 
 						messages: []
-					}, new emitNewChat(sessionId).callback);
+					}, new emitNewChat(user, participants).callback);
 				});
 			}
 		}
 	};
 }
 
-function chatLoaded(sessionId, clientChat, user){
-	this.callback = function(chat){
-		if(chat){
-			if(chat.users.length === 2){
-				chat.name = chat.users[0] === user.username ? chat.users[1] : chat.users[0];
+function chatLoaded(user, clientChat){
+	this.callback = function(storedChat){
+		if(storedChat){
+			if(storedChat.participants.length === 2){
+				storedChat.name = storedChat.participants[0] === user.username ? storedChat.participants[1] : storedChat.participants[0];
 			}
-			socket.emit('loadChat',{chat: chat});	
+			sockets.emit(user.sid, 'loadChat',{chat: storedChat});	
 		}else{
-			logger.logErr("Chat with token " + clientChat + " couldn't be loaded");
+			logger.logErr("Chat with token " + clientChat.token + " couldn't be loaded");
 		}
 	};
 }
 
-function userLoadedChat(sessionId, chat){
+function userLoadedChat(chat){
 	this.callback = function(user){
 		if(user){
 			logger.logDeb("Loading chat by chatid " + chat.token);
 			if(chat.token){
-				db.read('chats', {token: chat.token},new chatLoaded(sessionId, chat, user).callback);
+				db.read('chats', {token: chat.token},new chatLoaded(user, chat).callback);
 			}else{
-				db.readAll('chats', new chatsByContactsLoaded(sessionId, chat, user).callback);
+				db.readAll('chats', new chatsByContactsLoaded(user, chat).callback);
 			}
 		} else {
 			logger.logErr('User for chat creation not found');
@@ -79,7 +93,7 @@ function userLoadedChat(sessionId, chat){
 
 function exec(sessionId, chat){
 	logger.logDeb("User with sessionId " + sessionId + "loads chat");
-	db.read('users', {id: sessionId}, new userLoadedChat(sessionId, chat).callback);
+	db.read('users', {sid: sessionId}, new userLoadedChat(chat).callback);
 }
 
 module.exports = {

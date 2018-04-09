@@ -2,66 +2,65 @@ let logger = require('../../helpers/logger.js');
 let db = require('../../helpers/database.js');
 let sockets = require('../../helpers/sockets.js');
 
-function usersLoaded(sessionId, socket){
+function usersLoaded(user){
 	this.callback = function(users){
 		if(users && Object.keys(users).length !== 0){
 			let contacts = [];
 			for(ui in users){
-				if(users[ui].id !== sessionId){	
+				if(users[ui].sid !== user.sid){	
 					contacts.push({
 						name: users[ui].username,
 						lastOnline: users[ui].lastOnline
 					});
 				}
 			}
-			sockets.socket(sessionId).emit('allContacts', {contacts: contacts});
-			logger.logDeb("Contacts loaded and emitted");
+			sockets.emit(user.sid, 'allContacts', {contacts: contacts});
+			logger.logDeb("Contacts loaded and emitted " + JSON.stringify(contacts));
 		} else {
 			logger.logDeb("No contacts to load and emit");
 		}
 	}
 }
 
-function chatsLoaded(sessionId, socket, user){
+function chatsLoaded(user){
 	this.callback = function(chats){
 		if(chats){
 			let filteredChats = []
 			for(ki in chats){
-				let users = chats[ki].users;
-				users.forEach((u) => {
-					if(u === user.username){
+				let participants = chats[ki].participants;
+				participants.forEach((p) => {
+					if(p === user.username){
 						filteredChats.push(chats[ki]);
+						sockets.join(user.sid, chats[ki].token);
 						let fc = filteredChats[filteredChats.length-1];
-						if(fc.users.length === 2){
-							fc.name = fc.users[0] === user.username ? fc.users[1] : fc.users[0];
+						if(fc.participants.length === 2){
+							fc.name = fc.participants[0] === user.username ? fc.participants[1] : fc.participants[0];
 						}
 					}
 				});
 			}
-			sockets.socket(sessionId).emit('allChats', {chats: filteredChats});
-			logger.logDeb("Chats loaded and emitted");
+			sockets.emit(user.sid, 'allChats', {chats: filteredChats});
+			logger.logDeb("Chats loaded and emitted " + JSON.stringify(filteredChats));
 		} else {
 			logger.logDeb("No chats to load and emit");
 		}
-		db.readAll('users', new usersLoaded(sessionId, socket).callback);
+		db.readAll('users', new usersLoaded(user).callback);
 	}
 }
 
-function initAllChats(sessionId, socket, io){
-	this.callback = function(user){
+let initAllChats = (user) => {
 		if(!user){
 			logger.logErr("New user in chat not in database");
 		} else {
 			logger.logDeb("New User in chat");
-			sockets.io().emit('newContact',{name: user.username});
-			db.readAll('chats', new chatsLoaded(sessionId, socket, user).callback);
+			sockets.broadcast(user.sid, 'online',{name: user.username});
+			db.readAll('chats', new chatsLoaded(user).callback);
 		}
-	};
-}
+};
 
-function exec(sessionId, io, socket){
-	db.read('users', {id: sessionId}, new initAllChats(sessionId, io, socket).callback);
-}
+let exec = (sessionId) => {
+	db.read('users', {sid: sessionId}, initAllChats);
+};
 
 module.exports = {
 	exec : exec

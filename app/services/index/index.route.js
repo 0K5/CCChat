@@ -18,7 +18,7 @@ function VerifySession (req, res, next){
 }
 
 router.get('/', (req, res, next) => {
-	db.read('users', {id: req.session.id}, new VerifySession(req,res,next).callback);
+	db.read('users', {sid: req.session.id}, new VerifySession(req,res,next).callback);
 });
 
 module.exports = router;
