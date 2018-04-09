@@ -75,7 +75,12 @@ $(document).ready(function() {
         $('#contacts').find('#' + data.token).find('.notification').val('');
         $('#chatName').text(chat.name);
         $('#tokenChat').val(chat.token);
-        if (chat.messages) {
+		if(chat.isGroup){
+			let groupContent = '<span id="addToGrp" class="glyphicon glyphicon-plus-sign cccButton"></span>';
+			groupContent += '<span id="infoGrp" class="glyphicon glyphicon-info-sign cccButton"></span>';
+			$('#addContactToGroup').html(groupContent);
+		}
+		if (chat.messages) {
             chat.messages.forEach((msg) => {
                 appendMessage(msg);
             });

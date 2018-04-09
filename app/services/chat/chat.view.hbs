@@ -25,11 +25,15 @@
                 </div>
             </div>
             <div class="col-sm-8 frame">
-            <input type="hidden" id="tokenChat" value="">
-            <p class="text" id="chatName"></p>
+            <div id='msgHead' class='text text-l'>
+                <input type="hidden" id="tokenChat" value="">
+                <p class="msgName" id="chatName"></p>
+                <div id="addContactToGroup">
+                </div>
+            </div>
             <ul class="cul" id="msgs"></ul>
             <div id="sendMsgContainer">
-                <div  class="msj-rta macro">                        
+                <div class="msj-rta macro">                        
                     <div class="text text-r" style="background:whitesmoke !important">
                         <input id="msgInput" placeholder="Type a message"/>
                     </div> 

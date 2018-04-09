@@ -5,11 +5,10 @@ let sockets = require('../../helpers/sockets.js');
 function informParticipants(user, chat, participantName){
 	this.callback = function(participant){
 		if(participant){
-			if(chat.name === 'PrivateChat'){
-				chat.name = chat.participants[0] === participant.username ? chat.participants[1] : chat.participants[0];
-			}
-			sockets.emit(participant.sid, 'newChat', {chat: chat});
-			logger.logDeb('Chat ' + chat.name + ' sent to participant ' + participant.username);
+			adaptChatToReceiver(participant, chat, (user, chat) => {
+				sockets.emit(participant.sid, 'newChat', {chat: chat});
+				logger.logDeb('Chat ' + chat.name + ' sent to participant ' + participant.username);
+			});
 		} else {
 			logger.logErr('Participant ' + participantName + ' not in databast');
 		}
@@ -38,21 +37,14 @@ function chatsByContactsLoaded(user, chat){
 			}
 			participants.sort();
 			//Search for chat, if it already exists emit to user
+			logger.logDeb("Sorted users" + participants + " " + c.participants.sort())
 			allStoredChats.forEach((c) => {
-				logger.logDeb("Sorted users" + participants + " " + c.participants.sort())
 				if(JSON.stringify(participants) === JSON.stringify(c.participants.sort())){
 					logger.logDeb("Chat found and loaded");
-					if(c.participants.length === 2){
-						c.name = c.participants[0] === user.username ? c.participants[1] : c.participants[0];
-					}
-					c.messages.forEach((m) => {
-						if(m.origin !== user.username){
-							m.isReceiver = true;
-						}else{
-							m.isReceiver = false;
-						}
+					adaptChatToReceiver(user, c, (user, chat) => {
+						sockets.emit(user.sid, 'loadChat',{chat: chat});
+						logger.logDeb('All messages in loaded chat ' + JSON.stringify(c.messages));
 					});
-					sockets.emit(user.sid, 'loadChat',{chat: c});
 					chatFound = true;
 				}
 			});
@@ -63,24 +55,41 @@ function chatsByContactsLoaded(user, chat){
 					logger.logDeb("New chat with users " + chat.participants);
 					db.create('chats',{id: token}, {
 						token: token, 
-						name: participants.length > 2 && chat.name ? chat.name : 'PrivateChat', 
+						name: participants.length > 2 && chat.name ? chat.name : '', 
 						isGroup: participants.length > 2,
+						isNotification: participants.length < 2,
+						isPrivate: participants.length === 2,
 						participants: participants, 
 						messages: []
 					}, new emitNewChat(user, participants).callback);
 				});
 			}
+		} else {
+			logger.logErr('No chats stored with ' + chat.token);
 		}
 	};
 }
 
+function adaptChatToReceiver(user, chat, callback){
+	if(chat.isPrivate){
+		chat.name = chat.participants[0] === user.username ? chat.participants[1] : chat.participants[0];
+	}
+	chat.messages.forEach((m) => {
+		if(m.origin !== user.username){
+			m.isReceiver = true;
+		}else{
+			m.isReceiver = false;
+		}
+	});
+	callback(user, chat);
+};
+
 function chatLoaded(user, clientChat){
 	this.callback = function(storedChat){
 		if(storedChat){
-			if(storedChat.participants.length === 2){
-				storedChat.name = storedChat.participants[0] === user.username ? storedChat.participants[1] : storedChat.participants[0];
-			}
-			sockets.emit(user.sid, 'loadChat',{chat: storedChat});	
+			adaptChatToReceiver(user, storedChat, (user, chat) => {
+				sockets.emit(user.sid, 'loadChat',{chat: chat});	
+			});
 		}else{
 			logger.logErr("Chat with token " + clientChat.token + " couldn't be loaded");
 		}

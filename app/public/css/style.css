@@ -22,6 +22,15 @@
 .contact{
     float:left;background:white;
 }
+#addContactToGroup{
+    margin-left:auto;
+}
+#msgHead{
+    position:absolute;top:0;width:100%;display:flex;border:0;background:whitesmoke;float:left;
+}
+.msgName{
+    width:100%;margin-top:0;margin-bottom:auto;line-height: 13px;font-size: 12px;
+}
 .msgText{
     width:100%;margin-top:0;margin-bottom:auto;line-height: 13px;font-size: 12px;
 }
@@ -101,7 +110,7 @@
     bottom:47px;
     display:flex;
     flex-direction: column;
-    top:0;
+    top:47px;
     overflow-y:scroll;
 }
 .msj:before{
