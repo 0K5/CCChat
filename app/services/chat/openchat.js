@@ -26,18 +26,17 @@ function emitNewChat(user, participants){
 
 function chatsByContactsLoaded(user, chat){
 	this.callback = function(allStoredChats){
-		if(allStoredChats){
-			let chatFound = false;
-			let participants = [];
-			if(chat.contact){
-				participants = [chat.contact, user.username];
-			}else if(chat.participants){
-				participants = chat.participants;
-				participants.push(user.username);
-			}
+		let chatFound = false;
+		let participants = [];
+		if(chat.contact){
+			participants = [chat.contact, user.username];
+		}else if(chat.participants){
+			participants = chat.participants;
+			participants.push(user.username);
+		}
+		if(allStoredChats && allStoredChats.length > 0){
 			participants.sort();
 			//Search for chat, if it already exists emit to user
-			logger.logDeb("Sorted users" + participants + " " + c.participants.sort())
 			allStoredChats.forEach((c) => {
 				if(JSON.stringify(participants) === JSON.stringify(c.participants.sort())){
 					logger.logDeb("Chat found and loaded");
@@ -48,24 +47,22 @@ function chatsByContactsLoaded(user, chat){
 					chatFound = true;
 				}
 			});
-			//Otherwise create a new chat and save it in the database
-			if(!chatFound){
-				require('crypto').randomBytes(48, function(err, buffer) {
-					let token = buffer.toString('hex');
-					logger.logDeb("New chat with users " + chat.participants);
-					db.create('chats',{id: token}, {
-						token: token, 
-						name: participants.length > 2 && chat.name ? chat.name : '', 
-						isGroup: participants.length > 2,
-						isNotification: participants.length < 2,
-						isPrivate: participants.length === 2,
-						participants: participants, 
-						messages: []
-					}, new emitNewChat(user, participants).callback);
-				});
-			}
-		} else {
-			logger.logErr('No chats stored with ' + chat.token);
+		//Otherwise create a new chat and save it in the database
+		} 
+		if(!chatFound){
+			require('crypto').randomBytes(48, function(err, buffer) {
+				let token = buffer.toString('hex');
+				logger.logDeb("New chat with users " + chat.participants);
+				db.create('chats',{token: token}, {
+					token: token, 
+					name: participants.length > 2 && chat.name ? chat.name : '', 
+					isGroup: participants.length > 2,
+					isPrivate: participants.length === 2,
+					participants: participants, 
+					origin: user.username,
+					messages: []
+				}, new emitNewChat(user, participants).callback);
+			});
 		}
 	};
 }

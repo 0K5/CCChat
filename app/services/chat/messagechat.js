@@ -20,7 +20,9 @@ function participantLoaded(user, msg, participantName){
 				msg.isReceiver = false;
 			}
 			logger.logDeb('Message send to participant ' + participant.username + ' from ' + user.username);
-			sockets.emit(participant.sid, 'message', msg);
+			if(user.sid !== participant.sid){
+				sockets.emit(participant.sid, 'message', msg);
+			}
 		} else {
 			logger.logErr('Participant ' + participantName + ' not in databast');
 		}

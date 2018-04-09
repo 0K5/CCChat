@@ -10,7 +10,7 @@ function usersLoaded(user){
 				if(users[ui].sid !== user.sid){	
 					contacts.push({
 						name: users[ui].username,
-						lastOnline: users[ui].lastOnline
+						lastLogin: users[ui].lastLogin
 					});
 				}
 			}

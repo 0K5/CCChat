@@ -22,7 +22,7 @@
 .contact{
     float:left;background:white;
 }
-#addContactToGroup{
+#msgGroupActions{
     margin-left:auto;
 }
 #msgHead{
@@ -34,11 +34,17 @@
 .msgText{
     width:100%;margin-top:0;margin-bottom:auto;line-height: 13px;font-size: 12px;
 }
+.ntfText{
+    width:100%;margin-top:0;margin-bottom:auto;line-height: 13px;font-size: 12px;
+}
 .msgUser{
    width:100%;text-align:right;color:silver;margin-bottom:-7px;margin-top:auto;
 }
 .msgDate{
    width:100%;text-align:right;color:silver;margin-bottom:-7px;margin-top:auto;
+}
+.text-m{
+    float:right;left:-50%;
 }
 .text-l{
     float:left;padding-right:10px;
@@ -56,6 +62,9 @@
 }
 .macro{
     margin-top:5px;width:85%;border-radius:5px;padding:5px;display:flex;overflow:auto;
+}
+.ntf{
+    float:right;left:-50%;background:silver;
 }
 .msj-rta{
     float:right;background:whitesmoke;
@@ -107,11 +116,11 @@
     list-style-type: none;
     padding:18px;
     position:absolute;
-    bottom:47px;
     display:flex;
     flex-direction: column;
-    top:47px;
     overflow-y:scroll;
+    bottom:52px;
+    top:52px;
 }
 .msj:before{
     width: 0;

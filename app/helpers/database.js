@@ -62,11 +62,6 @@ let create = (dict, id, data, callback) => {
 	}else{
 		let insertData = () =>{
 			let insData = data;
-			if('id' in Object.keys(id)){
-				insData['id'] = id._id;
-			} else {
-				insData['id'] = id;
-			}
 			database.collection(dict).insertOne(insData, function(err, res){
 				if(err){
 					update(dict, id, data, callback);

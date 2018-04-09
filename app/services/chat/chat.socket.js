@@ -14,9 +14,21 @@ function setOns(sessionId, io, socket) {
 		logger.logDeb('User with sessionId ' + sessionId + 'added a new group');
 		require('./openchat.js').exec(sessionId,data);
 	});
+	socket.on('addToGrp', (data) => {
+		logger.logDeb('User with sessionId ' + sessionId + 'adds user to existing group');
+		require('./addtogroupchat.js').exec(sessionId,data);
+	});
+	socket.on('infoGroup', (data) =>{
+		logger.logDeb('User with sessionId ' + sessionId + 'requests info of group');
+		require('./infogroupchat.js').exec(sessionId,data);
+	});	
 	socket.on('message', (data) => {
-		logger.logDeb('User wirh sessionId ' + sessionId + 'sends message');
+		logger.logDeb('User with sessionId ' + sessionId + 'sends message');
 		require('./messagechat.js').exec(sessionId, data);
+	});
+	socket.on('logout',() => {
+		logger.logDeb('User with sessionId ' + sessionId + 'loggout requested');
+		require('./logoutchat.js').exec(sessionId);
 	});
 }
 

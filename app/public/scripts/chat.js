@@ -12,6 +12,15 @@ $(document).ready(function() {
     });
 	let chat = [];
 	let contacts = [];
+	let dateOptions = {
+		weekday: 'long', 
+		year: 'numeric', 
+		month: 'numeric', 
+		day: 'numeric',
+		hour12: false,
+		hour: 'numeric',
+		minute: 'numeric'
+	}
 
     function appendMessage(message) {
         let text = message.text || '',
@@ -20,12 +29,19 @@ $(document).ready(function() {
             origin = message.origin || '',
             isReceiver = message.isReceiver || '';
         let content = '<li style="width:100%;">';
-        content += isReceiver ? '<div class="msj macro">' : '<div class="msj-rta macro">';
-        content += isReceiver ? '<div class="text text-l">' : '<div class="text text-r"';
-        content += text ? '<p class="msgText">' + text + '</p>' : '';
-        content += media ? '<div class="msgPic" ><img class="img-thumbnail" style="width:100%;" src="' + media + '" /></div>' : '';
-        content += isReceiver ? '<p class="msgUser"><small>' + origin + '</small></p>' : '';
-        content += '<p class="msgDate"><small>' + timestamp + '</small></p>';
+		if(message.origin){
+			content += isReceiver ? '<div class="msj macro">' : '<div class="msj-rta macro">';
+			content += isReceiver ? '<div class="text text-l">' : '<div class="text text-r"';
+        	content += text ? '<p class="msgText">' + text + '</p>' : '';
+        	content += media ? '<div class="msgPic" ><img class="img-thumbnail" style="width:100%;" src="' + media + '" /></div>' : '';
+        	content += isReceiver ? '<p class="msgUser"><small>' + origin + '</small></p>' : '';
+        	content += '<p class="msgDate"><small>' + timestamp + '</small></p>';
+		}else{
+			content += '<div class="ntf macro">';
+			content += '<div class="text text-m">';
+			content += '<p class="ntfText"><small>' + text + '</small></p>';
+        	content += '<p class="msgDate"><small>' + timestamp + '</small></p>';
+		}
         content += '</div></div></li>';
         $("#msgs").append(content).scrollTop($("#msgs").prop('scrollHeight'));
     }
@@ -48,14 +64,14 @@ $(document).ready(function() {
 
     function appendContact(contact, containerId, withCheckbox) {
         let name = contact.name || '',
-            lastOnline = contact.lastOnline || '';
+            lastLogin = contact.lastLogin || '';
         if (name) {
             let content = '<li style="width:100%">' +
                 '<div class="msj macro contact" ';
             content += 'id="' + name + '">';
             content += '<div class="text text-l';
             content += '<p class="cntName">' + name + '</p>';
-            content += lastOnline ? '<p class="lastOnline"><small>' + lastOnline + '</small></p>' : '';
+            content += lastLogin ? '<p class="lastOnline"><small>' + lastLogin + '</small></p>' : '';
             content += '</div>';
 			if(withCheckbox){
 				content += '<div class="groupAdd cccButton">';
@@ -66,19 +82,21 @@ $(document).ready(function() {
         }
     }
 
-
-	
-
     socket.on('loadChat', function(data) {
         $('#msgs').empty();
         let chat = data.chat;
         $('#contacts').find('#' + data.token).find('.notification').val('');
         $('#chatName').text(chat.name);
         $('#tokenChat').val(chat.token);
+		$("#msgInput").show();
+		$("#sendMedia").show();
+		$("#sendMsg").show();
 		if(chat.isGroup){
-			let groupContent = '<span id="addToGrp" class="glyphicon glyphicon-plus-sign cccButton"></span>';
-			groupContent += '<span id="infoGrp" class="glyphicon glyphicon-info-sign cccButton"></span>';
-			$('#addContactToGroup').html(groupContent);
+			$("#addToGrp").show();
+			$("#infoGrp").show();
+		}else{
+			$("#addToGrp").hide();
+			$("#infoGrp").hide();
 		}
 		if (chat.messages) {
             chat.messages.forEach((msg) => {
@@ -113,6 +131,13 @@ $(document).ready(function() {
         appendChat(data.chat);
     });
 
+	function infoModal(title, message){
+		$('#modalInfo-title').html(title);
+		$('#modalInfo-message').html(message);
+		$('#infoModal').modal('show');
+	}
+
+
     function messageNotification(token) {
         let notification = $('#contacts').find('#' + token).find('.notification');
         let current = parseInt((notification.val() || '0'));
@@ -130,6 +155,11 @@ $(document).ready(function() {
 	function sendMsg(){
         let text = $('#msgInput').val(),
             token = $('#tokenChat').val();
+        appendMessage({
+			text: text,
+			timestamp: (new Date()).toLocaleString('de-DE', dateOptions),
+			origin: true
+		});
         if (text) {
             socket.emit('message', {
                 token: token,
@@ -171,10 +201,17 @@ $(document).ready(function() {
         });
     });
 
+	socket.on('addToGrp', function(data) {
+		appendMessage(data.msg);
+	});
+
+	socket.on('infoGroup', function(data) {
+		infoModal('Groupmembers of Groupchat ' + data.name, data.info);
+	});
+
 	$(document).on('click', '#createGrp', function(e) {
 		if(!$('#addGrpInput').val()){
-			$('#modalInfo').html('Groupname cannot be empty');
-			$('#errorModal').modal('show');
+			infoModal('Information','Groupname cannot be empty, please type in a group name');
 		}else{
 			$('#modalList').empty();
 			$('#modalHidden').val('createGrp');
@@ -185,31 +222,61 @@ $(document).ready(function() {
 		}
 	});
 
+	$(document).on('click', '#infoGrp', function(e) {
+		socket.emit('infoGroup',{
+			token: $('#tokenChat').val()
+		});
+	});
+
+	$(document).on('click', '#addToGrp', function(e) {
+		$('#modalList').empty();
+		$('#modalHidden').val('addToGrp');
+		for(ci in contacts){
+			appendContact(contacts[ci], 'modalList', true);
+		}
+		$('#chatModal').modal('show');
+	});
+
+	function groupAdd(emitEvent){
+		let allCheckboxes = $('#modalList').find('.groupAddCheckbox');
+		let grpContacts = [];
+		for(c in allCheckboxes){
+			if(allCheckboxes[c].checked){
+				grpContacts.push(allCheckboxes[c].id);
+			}
+		}
+		socket.emit(emitEvent, {
+			name: emitEvent === 'group' ? $('#addGrpInput').val() : '',
+			token: emitEvent === 'addToGrp' ? $('#tokenChat').val() : '',
+			participants: grpContacts
+		});
+		$('#chatModal').modal('hide');
+		$('#modalList').empty();
+		$('#addGrpInput').val('');
+	}
+
 	$(document).on('click', '#modal-save', function(e) {
 		if($('#modalHidden').val() === 'createGrp'){
-			let allCheckboxes = $('#modalList').find('.groupAddCheckbox');
-			let grpContacts = [];
-			for(c in allCheckboxes){
-				if(allCheckboxes[c].checked){
-					grpContacts.push(allCheckboxes[c].id);
-				}
-			}
-			socket.emit('group', {
-				name: $('#addGrpInput').val(),
-				participants: grpContacts
-			});
-			$('#chatModal').modal('hide');
-			$('#modalList').empty();
-			$('#addGrpInput').val('');
+			groupAdd('group');
+		}else if($('#modalHidden').val() === 'addToGrp'){
+			groupAdd('addToGrp');
 		}
+	});
+
+    socket.on('logout', function() {
+		window.location = baseUrl + 'login';
+    });
+	
+	$(document).on('click', '#logout', function(e) {
+		socket.emit('logout');
 	});
 
     socket.on('connect', function() {
         socket.emit('init');
         socket.on('disconnect', function() {
-            setTimeout(function() {
-                window.location = baseUrl + 'login';
-            }, 10000);
+			window.location = baseUrl + 'login';
         });
     });
+
+	$("#msgGroupActions").addClass('hidden');
 });

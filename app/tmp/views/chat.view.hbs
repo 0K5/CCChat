@@ -1,6 +1,7 @@
 <div class="jumbotron text-center">
         <h1>{{title}}</h1>
     <p>Chat with your student colleagues and only with student colleagues</p>
+    <span id="logout" class="glyphicon glyphicon-eject cccButton"></span>
 </div>
 <div class="container">
         <div class="row">
@@ -28,19 +29,21 @@
             <div id='msgHead' class='text text-l'>
                 <input type="hidden" id="tokenChat" value="">
                 <p class="msgName" id="chatName"></p>
-                <div id="addContactToGroup">
+                <div id="msgGrpActions">
+			        <span id="addToGrp" class="glyphicon glyphicon-plus-sign cccButton" style="display:none;"></span>
+			        <span id="infoGrp" class="glyphicon glyphicon-info-sign cccButton" style="display:none;"></span>
                 </div>
             </div>
             <ul class="cul" id="msgs"></ul>
             <div id="sendMsgContainer">
                 <div class="msj-rta macro">                        
                     <div class="text text-r" style="background:whitesmoke !important">
-                        <input id="msgInput" placeholder="Type a message"/>
+                        <input id="msgInput" placeholder="Type a message" style="display:none;">
                     </div> 
                 </div>
                 <div id="sendCntrl" style="padding:10px;">
-                    <span id="sendMedia" class="glyphicon glyphicon-film cccButton"></span>
-                    <span id="sendMsg" class="glyphicon glyphicon-share-alt cccButton"></span>
+                    <span id="sendMedia" class="glyphicon glyphicon-film cccButton" style="display:none;"></span>
+                    <span id="sendMsg" class="glyphicon glyphicon-share-alt cccButton" style="display:none;"></span>
                 </div>                
             </div>
         </div> 
@@ -63,15 +66,15 @@
             </div>
         </div>
     </div>
-    <div id="errorModal" class="modal fade" role="dialog">
+    <div id="infoModal" class="modal fade" role="dialog">
        <div class="modal-dialog">
            <div class="modal-content">
                <div class="modal-header">
                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                   <h4 class="modal-title">Warning</h4>
+                   <h4 class="modal-title" id="modalInfo-title"></h4>
                </div>
                <div class="modal-body">
-                   <p id="modalInfo"></p>
+                   <p id="modalInfo-message"></p>
                </div>
                <div class="modal-footer">
                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -2,11 +2,21 @@ let logger = require('../../helpers/logger.js');
 let express = require('express');
 let bcrypt = require('bcrypt');
 let db = require('../../helpers/database.js');
+let sockets = require('../../helpers/sockets.js');
 let router = express.Router();
 let ExpressBrute = require('express-brute');
 let MemCacheStore = require('express-brute-memcached');
 let moment = require('moment');
 let store = new ExpressBrute.MemoryStore();
+let dateOptions = {
+	weekday: 'long', 
+	year: 'numeric', 
+	month: 'numeric', 
+	day: 'numeric',
+	hour12: false,
+	hour: 'numeric',
+	minute: 'numeric'
+}
 
 let failCallback = function(req, res, next, nextValidRequestDate) {
     res.send({
@@ -46,12 +56,17 @@ function loginAttempt(req, res, next) {
                             username: req.body.username
                         }, {
                             sid: req.session.id,
-                            loggedIn: 1
+                            loggedIn: 1,
+							lastLogin: (new Date()).toLocaleString('de-DE', dateOptions)
                         }, (user) => {
-                            logger.logDeb("Login successful redirect to chat");
-                            res.send({
-                                url: 'chat'
-                            });
+							if(user){
+								logger.logDeb("Login successful redirect to chat");
+                            	res.send({
+                            	    url: 'chat'
+                            	});
+							}else{
+								logger.logErr("User Login failed on user update");
+							}
                         });
                     });
                 } else {
@@ -89,20 +104,32 @@ function registerAttempt(req, res, next) {
             });
         } else {
             bcrypt.hash(req.body.password, 10, function(err, hash) {
-                logger.logInfo("Passwordhash is: " + hash);
                 if (err) {
                     logger.logErr(err);
                 } else {
                     db.create('users', {
-                        sid: req.session.id
-                    }, {
+                        sid: req.session.id,
+					}, {
+                        sid: req.session.id,
                         username: req.body.username,
                         password: hash,
-                        loggedIn: 1
+                        loggedIn: 1,
+						lastLogin: (new Date()).toLocaleString('de-DE', dateOptions)
                     }, (user) => {
-                        res.send({
-                            url: 'chat'
-                        });
+						if(user){
+                            logger.logDeb("Register successful redirect to chat");
+							res.send({
+                        	    url: 'chat'
+                        	});
+							sockets.broadcast(user.sid, 'newContact', {
+								contact: {
+									name: user.username,
+									lastLogin: user.lastLogin
+								}
+							});
+						}else{
+							logger.logErr("User Register failed on user creation");
+						}
                     });
                 }
             });
