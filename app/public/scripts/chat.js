@@ -4,17 +4,21 @@
 //let you = {};
 //you.avatar = "https://a11.t26.net/taringa/avatares/9/1/2/F/7/8/Demon_King1/48x48_5C5.jpg";
 
-$(document).ready(function(){
+$(document).ready(function() {
     let baseUrl = window.location.protocol + '//' + window.location.host + '/';
-    let socket = io.connect(baseUrl,{transports: ['websocket'], upgrade: false});
-	let actUser = undefined;
+    let socket = io.connect(baseUrl, {
+        transports: ['websocket'],
+        upgrade: false
+    });
+	let chat = [];
+	let contacts = [];
 
     function appendMessage(message) {
         let text = message.text || '',
             media = message.media || '',
             timestamp = message.timestamp || '',
             origin = message.origin || '',
-			isReceiver = message.isReceiver || '';
+            isReceiver = message.isReceiver || '';
         let content = '<li style="width:100%;">';
         content += isReceiver ? '<div class="msj macro">' : '<div class="msj-rta macro">';
         content += isReceiver ? '<div class="text text-l">' : '<div class="text text-r"';
@@ -28,94 +32,110 @@ $(document).ready(function(){
 
     function appendChat(chat) {
         let name = chat.name || '',
-			token = chat.token || '',
-			notification = chat.notification || '';
-        let content = '<li style="width:100%">' +
-            '<div class="msj macro chat" ';
-        content += token ? 'id="' + token + '">' : '>';
-        content += '<div class="text text-l';
-        content += name ? '<p class="cntName">' + name + '</p>' : '';
-        content += '<p class="notification"><small>' + notification + '</small></p>';
-        content += '</div></div></li>';
-        $("#chats").append(content).scrollTop($("#chats").prop('scrollHeight'));
+            token = chat.token || '',
+            notification = chat.notification || '';
+        if (token && name) {
+            let content = '<li style="width:100%">' +
+                '<div class="msj macro chat" ';
+            content += 'id="' + token + '">';
+            content += '<div class="text text-l';
+            content += '<p class="cntName">' + name + '</p>';
+            content += '<p class="notification"><small>' + notification + '</small></p>';
+            content += '</div></div></li>';
+            $("#chats").append(content).scrollTop($("#chats").prop('scrollHeight'));
+        }
     }
 
-    function appendContact(contact) {
+    function appendContact(contact, containerId, withCheckbox) {
         let name = contact.name || '',
             lastOnline = contact.lastOnline || '';
-        let content = '<li style="width:100%">' +
-            '<div class="msj macro contact" ';
-        content += 'id="' + name + '">';
-        content += '<div class="text text-l';
-        content += name ? '<p class="cntName">' + name + '</p>' : '';
-        content += lastOnline ? '<p class="lastOnline"><small>' + lastOnline + '</small></p>' : '';
-        content += '</div></div></li>';
-        $("#contacts").append(content).scrollTop($("#contacts").prop('scrollHeight'));
+        if (name) {
+            let content = '<li style="width:100%">' +
+                '<div class="msj macro contact" ';
+            content += 'id="' + name + '">';
+            content += '<div class="text text-l';
+            content += '<p class="cntName">' + name + '</p>';
+            content += lastOnline ? '<p class="lastOnline"><small>' + lastOnline + '</small></p>' : '';
+            content += '</div>';
+			if(withCheckbox){
+				content += '<div class="groupAdd cccButton">';
+				content += '<input type="checkbox" class="form-check-input groupAddCheckbox" id="' + name + '"></div>';
+			}
+            content += '</li>';
+            $("#"+containerId).append(content).scrollTop($("#"+containerId).prop('scrollHeight'));
+        }
     }
 
 
+	
+
     socket.on('loadChat', function(data) {
-		$('#msgs').empty();
-		let chat = data.chat;
-		$('#contacts').find('#'+data.token).find('.notification').val('');
-		$('#chatName').text(chat.name);
-		$('#tokenChat').val(chat.token);
-		if(chat.messages){
-			chat.messages.forEach((msg) => {
-        	    appendMessage(msg);
-        	});
-		}
+        $('#msgs').empty();
+        let chat = data.chat;
+        $('#contacts').find('#' + data.token).find('.notification').val('');
+        $('#chatName').text(chat.name);
+        $('#tokenChat').val(chat.token);
+        if (chat.messages) {
+            chat.messages.forEach((msg) => {
+                appendMessage(msg);
+            });
+        }
     });
 
     socket.on('allChats', function(data) {
-		$('#chats').empty();
-        let chats = data.chats;
+        $('#chats').empty();
+        chats = data.chats;
         chats.forEach((chat) => {
             appendChat(chat);
         });
     });
 
     socket.on('allContacts', function(data) {
-		$('#contacts').empty();
-        let contacts = data.contacts;
+        $('#contacts').empty();
+        contacts = data.contacts;
         contacts.forEach((contact) => {
-            appendContact(contact);
+            appendContact(contact, 'contacts', false);
         });
     });
 
-	socket.on('newContact', function(data) {
-		appendContact(data);
-	});
-
-	socket.on('newChat', function(data) {
-		appendChat(data.chat);
-	});
-	
-	function messageNotification(token){
-		let notification = $('#contacts').find('#'+token).find('.notification');
-		let current = parseInt((notification.val()||'0'));
-		notification.val(++current);
-	}
-	
-    socket.on('message', function(chat) {
-		console.log(JSON.stringify(chat));
-		if($('#tokenChat').val() === chat.token){
-			appendMessage(chat);
-		}else{
-			messageNotification(chat.token);
-		}
+    socket.on('newContact', function(data) {
+		contacts.push(data.contact);
+        appendContact(data.contact, 'contacts', false);
     });
 
-    $(document).on('click', '#sendMsg', function(e) {
+    socket.on('newChat', function(data) {
+		chats.push(data.chat);
+        appendChat(data.chat);
+    });
+
+    function messageNotification(token) {
+        let notification = $('#contacts').find('#' + token).find('.notification');
+        let current = parseInt((notification.val() || '0'));
+        notification.val(++current);
+    }
+
+    socket.on('message', function(chat) {
+        if ($('#tokenChat').val() === chat.token) {
+            appendMessage(chat);
+        } else {
+            messageNotification(chat.token);
+        }
+    });
+
+	function sendMsg(){
         let text = $('#msgInput').val(),
-			token = $('#tokenChat').val();
+            token = $('#tokenChat').val();
         if (text) {
             socket.emit('message', {
-				token: token,
+                token: token,
                 text: text
             });
             $('#msgInput').val('');
-		}
+        }
+	}
+
+    $(document).on('click', '#sendMsg', function(e) {
+		sendMsg();
     });
 
     $('#msgInput').keyup((event) => {
@@ -124,19 +144,21 @@ $(document).ready(function(){
         }
     });
 
-	$(document).on('click', '.chat', function(e) {
-		let token = e.target.closest(".chat").id
+    $(document).on('click', '.chat', function(e) {
+        let token = e.target.closest(".chat").id
         socket.emit('openChat', {
-			token : token 
+            token: token
         });
-	});
+    });
 
-	$(document).on('click', '.contact', function(e) {
-		let contact = e.target.closest(".contact").id
-        socket.emit('openChat', {
-			contact : contact 
-        });
-	});
+    $(document).on('click', '.contact', function(e) {
+        let contact = e.target.closest(".contact").id
+		if(e.target.class !== 'groupAdd' && !e.target.closest(".groupAdd")){
+			socket.emit('openChat', {
+        	    contact: contact
+        	});
+		}
+    });
 
     $(document).on('click', '#sendMedia', function(e) {
         window.dialog.openFileDialog(function(res) {
@@ -144,12 +166,45 @@ $(document).ready(function(){
         });
     });
 
-	socket.on('connect', function(){
-		socket.emit('init');
-		socket.on('disconnect',function(){
-			setTimeout(function(){
-				window.location = baseUrl + 'login';
-			},10000);
-		});
+	$(document).on('click', '#createGrp', function(e) {
+		if(!$('#addGrpInput').val()){
+			$('#modalInfo').html('Groupname cannot be empty');
+			$('#errorModal').modal('show');
+		}else{
+			$('#modalList').empty();
+			$('#modalHidden').val('createGrp');
+			for(ci in contacts){
+				appendContact(contacts[ci], 'modalList', true);
+			}
+			$('#chatModal').modal('show');
+		}
 	});
+
+	$(document).on('click', '#modal-save', function(e) {
+		if($('#modalHidden').val() === 'createGrp'){
+			let allCheckboxes = $('#modalList').find('.groupAddCheckbox');
+			let grpContacts = [];
+			for(c in allCheckboxes){
+				if(allCheckboxes[c].checked){
+					grpContacts.push(allCheckboxes[c].id);
+				}
+			}
+			socket.emit('group', {
+				name: $('#addGrpInput').val(),
+				participants: grpContacts
+			});
+			$('#chatModal').modal('hide');
+			$('#modalList').empty();
+			$('#addGrpInput').val('');
+		}
+	});
+
+    socket.on('connect', function() {
+        socket.emit('init');
+        socket.on('disconnect', function() {
+            setTimeout(function() {
+                window.location = baseUrl + 'login';
+            }, 10000);
+        });
+    });
 });

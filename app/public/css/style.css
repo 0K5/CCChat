@@ -13,6 +13,9 @@
 #msgInput{
     border:0;padding:10px;background:whitesmoke;
 }
+#addGrpInput{
+    border:0;padding:10px;background:whitesmoke;
+}
 .text{
     width:75%;display:flex;flex-direction:column;
 }
@@ -43,7 +46,7 @@
     padding-right:10px;
 }
 .macro{
-    margin-top:5px;width:85%;border-radius:5px;padding:5px;display:flex;
+    margin-top:5px;width:85%;border-radius:5px;padding:5px;display:flex;overflow:auto;
 }
 .msj-rta{
     float:right;background:whitesmoke;
@@ -60,8 +63,17 @@
 #sendMsgContainer{
     position:absolute;bottom:0;width:100%;display:flex;
 }
-#sendCntrl{
+#addGrpContainer{
+    position:absolute;bottom:0;width:100%;display:flex;
+}
+.cccButton{
     background: whitesmoke;padding: 10px;font-size: 21px;border-radius: 50%;
+}
+.groupAdd{
+    margin-left:auto;
+}
+#createGrp{
+    margin:auto;margin-left:1%;
 }
 #sendCntrl{
     margin:auto;margin-left:1%;
@@ -72,6 +84,11 @@
     overflow-y:scroll;
 }
 .chats{
+    margin-top: 40px;
+    bottom: 0px;
+    overflow-y:scroll;
+}
+#modalList{
     margin-top: 40px;
     bottom: 0px;
     overflow-y:scroll;

@@ -2,21 +2,25 @@ let logger = require('../../helpers/logger.js');
 let db = require('../../helpers/database.js');
 let sockets = require('../../helpers/sockets.js');
 
-function informParticipants(chat){
+function informParticipants(user, chat, participantName){
 	this.callback = function(participant){
 		if(participant){
 			if(chat.name === 'PrivateChat'){
-				chat.name = (chat.participants[0] === participant.username ? chat.participants[1] : chat.participants[0]);
+				chat.name = chat.participants[0] === participant.username ? chat.participants[1] : chat.participants[0];
 			}
 			sockets.emit(participant.sid, 'newChat', {chat: chat});
+			logger.logDeb('Chat ' + chat.name + ' sent to participant ' + participant.username);
+		} else {
+			logger.logErr('Participant ' + participantName + ' not in databast');
 		}
 	}
-}
+};
+
 function emitNewChat(user, participants){
 	this.callback = function(chat){
 		sockets.emit(user.sid, 'loadChat',{chat: chat});
 		for(pi in participants){
-			db.read('users', {username: participants[pi]}, new informParticipants(chat).callback);
+			db.read('users', {username: participants[pi]}, new informParticipants(user, chat, participants[pi]).callback);
 		}
 	}
 };
@@ -41,6 +45,13 @@ function chatsByContactsLoaded(user, chat){
 					if(c.participants.length === 2){
 						c.name = c.participants[0] === user.username ? c.participants[1] : c.participants[0];
 					}
+					c.messages.forEach((m) => {
+						if(m.origin !== user.username){
+							m.isReceiver = true;
+						}else{
+							m.isReceiver = false;
+						}
+					});
 					sockets.emit(user.sid, 'loadChat',{chat: c});
 					chatFound = true;
 				}
@@ -49,11 +60,11 @@ function chatsByContactsLoaded(user, chat){
 			if(!chatFound){
 				require('crypto').randomBytes(48, function(err, buffer) {
 					let token = buffer.toString('hex');
-					logger.logDeb("New chat with users " + chat.contact);
-					sockets.join(user.sid, token);
+					logger.logDeb("New chat with users " + chat.participants);
 					db.create('chats',{id: token}, {
 						token: token, 
-						name: participants.length === 2 ? 'PrivateChat' : 'GroupChat', 
+						name: participants.length > 2 && chat.name ? chat.name : 'PrivateChat', 
+						isGroup: participants.length > 2,
 						participants: participants, 
 						messages: []
 					}, new emitNewChat(user, participants).callback);

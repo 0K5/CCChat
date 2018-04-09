@@ -10,6 +10,10 @@ function setOns(sessionId, io, socket) {
         logger.logDeb('User with sessionId ' + sessionId + 'opens chat');
         require('./openchat.js').exec(sessionId, data);
     });
+	socket.on('group', (data) => {
+		logger.logDeb('User with sessionId ' + sessionId + 'added a new group');
+		require('./openchat.js').exec(sessionId,data);
+	});
 	socket.on('message', (data) => {
 		logger.logDeb('User wirh sessionId ' + sessionId + 'sends message');
 		require('./messagechat.js').exec(sessionId, data);
