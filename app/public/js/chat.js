@@ -123,17 +123,15 @@ $(document).ready(function() {
         let origin = data.origin || '',
             loadStatus = data.loadStatus || '',
 			stid = data.stid || '',
-			img = data.media || '',
+			fileName = data.fileName || '',
 			link = data.link || '',
 			finished = data.finished || '';
         let content = '<li style="width:100%;">';
 		let innerContent = '';
-		if(img){
-			innerContent = '<img class="img-thumbnail" style="width:100%;" src="' + media + '" /></div>';
-		}else if(link){
-			innerContent = 'File ready click to download ' + link;
+		if(link){
+			innerContent = '<a id="'+stid+'" style="width:100%;" href="' + link + '" download="'+fileName+'">Download '+fileName+'</a>';
 		}else{
-			innerContent = origin  + ' is sending a file. Loading ' + loadStatus;
+			innerContent = origin  + ' sending file. Loading ' + loadStatus;
 		}
 		if(!($('#'+data.stid).length)){
 			content += '<div class="msj macro">';
@@ -148,7 +146,7 @@ $(document).ready(function() {
     }
 
 	function streamTransmitter(data){
-		this.stream = '';
+		this.blob = [];
 		this.size = 0;
 		this.load = function(){
 			return Math.floor(this.size/ data.size*100)+ '%';
@@ -160,16 +158,21 @@ $(document).ready(function() {
 		this.once = function(){};
 		this.write = function(chunk){
 			this.size += chunk.length;
-			this.stream += chunk;
+			this.blob.push(chunk);
 			data.loadStatus = this.load();
 			setTimeout(updateMedia(data), data.loadStatus * 100);
 		};
 		this.end = function(){
-			if(data.type === 'img/'){
-			}else{
-				data.link = 'plainlink';
-				updateMedia(data);
-			}
+			let b = new Blob(this.blob,{type: data.type});
+			let url = window.URL.createObjectURL(b);
+			data.link = url;
+			data.fileName = data.name;
+			updateMedia(data);
+			$('#'+data.stid).on('click', function(e) {
+				setTimeout(function(){
+					window.URL.revokeObjectURL(url);
+				},10000);
+			});
 		};
 		this.emit = function(){};
 		this.prependListener = function(){};
@@ -201,7 +204,7 @@ $(document).ready(function() {
 					size += chunk.length;
 					updateMedia({
 						loadStatus: Math.floor(size/ file.size*100)+ '%',
-						origin: "You're",
+						origin: "You",
 						stid: "OwnMedia"
 					});
 				});
