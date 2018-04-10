@@ -6,6 +6,7 @@ $(document).ready(function() {
     });
     let chat = {};
     let contacts = [];
+	let streams = {};
     let dateOptions = {
         weekday: 'long',
         year: 'numeric',
@@ -118,7 +119,66 @@ $(document).ready(function() {
 
 
 	// Send media functionalities
-	
+    function updateMedia(data) {
+        let origin = data.origin || '',
+            loadStatus = data.loadStatus || '',
+			stid = data.stid || '',
+			img = data.media || '',
+			link = data.link || '',
+			finished = data.finished || '';
+        let content = '<li style="width:100%;">';
+		let innerContent = '';
+		if(img){
+			innerContent = '<img class="img-thumbnail" style="width:100%;" src="' + media + '" /></div>';
+		}else if(link){
+			innerContent = 'File ready click to download ' + link;
+		}else{
+			innerContent = origin  + ' is sending a file. Loading ' + loadStatus;
+		}
+		if(!($('#'+data.stid).length)){
+			content += '<div class="msj macro">';
+        	content += '<div class="text text-l">';
+        	content += innerContent ? '<div class="msgText" id='+data.stid+'>' + innerContent + '</div>' : '';
+        	content += '<p class="msgUser"><small>' + origin + '</small></p>';
+        	content += '</div></div></li>';
+			$("#msgs").append(content).scrollTop($("#msgs").prop('scrollHeight'));
+		}else{
+			$('#'+data.stid).html(innerContent);
+		}
+    }
+
+	function streamTransmitter(data){
+		this.stream = '';
+		this.size = 0;
+		this.load = function(){
+			return Math.floor(this.size/ data.size*100)+ '%';
+		};
+		this.on = function(){
+			data.loadStatus = this.load();
+			updateMedia(data);	
+		};
+		this.once = function(){};
+		this.write = function(chunk){
+			this.size += chunk.length;
+			this.stream += chunk;
+			data.loadStatus = this.load();
+			setTimeout(updateMedia(data), data.loadStatus * 100);
+		};
+		this.end = function(){
+			if(data.type === 'img/'){
+			}else{
+				data.link = 'plainlink';
+				updateMedia(data);
+			}
+		};
+		this.emit = function(){};
+		this.prependListener = function(){};
+	}
+
+	ss(socket).on('openStream', function(stream, data){
+		stream.pipe(new streamTransmitter(data))
+	});
+
 	$(document).on('click', '#sendMedia', function(e) {
 		$('#fileImport').trigger('change');
 	});
@@ -139,7 +199,11 @@ $(document).ready(function() {
 				let size = 0;
 				blopStream.on('data', function(chunk){
 					size += chunk.length;
-					console.log(Math.floor(size/ file.size*100)+ '%');
+					updateMedia({
+						loadStatus: Math.floor(size/ file.size*100)+ '%',
+						origin: "You're",
+						stid: "OwnMedia"
+					});
 				});
 				blopStream.pipe(stream);
 			}else{

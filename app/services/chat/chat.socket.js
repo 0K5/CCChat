@@ -35,33 +35,7 @@ function setOns(sessionId, io, socket) {
 	});
 	ss(socket).on('sendMedia', function(stream, data) {
 		logger.logDeb('User with sessionId ' + sessionId + 'sends media');
-		logger.logDeb('With data ' + JSON.stringify(data));
-		let filename = path.resolve(__dirname + '../../../tmp/' + data.token);
-		let tmpViews = path.resolve(__dirname + '../../../tmp/streams');
-		if(!fs.existsSync(tmpViews)){
-			fs.mkdirSync(tmpViews);
-		}
-		let streamFunction = function(token){
-			let size = 0;
-			this.on = function(info){
-				logger.logDeb('On stream send ' + info);
-			};
-			this.once = function(info){
-				logger.logDeb('Once stream send ' + info);
-			};
-			this.write = function(chunk){
-				size += chunk.length;
-				logger.logDeb('Stream send is currently at ' +Math.floor(size/ data.size*100)+ '%');
-			};
-			this.end = function(){
-				logger.logDeb('Stream is fully transfered to server ');
-			};
-			this.emit = function(info){
-				logger.logDeb('Emit stream send ' + info);
-			};
-		}
-		stream.pipe(new streamFunction(data.token));
-		
+		require('./sendmediachat.js').exec(sessionId, stream, data);
 	});
 }
 

@@ -1,0 +1,89 @@
+<div class="jumbotron text-center">
+        <h1>{{title}}</h1>
+    <p>Chat with your student colleagues and only with student colleagues</p>
+    <span id="logout" class="glyphicon glyphicon-eject cccButton"></span>
+</div>
+<div class="container">
+        <div class="row">
+            <div class="col-sm-4 frame" id="chatsContainer">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#contactsMenu">Contacts</a></li>
+                    <li><a data-toggle="tab" href="#chatsMenu">Chats</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="contactsMenu" class="tab-pane fade in active">
+                        <ul class="contacts cul" id="contacts"></ul>
+                    </div>
+                    <div id="chatsMenu" class="tab-pane fade">
+                        <ul class="chats cul" id="chats"></ul>
+                        <div id="addGrpContainer">
+                            <div class="text text-r" style="background:whitesmoke !important">
+                                <input id="addGrpInput" placeholder="Type group name"/>
+                            </div>
+                            <span id="createGrp" class="glyphicon glyphicon-plus-sign cccButton"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8 frame">
+            <div id='msgHead' class='text text-l'>
+                <input type="hidden" id="tokenChat" value="">
+                <p class="msgName" id="chatName"></p>
+                <div id="msgGrpActions">
+			        <span id="addToGrp" class="glyphicon glyphicon-plus-sign cccButton" style="display:none;"></span>
+			        <span id="infoGrp" class="glyphicon glyphicon-info-sign cccButton" style="display:none;"></span>
+                </div>
+            </div>
+            <ul class="cul" id="msgs"></ul>
+            <div id="sendMsgContainer">
+                <div class="msj-rta macro">                        
+                    <div class="text text-r" style="background:whitesmoke !important">
+                        <input id="msgInput" placeholder="Type a message" style="display:none;">
+                    </div> 
+                </div>
+                <div id="sendCntrl" style="padding:10px;">
+                        
+                        <label id="sendMedia" class="glyphicon glyphicon-film cccButton" style="display:none;">
+                                <input type="file" id="fileImport">
+                        </label>
+                    <span id="sendMsg" class="glyphicon glyphicon-share-alt cccButton" style="display:none;"></span>
+                </div>                
+            </div>
+        </div> 
+    </div>
+    <div id="chatModal" class="modal fade" tabindex='-1' role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <input type="hidden" id="modalHidden" value="">
+                </div>
+                <div class="modal-body">
+                        <ul id="modalList"></ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="modal-save">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="infoModal" class="modal fade" role="dialog">
+       <div class="modal-dialog">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal">&times;</button>
+                   <h4 class="modal-title" id="infoModal-title"></h4>
+               </div>
+               <div class="modal-body">
+                   <p id="infoModal-message"></p>
+               </div>
+               <div class="modal-footer">
+                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+               </div>
+           </div>
+       </div>
+   </div>
+</div>
+<script src="/js/chat.js"></script>

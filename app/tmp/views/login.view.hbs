@@ -1,0 +1,54 @@
+<div class="container">
+	<div id="userFormArea" class="row">				
+		<div class="col-md-4" class="forms">
+			<form id="loginForm" autocomplete="off">
+				<div class="form-group">
+					<label><h3>Login:</h3></label>
+					<br>
+					<label>Enter your student email</label>
+					<input type="text" class="form-control" id="useremailLogin" required>
+					<label>Enter password</label>
+					<input type="password" class="form-control" id="passwordLogin" required>
+					<br>
+					<input type="button" id="submitLogin" class="btn btn-primary" value="Login"/>
+				</div>		
+			</form>
+		</div>
+			
+		<div class="col-md-4" class="forms">
+			<form id="registerForm" autocomplete='<fieldset class="well the-fieldset"'>
+				<div class="form-group">
+					<label><h3>Register:</h3></label>
+					<br>
+					<label>Enter your student email</label>
+					<input type="text" class="form-control" id="useremailRegister" required>
+					<br>
+					<label>Enter a random password</label>
+					<input type="password" class="form-control" id="passwordRegister" required>
+					<br>
+					<label>Repeat the password</label>
+					<input type="password" class="form-control" id="passwordRegisterRep" required>
+					<br>
+					<input type="button" id="submitRegister" class="btn btn-primary" value="Register"/>
+				</div>
+			</form>
+		</div>
+    </div>  
+    <div id="infoModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="infoModal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="infoModal-message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/login.js" type="text/javascript"></script>

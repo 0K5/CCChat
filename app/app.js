@@ -69,7 +69,7 @@
 		};
 		let tmpViews = path.resolve(__dirname + '/tmp/views');
 		if(!fs.existsSync(tmpViews)){
-			fs.mkdirSync(tmpViews);
+			fs.ensureDirSync(tmpViews);
 		}
         allViews.forEach((dir) => {
             if (dir.endsWith('.view.hbs')) {
