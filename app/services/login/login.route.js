@@ -103,7 +103,7 @@ function registerAttempt(req, res, next) {
                 err: 'The email is already registered'
             });
         } else {
-            bcrypt.hash(req.body.password, 10, function(err, hash) {
+            bcrypt.hash(req.body.password, 31, function(err, hash) {
                 if (err) {
                     logger.logErr(err);
                 } else {
