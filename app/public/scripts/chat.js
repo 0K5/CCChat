@@ -10,7 +10,7 @@ $(document).ready(function() {
         transports: ['websocket'],
         upgrade: false
     });
-	let chat = [];
+	let chat = {};
 	let contacts = [];
 	let dateOptions = {
 		weekday: 'long', 
@@ -84,7 +84,7 @@ $(document).ready(function() {
 
     socket.on('loadChat', function(data) {
         $('#msgs').empty();
-        let chat = data.chat;
+        chat = data.chat;
         $('#contacts').find('#' + data.token).find('.notification').val('');
         $('#chatName').text(chat.name);
         $('#tokenChat').val(chat.token);
@@ -107,8 +107,7 @@ $(document).ready(function() {
 
     socket.on('allChats', function(data) {
         $('#chats').empty();
-        chats = data.chats;
-        chats.forEach((chat) => {
+        data.chats.forEach((chat) => {
             appendChat(chat);
         });
     });
@@ -127,7 +126,6 @@ $(document).ready(function() {
     });
 
     socket.on('newChat', function(data) {
-		chats.push(data.chat);
         appendChat(data.chat);
     });
 
@@ -205,10 +203,6 @@ $(document).ready(function() {
 		appendMessage(data.msg);
 	});
 
-	socket.on('infoGroup', function(data) {
-		infoModal('Groupmembers of Groupchat ' + data.name, data.info);
-	});
-
 	$(document).on('click', '#createGrp', function(e) {
 		if(!$('#addGrpInput').val()){
 			infoModal('Information','Groupname cannot be empty, please type in a group name');
@@ -223,9 +217,13 @@ $(document).ready(function() {
 	});
 
 	$(document).on('click', '#infoGrp', function(e) {
-		socket.emit('infoGroup',{
-			token: $('#tokenChat').val()
-		});
+		let info = '';
+		let participants = chat.participants;
+		for(pi in participants){
+			info += participants[pi] + '<br>';
+		}
+		info += 'Chat created by ' + chat.origin;
+		infoModal('Groupmembers of Groupchat ' + chat.name, info);
 	});
 
 	$(document).on('click', '#addToGrp', function(e) {
