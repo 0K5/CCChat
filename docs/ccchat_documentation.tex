@@ -55,13 +55,17 @@
 \begin{document}
 \maketitle
 \tableofcontents
-
+\newpage
 \section{Up next}
 \begin{enumerate}
         \item
-                set Up Mongoose
+                Send Media
         \item
-                login
+                Media compression and persistency
+        \item
+                Online Status
+        \item 
+                Profile picture
 \end{enumerate}
 
 \section{Node Modules (Serverside)}
@@ -70,9 +74,9 @@
     \toprule
     express         & Web application framework that includes several useful features for web applications. \\ 
     \midrule
-    passport        & Authentication middleware for session management. \\
-    \midrule
     socket.io       & Realtime event-based bidirectional communication. \\
+    \midrule
+    socket.io-stream & Sending media over socket within stream\\
     \midrule
     winston         & Logger. \\
     \midrule
@@ -80,7 +84,7 @@
     \midrule
     serve-favicon   & Handles the requests from browsers for the favicon and caches the favicon. \\
     \midrule
-    handlebars      & Builds semantic templates \\
+    express-handlebars & Builds semantic templates \\
     \midrule
     mongoose        & For MongoDB modeling. Saves all app data. \\
     \midrule
@@ -91,6 +95,22 @@
     mocha           & Testframework \\
     \midrule
     chai            & Helper for testframework \\
+    \midrule
+    express-brute   & Prevents bruteforce attacks on login \\
+    \midrule
+    bcrypt          & Secure hashing of passwords in database \\
+    \midrule
+    express-session & Sessions, so that the user won't have to login all the time\\
+    \midrule
+    express-socket.io-sessions & Creates a shared session for sockets\\
+    \midrule
+    fs-extra        & More functionality for fs module (needed to save data to tmp)\\
+    \midrule
+    moment          & Calculates time from now to certain point. For bruteforce module\\
+    \midrule
+    popper          & Required by bootstrap 4.0.0 Realtime Cross-Browser automation\\
+    \midrule
+    winston         & Logger\\
     \bottomrule
 \end{tabularx}
 
@@ -101,6 +121,12 @@
     bootstrap       & Responsive website programming for mobile-first implementation.\\
     \midrule
     jQuery          & Easier handling of javascript \\
+    \midrule
+    socket.io       & To connect socket from client side\\
+    \midrule
+    socket.io-stream & To stream media from client side\\
+    \midrule
+    nw-dialog       & Dialog to upload files from the client\\
     \bottomrule
 \end{tabularx}
     
@@ -121,28 +147,28 @@
                                 \item 
                                     css\\
                                 \item 
-                                    html\\
-                                \item
-                                    libs\\
+                                    vendor\\
                         \end{itemize}
                     \item
-                        services\\
+                        services (All services for the app (for example login-Service and chat-Service)\\
                         \begin{itemize}
                                 \item
-                                    <<servicename>>.route.js (Route)\\
+                                    index\\
                                 \item
-                                    <<servicename>>.views.js (Handlebars view)\\
-                                \item
-                                    <<servicename>>.spec.js (Test)\\
-                                \item
-                                    <<servicename>>.module.js (Module/Logic)\\
+                                    login\\
+                                \item 
+                                    chat\\
                         \end{itemize}
-                    \item
-                        middleware (processes incoming requests before they are passed to the routes (loginauthentication))\\
                     \item
                         helpers (functionality and code shared in the whole app (regex- or renderoperations))\\
                     \item
                         tests (applicationtests)\\
+                    \item
+                        layouts (Layouts for handlebars)\\
+                    \item
+                        certs (Certification files for the https)\\
+                    \item
+                        tmp (all tmp files: logs, modules for handlebars,\dots)\\
             \end{itemize}
 \end{itemize}
 \renewcommand{\labelitemi}{$\bullet$}
@@ -150,7 +176,7 @@
 \renewcommand{\labelitemiii}{$\diamond$}
 \renewcommand{\labelitemiv}{$\ast$}
 
-\section{Documentation}
+\section{Code Documentation}
 \begin{description}
         \item[modules]
             The functionality of modules is described within a comment on top of the js-file.\\
@@ -161,8 +187,6 @@
             Variables require clear and good naming, never comment a variable unless absolutely necessary.\\ 
             You should think a littel longer and find a better name.\\
 \end{description}
-\section{Formatting}
-We use the Eclipse JS Formatter standart for our code.\\
 \section{SSL}
 \subsection{Create certificate}
 \begin{lstlisting}
@@ -222,6 +246,18 @@ Option 2:\\
                 Click „Confirm Security Exception“
 \end{enumerate}
 \section{Logger}
+    We use winston for logging.\\
+    Logstati:\\
+    \begin{description}
+            \item[info]
+                    Generic info\\
+            \item[warn]
+                    Can be ignored, there will be an fallback\\
+            \item[error]
+                    Should not be ignored and should be fixed\\
+            \item[debug]
+                    For debugging in development\\
+    \end{description}
 \section{Error Handling}
 \section{Useful websites}
 \begin{itemize}
