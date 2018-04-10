@@ -15,7 +15,8 @@ $(document).ready(function() {
         hour12: false,
         hour: 'numeric',
         minute: 'numeric'
-    }
+    };
+	let uploading = false;
     
     // Generic functions
 
@@ -131,13 +132,13 @@ $(document).ready(function() {
 		if(link){
 			innerContent = '<a id="'+stid+'" style="width:100%;" href="' + link + '" download="'+fileName+'">Download '+fileName+'</a>';
 		}else{
-			innerContent = origin  + ' sending file. Loading ' + loadStatus;
+			innerContent = origin  + ' sending file ' + fileName + '. Loading ' + loadStatus;
 		}
 		if(!($('#'+data.stid).length)){
 			content += '<div class="msj macro">';
         	content += '<div class="text text-l">';
         	content += innerContent ? '<div class="msgText" id='+data.stid+'>' + innerContent + '</div>' : '';
-        	content += '<p class="msgUser"><small>' + origin + '</small></p>';
+        	content += fileName !== "You're" ? '<p class="msgUser"><small>' + origin + '</small></p>' : '';
         	content += '</div></div></li>';
 			$("#msgs").append(content).scrollTop($("#msgs").prop('scrollHeight'));
 		}else{
@@ -183,14 +184,20 @@ $(document).ready(function() {
 	});
 
 	$(document).on('click', '#sendMedia', function(e) {
-		$('#fileImport').trigger('change');
+		if(!uploading){
+			$('#fileImport').trigger('change');
+		} else {
+			infoModal('Still uploading' , 'Wait for file transfer to finish');
+		}
 	});
 
 	$('#fileImport').on('change', function() {
 		let fi  = document.getElementById('fileImport');
-		if(fi.files && fi.files[0]){
+		if(fi.files && fi.files[0] && !uploading){
 			let file = fi.files[0];
 			if(file.size < 50000000){
+				uploading = true;
+				streams[file.name]  = $('#tokenChat').val();
 				let stream = ss.createStream();
 				ss(socket).emit('sendMedia', stream, {
 					name: file.name,
@@ -200,13 +207,19 @@ $(document).ready(function() {
 				});
 				let blopStream = ss.createBlobReadStream(file);
 				let size = 0;
+				let stid = '_' + Math.random().toString(36).substr(2, 9);
 				blopStream.on('data', function(chunk){
 					size += chunk.length;
 					updateMedia({
+						fileName: file.name,
 						loadStatus: Math.floor(size/ file.size*100)+ '%',
-						origin: "You",
-						stid: "OwnMedia"
+						origin: "You're",
+						stid: stid
 					});
+					if(size === file.size){
+						uploading = false;
+						document.getElementById('fileImport').value = null;
+					}
 				});
 				blopStream.pipe(stream);
 			}else{
@@ -220,7 +233,8 @@ $(document).ready(function() {
     function appendChat(chat) {
         let name = chat.name || '',
             token = chat.token || '',
-            notification = chat.notification || '';
+            notification = chat.notification || '',
+			isGroup = chat.isGroup || '';
         if (token && name) {
             let content = '<li style="width:100%">' +
                 '<div class="msj macro chat" ';
@@ -228,6 +242,7 @@ $(document).ready(function() {
             content += '<div class="text text-l';
             content += '<p class="cntName">' + name + '</p>';
             content += '<p class="notification"><small>' + notification + '</small></p>';
+            content += isGroup ? '<p class="isGroup"><small>Group</small></p>' : '';
             content += '</div></div></li>';
             $("#chats").append(content).scrollTop($("#chats").prop('scrollHeight'));
         }

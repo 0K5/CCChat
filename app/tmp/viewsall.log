@@ -829,3 +829,309 @@
 {"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T17:31:39.294Z"}
 {"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T17:31:39.295Z"}
 {"level":"info","message":"Initializing express application","timestamp":"2018-04-10T17:31:39.387Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T20:30:57.235Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T20:30:57.252Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T20:30:57.251Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T20:30:57.263Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T20:30:57.448Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T20:30:57.784Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T20:30:58.782Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T20:30:58.782Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T20:30:58.876Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T20:34:08.113Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T20:34:08.127Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T20:34:08.125Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T20:34:08.137Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T20:34:08.311Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T20:34:08.649Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T20:34:09.621Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T20:34:09.621Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T20:34:09.723Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T20:38:16.397Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T20:38:16.410Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T20:38:16.409Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T20:38:16.421Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T20:38:16.592Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T20:38:17.111Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T20:38:18.082Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T20:38:18.082Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T20:38:18.174Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T20:39:24.175Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T20:39:24.189Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T20:39:24.187Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T20:39:24.199Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T20:39:24.374Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T20:39:24.582Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T20:39:25.553Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T20:39:25.554Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T20:39:25.646Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T20:43:08.439Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T20:43:08.453Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T20:43:08.451Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T20:43:08.463Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T20:43:08.636Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T20:43:08.872Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T20:43:09.835Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T20:43:09.835Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T20:43:09.947Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T20:44:13.730Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T20:44:13.743Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T20:44:13.742Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T20:44:13.754Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T20:44:13.925Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T20:44:14.119Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T20:44:15.090Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T20:44:15.090Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T20:44:15.193Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T20:46:04.327Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T20:46:04.341Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T20:46:04.339Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T20:46:04.351Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T20:46:04.521Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T20:46:04.728Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T20:46:05.707Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T20:46:05.708Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T20:46:05.809Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T20:51:31.032Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T20:51:31.046Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T20:51:31.044Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T20:51:31.057Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T20:51:31.230Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T20:51:31.424Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T20:51:32.487Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T20:51:32.488Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T20:51:32.584Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T20:52:27.975Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T20:52:27.989Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T20:52:27.988Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T20:52:28.000Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T20:52:28.184Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T20:52:28.376Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T20:52:29.319Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T20:52:29.320Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T20:52:29.436Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T20:54:47.603Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T20:54:47.616Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T20:54:47.615Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T20:54:47.627Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T20:54:47.803Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T20:54:47.993Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T20:54:49.044Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T20:54:49.044Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T20:54:49.140Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T20:56:36.877Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T20:56:36.890Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T20:56:36.889Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T20:56:36.901Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T20:56:37.080Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T20:56:37.367Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T20:56:38.348Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T20:56:38.348Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T20:56:38.442Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:03:57.746Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:03:57.760Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:03:57.758Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:03:57.771Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:03:57.949Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:03:58.237Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:03:59.231Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:03:59.232Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:03:59.327Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:05:46.640Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:05:46.653Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:05:46.652Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:05:46.664Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:05:46.842Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:05:47.177Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:05:48.161Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:05:48.162Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:05:48.272Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:07:25.381Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:07:25.395Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:07:25.394Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:07:25.406Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:07:25.576Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:07:26.090Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:07:27.063Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:07:27.064Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:07:27.171Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:09:16.986Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:09:17.000Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:09:16.998Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:09:17.011Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:09:17.183Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:09:17.703Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:09:18.734Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:09:18.734Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:09:18.829Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:10:06.830Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:10:06.844Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:10:06.842Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:10:06.856Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:10:07.044Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:10:07.340Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:10:08.289Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:10:08.289Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:10:08.385Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:10:55.205Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:10:55.218Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:10:55.217Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:10:55.229Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:10:55.399Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:10:55.731Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:10:56.682Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:10:56.683Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:10:56.779Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:11:18.032Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:11:18.045Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:11:18.044Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:11:18.055Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:11:18.224Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:11:18.417Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:11:19.370Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:11:19.371Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:11:19.463Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:13:38.931Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:13:38.944Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:13:38.943Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:13:38.955Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:13:39.124Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:13:39.518Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:13:40.519Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:13:40.520Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:13:40.613Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:15:49.676Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:15:49.689Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:15:49.688Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:15:49.700Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:15:49.870Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:15:50.064Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:15:51.015Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:15:51.016Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:15:51.118Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:23:23.584Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:23:23.599Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:23:23.597Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:23:23.609Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:23:23.783Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:23:24.067Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:23:30.059Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:23:30.059Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:23:30.154Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:28:50.678Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:28:50.691Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:28:50.689Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:28:50.701Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:28:50.872Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:28:51.393Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:28:52.410Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:28:52.411Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:28:52.503Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:30:46.218Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:30:46.231Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:30:46.230Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:30:46.242Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:30:46.424Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:30:46.613Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:30:47.600Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:30:47.601Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:30:47.694Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:38:58.708Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:38:58.721Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:38:58.720Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:38:58.732Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:38:58.904Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:38:59.110Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:39:00.139Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:39:00.140Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:39:00.240Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:40:15.310Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:40:15.323Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:40:15.322Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:40:15.334Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:40:15.504Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:40:15.700Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:40:16.689Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:40:16.690Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:40:16.787Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:40:53.405Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:40:53.418Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:40:53.417Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:40:53.430Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:40:53.602Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:40:53.805Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:40:54.807Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:40:54.808Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:40:54.900Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T21:43:40.119Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T21:43:40.133Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T21:43:40.131Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T21:43:40.143Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T21:43:40.315Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T21:43:40.837Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T21:43:41.822Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T21:43:41.823Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T21:43:41.915Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T22:05:31.634Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T22:05:31.649Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T22:05:31.648Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T22:05:31.660Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T22:05:31.848Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T22:05:32.217Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T22:05:33.203Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T22:05:33.203Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T22:05:33.305Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T22:15:01.841Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T22:15:01.855Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T22:15:01.853Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T22:15:01.867Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T22:15:02.049Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T22:15:02.256Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T22:15:03.242Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T22:15:03.243Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T22:15:03.341Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T22:20:44.691Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T22:20:44.705Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T22:20:44.704Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T22:20:44.717Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T22:20:44.893Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T22:20:45.190Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T22:20:46.201Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T22:20:46.202Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T22:20:46.296Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T22:21:52.218Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T22:21:52.231Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T22:21:52.230Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T22:21:52.242Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T22:21:52.414Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T22:21:52.922Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T22:21:53.982Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T22:21:53.983Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T22:21:54.078Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T22:23:04.897Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T22:23:04.911Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T22:23:04.909Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T22:23:04.921Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T22:23:05.095Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T22:23:05.452Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T22:23:06.446Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T22:23:06.446Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T22:23:06.541Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T22:24:14.864Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T22:24:14.877Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T22:24:14.876Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T22:24:14.888Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T22:24:15.060Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T22:24:15.345Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T22:24:16.327Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T22:24:16.328Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T22:24:16.421Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-10T22:30:09.044Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-10T22:30:09.061Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-10T22:30:09.059Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-10T22:30:09.073Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-10T22:30:09.248Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-10T22:30:09.752Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-10T22:30:10.755Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-10T22:30:10.755Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-10T22:30:10.857Z"}
