@@ -56,15 +56,25 @@ let setUpSessionStorage = (app, server, next) => {
             logger.logWarn("Connection to redislab couldn't be established");
         }
     });
-    client.on('error', function() {
+    client.on('error', function(e) {
         logger.logWarn("Connection to redislabs could'nt be established");
+		logger.logWarn(e);
         client.end(true);
-        client = redis.createClient();
-        client.on('error', function() {
+        client = redis.createClient({host: 'localhost', port:6379});
+        client.on('error', function(e) {
             logger.logWarn("Connection to locale redis database couldn't be established");
+			logger.logWarn(e);
             client.end(true);
             setUpSession(storage, session, app, server, next);
         });
+		client.on('connect', function() {
+    	    storage = new redisStore({
+    	        host: 'localhost',
+    	        port: 6479,
+    	        client
+    	    });
+    	    setUpSession(storage, session, app, server, next);
+    	});
     });
     client.on('connect', function() {
         storage = new redisStore({

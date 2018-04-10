@@ -66,7 +66,11 @@
             app.set('views', path.join(__dirname + '/tmp/views/'));
             app.set('view engine', '.hbs');
             setUpExpress(app, server);
-        };
+		};
+		let tmpViews = path.resolve(__dirname + '/tmp/views');
+		if(!fs.existsSync(tmpViews)){
+			fs.ensureDirSync(tmpViews);
+		}
         allViews.forEach((dir) => {
             if (dir.endsWith('.view.hbs')) {
                 fs.copy(dir, './tmp/views/' + dir.substring(dir.lastIndexOf('/')), (err) => {

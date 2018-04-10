@@ -1,5 +1,8 @@
 let sockets = require('../../helpers/sockets.js');
 let logger = require('../../helpers/logger.js');
+let ss = require('socket.io-stream');
+let fs = require('fs-extra');
+let path = require('path');
 
 function setOns(sessionId, io, socket) {
     socket.on('init', () => {
@@ -29,6 +32,10 @@ function setOns(sessionId, io, socket) {
 	socket.on('logout',() => {
 		logger.logDeb('User with sessionId ' + sessionId + 'loggout requested');
 		require('./logoutchat.js').exec(sessionId);
+	});
+	ss(socket).on('sendMedia', function(stream, data) {
+		logger.logDeb('User with sessionId ' + sessionId + 'sends media');
+		require('./sendmediachat.js').exec(sessionId, stream, data);
 	});
 }
 

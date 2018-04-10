@@ -1,10 +1,11 @@
-let fs = require('fs');
+let fs = require('fs-extra');
+let path = require('path');
 
 let log = (logLevel) => {
     let winston = require('winston');
-	let dir = './tmp/logs/';
+	let dir = path.join(__dirname , '../tmp/views');
 	if(!fs.existsSync(dir)){
-		fs.mkdirSync(dir);
+		fs.ensureDirSync(dir);
 	}
     let logger = new winston.Logger({
         transports: [

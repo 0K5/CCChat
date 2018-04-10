@@ -1,4 +1,5 @@
 let logger = require('./logger.js');
+let ss = require('socket.io-stream');
 let fs = require('fs-extra');
 let path = require('path');
 let onConnectActions = {};
@@ -78,6 +79,14 @@ let emitRoom = (sessionId, roomId, eventName, data) => {
 	}
 };
 
+let emitStream = (sessionId, eventName, inStream, data) => {
+	if(sessionId in sockets){
+		let outStream = ss.createStream();
+		ss(sockets[sessionId]).emit('openStream', outStream, data);
+		inStream.pipe(outStream);
+	}
+};
+
 let join = (sessionId, roomId) => {
 	if(sessionId in sockets){
 		sockets[sessionId].join(roomId, function(){
@@ -91,5 +100,6 @@ module.exports = {
 	emit: emit,
 	broadcast: broadcast,
 	emitRoom: emitRoom,
+	emitStream: emitStream,
 	join: join
 };
