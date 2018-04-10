@@ -116,13 +116,37 @@ $(document).ready(function() {
 
     $("#msgGroupActions").addClass('hidden');
 
+
 	// Send media functionalities
 	
-    $(document).on('click', '#sendMedia', function(e) {
-        window.dialog.openFileDialog(function(res) {
-            socket.emit('file', res);
-        });
-    });
+	$(document).on('click', '#sendMedia', function(e) {
+		$('#fileImport').trigger('change');
+	});
+
+	$('#fileImport').on('change', function() {
+		let fi  = document.getElementById('fileImport');
+		if(fi.files && fi.files[0]){
+			let file = fi.files[0];
+			if(file.size < 50000000){
+				let stream = ss.createStream();
+				ss(socket).emit('sendMedia', stream, {
+					name: file.name,
+					size: file.size,
+					type: file.type,
+					token: $('#tokenChat').val()
+				});
+				let blopStream = ss.createBlobReadStream(file);
+				let size = 0;
+				blopStream.on('data', function(chunk){
+					size += chunk.length;
+					console.log(Math.floor(size/ file.size*100)+ '%');
+				});
+				blopStream.pipe(stream);
+			}else{
+				infoModal('File upload', 'You can only send files under 50MB');
+			}
+		}
+	});
 
     // All chat functionalities
 
@@ -151,6 +175,7 @@ $(document).ready(function() {
         $("#msgInput").show();
         $("#sendMedia").show();
         $("#sendMsg").show();
+		$("#fileImport").hide();
         if (chat.isGroup) {
             $("#addToGrp").show();
             $("#infoGrp").show();
