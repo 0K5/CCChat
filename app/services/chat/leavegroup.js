@@ -1,6 +1,6 @@
-let logger = require('../../helpers/logger.js');
-let db = require('../../helpers/database.js');
-let sockets = require('../../helpers/sockets.js');
+let logger = require('../../modules/logger.js');
+let db = require('../../modules/database.js');
+let sockets = require('../../modules/sockets.js');
 let moment = require('moment');
 moment.locale('de');
 
