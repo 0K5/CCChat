@@ -1296,3 +1296,12 @@
 {"level":"info","message":"Initializing express application","timestamp":"2018-04-11T19:34:48.815Z"}
 {"level":"error","message":"User for chat creation not found","timestamp":"2018-04-11T19:36:49.213Z"}
 {"level":"error","message":"User for chat creation not found","timestamp":"2018-04-11T19:36:54.458Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-11T21:34:50.845Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-11T21:34:50.859Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-11T21:34:50.858Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-11T21:34:50.872Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-11T21:34:51.053Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-11T21:34:51.247Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-11T21:34:52.248Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-11T21:34:52.248Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-11T21:34:52.344Z"}

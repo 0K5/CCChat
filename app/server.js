@@ -1,85 +1,94 @@
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
+(() => {
+    let logger = require('./modules/logger.js');
+    let servicefiles = require('./modules/servicefiles.js');
+    let server = undefined;
+    let express = require('express')
+    let app = express();
 
-var users = {};
-connections = [];
+    logger.logInfo('Setting up App');
+    let fs = require('fs-extra');
+    let path = require('path');
+    let bodyParser = require('body-parser');
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({
+        extended: true
+    }));
+    let mimeTypes = {
+        ".html": "text/html",
+        ".css": "text/css",
+        ".js": "application/javascript",
+        ".png": "image/png",
+        ".gif": "image/gif",
+        ".jpg": "image/jpeg",
+        ".fx": "application/fx"
+    };
+    express.static.mime.define(mimeTypes);
 
-portNumber = 3000;
+    /*Set up express an routes, so that f.e. https://localhost:3000/login is called the route will be in 
+     * ./services/login/login.route.js*/
+    let setUpExpress = (app, server) => {
+        logger.logInfo('Initializing express application');
+        app.use(express.static(path.join(__dirname, '/public')));
+        app.use('/', require('./services/index/index.route.js'));
+        servicefiles.get('.route.js', (allRoutes) => {
+            allRoutes.forEach((routeFile) => {
+                let route = routeFile.substring(routeFile.lastIndexOf('/'));
+                route = route.substring(0, route.indexOf('.'));
+                app.use(route, require(routeFile));
+            });
+        });
+    };
 
-server.listen(process.env.PORT || portNumber);
-console.log('Server (CCChat) running...');
+    /*Set up handlebars, all handlebar files need to be in one folder... this corrupts the service folder structure
+     * so the .views.hbs files for handlebars are copied to ./tmp/views on start*/
+    let setUpHandlebars = (app, server) => {
+        logger.logInfo('Setting up handlebars');
+        let handlebars = require('express-handlebars');
+        servicefiles.get('.view.hbs', (allViews) => {
+            let copyCount = allViews.length;
+            let setViewsToTmp = () => {
+                allViews = allViews.map((dir) => path.join(__dirname + 'services/' + dir));
+                app.engine('hbs', handlebars({
+                    extname: 'hbs',
+                    defaultLayout: 'main',
+                    layoutsDir: __dirname + '/layouts/'
+                }));
+                app.set('views', path.join(__dirname + '/tmp/views/'));
+                app.set('view engine', '.hbs');
+                setUpExpress(app, server);
+            };
+            let tmpViews = path.resolve(__dirname + '/tmp/views');
+            if (!fs.existsSync(tmpViews)) {
+                fs.ensureDirSync(tmpViews);
+            }
+            //Copies files from services folder to ./tmp/views/
+            allViews.forEach((dir) => {
+                if (dir.endsWith('.view.hbs')) {
+                    fs.copy(dir, './tmp/views/' + dir.substring(dir.lastIndexOf('/')), (err) => {
+                        if (err) {
+                            logger.logErr(err);
+                        }
+                        copyCount--;
+                        if (copyCount === 0) {
+                            setViewsToTmp(app, server);
+                        }
+                    })
+                }
+            });
+        });
+    };
 
-app.use(express.static(__dirname + '/public'));
+    let setUpDatabase = (app, server) => {
+        require('./modules/database.js').init(app, server, setUpHandlebars);
+    };
 
-app.get('/', function(req, res){
-	res.sendFile(__dirname + '/index.html');
-});
- 
+    let setUpSockets = (app, server, session, storage) => {
+        require('./modules/sockets.js').init(app, server, session, storage, setUpDatabase);
+    };
 
-io.sockets.on('connection', function(socket){
-	//Connect
-	connections.push(socket);
-	console.log("Number of connected sockets: " +connections.length);
+    let setUpSessions = (app, server) => {
+        require('./modules/sessions.js').init(app, server, setUpSockets);
+    };
 
-	
-	//Disconnect
-	socket.on('disconnect', function(data){
-		delete users[socket.nickname];
-		updateUsernames();
-		connections.splice(connections.indexOf(socket), 1);
-		console.log("Number of connected sockets: " +connections.length);
-		io.sockets.emit('user left', {user: socket.nickname});
-		console.log(socket.nickname +" left the chatroom");
-	});
-	
-	//Send Message
-	socket.on('send message', function(data, callback){
-		var msg = data.trim();
-		if(msg.substring(0,3) == '/p '){
-			msg = msg.substring(3);
-			var i = msg.indexOf(' ');
-			if(i != -1){
-				var name = msg.substring(0, i);
-				var msg = msg.substring(i + 1);
-				if(name in users){
-					users[name].emit('private message', {msg: msg, user: socket.nickname, timestamp: new Date(Date.now()).toUTCString()});
-					console.log('private message');
-				} else {
-					callback('There is no user with such name. Please try again.');
-				}
-			} else {
-				callback('The private message cannot be empty');
-			}
-			
-		}
-		else if(msg.substring(0,5) == '/list'){
-			var socketid = socket.id;
-			io.to(socketid).emit('user list', {list: Object.keys(users)});
-		}
-		else{
-			io.sockets.emit('new message', {msg: msg, user: socket.nickname, timestamp: new Date(Date.now()).toUTCString()});
-		}
-	});
-	
-	//New User
-	socket.on('new user', function(data, callback){
-		if(data.username in users){
-			callback(false);
-		} else {
-			callback(true);
-			socket.nickname = data.username;
-			users[socket.nickname] = socket;
-			updateUsernames();
-		//	io.sockets.emit('new user enlisted', {user: socket.nickname});
-			io.sockets.emit('new user enlisted', {user: socket.nickname, timestamp: new Date(Date.now()).toUTCString()});			
-			console.log(socket.nickname +" joined the chatroom");
-		}
-	});
-	
-	function updateUsernames(){
-		io.sockets.emit('get users', Object.keys(users));
-	}
-	
-});
+    require('./modules/server.js').init(app, setUpSessions);
+})();
