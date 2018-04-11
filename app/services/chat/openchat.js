@@ -1,6 +1,6 @@
-let logger = require('../../helpers/logger.js');
-let db = require('../../helpers/database.js');
-let sockets = require('../../helpers/sockets.js');
+let logger = require('../../modules/logger.js');
+let db = require('../../modules/database.js');
+let sockets = require('../../modules/sockets.js');
 
 function informParticipants(user, chat, participantName){
 	this.callback = function(participant){

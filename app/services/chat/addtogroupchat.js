@@ -1,6 +1,7 @@
-let logger = require('../../helpers/logger.js');
-let db = require('../../helpers/database.js');
-let sockets = require('../../helpers/sockets.js');
+/* Functionality to add a contact to a chat group*/
+let logger = require('../../modules/logger.js');
+let db = require('../../modules/database.js');
+let sockets = require('../../modules/sockets.js');
 let dateOptions = {
 	weekday: 'long', 
 	year: 'numeric', 
@@ -11,6 +12,9 @@ let dateOptions = {
 	minute: 'numeric'
 }
 
+/* Emits the information, that a new contact is added to the group 
+ * @param msg Object the message that will be added to the chat with the contact thats added to the group
+ */
 function emitGroupAdd(msg){
 	this.callback = function(user){
 		if(user){
@@ -22,6 +26,9 @@ function emitGroupAdd(msg){
 	};
 }
 
+/*On successul updated chat get the last message (where the information of the add-new-contact action is saved) and read all participants from chat by name to get sessionId for emit-Action
+	* @param addCnt Number number of new contact(s) added to the chat
+	* @param chat the chat where the contact(s) are added*/
 function chatUpdated(addCnt, chat){
 	this.callback = function(c){
 		if(c){
@@ -38,6 +45,7 @@ function chatUpdated(addCnt, chat){
 	};
 }
 
+/*If the chat is successfully loaded from the database ŒŒ*/
 function chatLoaded(user, sendChat){
 	this.callback = function(storedChat){
 		if(storedChat){

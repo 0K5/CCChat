@@ -1,15 +1,7 @@
-let logger = require('../../helpers/logger.js');
-let db = require('../../helpers/database.js');
-let sockets = require('../../helpers/sockets.js');
-let dateOptions = {
-	weekday: 'long', 
-	year: 'numeric', 
-	month: 'numeric', 
-	day: 'numeric',
-	hour12: false,
-	hour: 'numeric',
-	minute: 'numeric'
-}
+let logger = require('../../modules/logger.js');
+let db = require('../../modules/database.js');
+let sockets = require('../../modules/sockets.js');
+let moment = require('moment');
 
 function participantLoaded(user, msg, participantName){
 	this.callback = function(participant){
@@ -32,7 +24,6 @@ function participantLoaded(user, msg, participantName){
 function updatedChat(user, msg){
 	this.callback = function(chat){
 		if(chat){
-			console.log('CHAT ' + JSON.stringify(chat));
 			chat.participants.forEach((p) => {
 				db.read('users', {username: p}, new participantLoaded(user, msg, p ).callback);
 			});
@@ -45,7 +36,8 @@ function updatedChat(user, msg){
 function chatLoaded(user, msg){
 	this.callback = function(chat){
 		if(chat){
-			msg.timestamp = (new Date()).toLocaleString('de-DE', dateOptions);
+			moment.locale('de');
+			msg.timestamp = moment().format('LLLL');
 			let messages = chat.messages;
 			messages.push(msg);
 			db.update('chats', {token: chat.token},{messages: messages}, new updatedChat(user, msg).callback);

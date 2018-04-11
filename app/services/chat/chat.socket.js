@@ -1,5 +1,5 @@
-let sockets = require('../../helpers/sockets.js');
-let logger = require('../../helpers/logger.js');
+let sockets = require('../../modules/sockets.js');
+let logger = require('../../modules/logger.js');
 let ss = require('socket.io-stream');
 let fs = require('fs-extra');
 let path = require('path');

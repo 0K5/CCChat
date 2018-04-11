@@ -1,5 +1,5 @@
-let logger = require('../../helpers/logger.js');
-let db = require('../../helpers/database.js');
+let logger = require('../../modules/logger.js');
+let db = require('../../modules/database.js');
 let express = require('express');
 let router = express.Router();
 
@@ -30,9 +30,5 @@ function VerifySession (req, res, next){
 router.get('/', (req, res, next) => {
 	db.read('users', {sid : req.session.id}, new VerifySession(req, res).callback);
 });
-
-router.use('/messages', require('../messages/messages.route.js'));
-
-router.use('/contacts', require('../contacts/contacts.route.js'));
 
 module.exports = router;
