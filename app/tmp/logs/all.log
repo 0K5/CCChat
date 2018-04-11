@@ -1305,3 +1305,27 @@
 {"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-11T21:34:52.248Z"}
 {"level":"info","message":"Setting up handlebars","timestamp":"2018-04-11T21:34:52.248Z"}
 {"level":"info","message":"Initializing express application","timestamp":"2018-04-11T21:34:52.344Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-11T21:53:56.711Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-11T21:53:56.724Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-11T21:53:56.722Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-11T21:53:56.736Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-11T21:53:56.905Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-11T21:53:57.258Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-11T21:53:58.268Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-11T21:53:58.268Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-11T21:53:58.361Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-11T21:54:33.081Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-11T21:54:33.094Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-11T21:54:33.093Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-11T21:54:33.107Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-11T21:54:33.277Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-11T21:54:33.619Z"}
+{"level":"info","message":"Connection to mlab database succeeded","timestamp":"2018-04-11T21:54:34.620Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-11T21:54:34.621Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-11T21:54:34.713Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-11T21:58:59.855Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-11T21:58:59.869Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-11T21:58:59.867Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-11T21:58:59.881Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-11T21:59:00.058Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-11T21:59:00.567Z"}
