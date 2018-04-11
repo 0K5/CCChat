@@ -1,25 +1,19 @@
+<<<<<<< HEAD
 /* Functionality to add a contact to a chat group*/
-let logger = require('../../modules/logger.js');
-let db = require('../../modules/database.js');
-let sockets = require('../../modules/sockets.js');
-let dateOptions = {
-	weekday: 'long', 
-	year: 'numeric', 
-	month: 'numeric', 
-	day: 'numeric',
-	hour12: false,
-	hour: 'numeric',
-	minute: 'numeric'
-}
+let logger = require('../../helpers/logger.js');
+let db = require('../../helpers/database.js');
+let sockets = require('../../helpers/sockets.js');
+let moment = require('moment');
+moment.locale('de');
 
 /* Emits the information, that a new contact is added to the group 
  * @param msg Object the message that will be added to the chat with the contact thats added to the group
  */
-function emitGroupAdd(msg){
+function emitGroupAdd(chat, msg, p){
 	this.callback = function(user){
 		if(user){
 			logger.logDeb('Emitting message ' + JSON.stringify(msg) + ' to user ' + user.username);
-			sockets.emit(user.sid, 'addToGrp', {msg: msg});	
+			sockets.emit(user.sid, 'addToGrp', {msg: msg, chat: chat});	
 		} else {
 			logger.logErr('Add contact to chat loading user ' + p + ' failed');
 		}
@@ -29,14 +23,14 @@ function emitGroupAdd(msg){
 /*On successul updated chat get the last message (where the information of the add-new-contact action is saved) and read all participants from chat by name to get sessionId for emit-Action
 	* @param addCnt Number number of new contact(s) added to the chat
 	* @param chat the chat where the contact(s) are added*/
-function chatUpdated(addCnt, chat){
+function chatUpdated(user, addCnt, chat){
 	this.callback = function(c){
 		if(c){
 			for(let i=(chat.messages.length-addCnt); i<chat.messages.length; i++){
 				let msg = chat.messages[i];
 				chat.participants.forEach((p) => {
 					logger.logDeb('Add contact to chat emitting msg to ' + p);
-					db.read('users',{username: p}, new emitGroupAdd(msg, p).callback);
+					db.read('users',{username: p}, new emitGroupAdd(chat, msg, p).callback);
 				});
 			}
 		} else {
@@ -63,13 +57,13 @@ function chatLoaded(user, sendChat){
 					storedChat.messages.push({
 						token: storedChat.token,
 						text: p + ' added to chat by ' + user.username,
-						timestamp: (new Date()).toLocaleString('de-DE', dateOptions),
+						timestamp: moment().format('LLLL'),
 					});
 				}
 			});
 			if(addCnt > 0){
 				logger.logDeb('Add contact to chat update on chat ' + storedChat.name);
-				db.update('chats',{token: storedChat.token}, storedChat, new chatUpdated(addCnt, storedChat).callback);
+				db.update('chats',{token: storedChat.token}, storedChat, new chatUpdated(user, addCnt, storedChat).callback);
 			}
 		} else {
 			logger.logErr('Chat with name ' + sendChat.name + ' not in database');

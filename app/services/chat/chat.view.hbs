@@ -2,6 +2,7 @@
         <h1>{{title}}</h1>
     <p>Chat with your student colleagues and only with student colleagues</p>
     <span id="logout" class="glyphicon glyphicon-eject cccButton"></span>
+    <input type="hidden" id="username" value={{{user}}}>
 </div>
 <div class="container">
         <div class="row">
@@ -31,6 +32,7 @@
                 <p class="msgName" id="chatName"></p>
                 <div id="msgGrpActions">
 			        <span id="addToGrp" class="glyphicon glyphicon-plus-sign cccButton" style="display:none;"></span>
+			        <span id="leaveGrp" class="glyphicon glyphicon-eject cccButton" style="display:none;"></span>
 			        <span id="infoGrp" class="glyphicon glyphicon-info-sign cccButton" style="display:none;"></span>
                 </div>
             </div>

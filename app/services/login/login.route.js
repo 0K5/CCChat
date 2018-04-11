@@ -9,15 +9,7 @@ let ExpressBrute = require('express-brute');
 let MemCacheStore = require('express-brute-memcached');
 let moment = require('moment');
 let store = new ExpressBrute.MemoryStore();
-let dateOptions = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour12: false,
-    hour: 'numeric',
-    minute: 'numeric'
-}
+moment.locale('de');
 
 /*Callback on to much dismissed login attempts to prevent bruteforce attacks*/
 let failCallback = function(req, res, next, nextPossibleLoginTime) {
@@ -60,7 +52,7 @@ function loginAttempt(req, res, next) {
                         }, {
                             sid: req.session.id,
                             loggedIn: 1,
-                            lastLogin: (new Date()).toLocaleString('de-DE', dateOptions)
+                            lastLogin: moment().format('LLLL')
                         }, (user) => {
                             if (user) {
                                 logger.logDeb("Login successful redirect to chat");
@@ -105,11 +97,17 @@ function registerAttempt(req, res, next) {
             res.send({
                 err: 'The email is already registered'
             });
+        } else if (req.body.password !== req.body.passwordrep) {
+            res.send({
+                err: 'The passwords do not match'
+            });
         } else {
-            bcrypt.hash(req.body.password, 31, function(err, hash) {
+            logger.logDeb("Creating hash from password");
+            bcrypt.hash(req.body.password, 10, function(err, hash) {
                 if (err) {
-                    logger.logErr(err);
+                    logger.logErr('Error on password hash creation ' + err);
                 } else {
+                    logger.logDeb('Register create new user');
                     db.create('users', {
                         sid: req.session.id,
                     }, {
@@ -117,7 +115,7 @@ function registerAttempt(req, res, next) {
                         username: req.body.username,
                         password: hash,
                         loggedIn: 1,
-                        lastLogin: (new Date()).toLocaleString('de-DE', dateOptions)
+                        lastLogin: moment().format('LLLL')
                     }, (user) => {
                         if (user) {
                             logger.logDeb("Register successful redirect to chat");
