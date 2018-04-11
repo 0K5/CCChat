@@ -29,7 +29,7 @@ let initDatabase = (app, server, callback) => {
                 }
             });
         });
-        mdb.once("open", function(callback) {
+        mdb.once("open", function() {
             logger.logInfo("Connection to mlab database succeeded");
             database = mdb;
             return callback(app, server);
@@ -54,7 +54,7 @@ let create = (coll, id, data, callback) => {
                     return update(coll, id, data, callback);
                 } else {
                     logger.logDeb("Document with id " + JSON.stringify(id) + " created");
-                    return callback(res);
+                    return callback(res.ops[0]);
                 }
             });
         };

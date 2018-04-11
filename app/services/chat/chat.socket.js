@@ -7,7 +7,7 @@ let path = require('path');
 function setOns(sessionId, io, socket) {
     socket.on('init', () => {
         logger.logDeb('User with sessionId ' + sessionId + 'initialises chat');
-        require('./initchat.js').exec(sessionId);
+        require('./init.js').exec(sessionId);
     });
     socket.on('openChat', (data) => {
         logger.logDeb('User with sessionId ' + sessionId + 'opens chat');
@@ -19,27 +19,27 @@ function setOns(sessionId, io, socket) {
 	});
 	socket.on('addToGrp', (data) => {
 		logger.logDeb('User with sessionId ' + sessionId + 'adds user to existing group');
-		require('./addtogroupchat.js').exec(sessionId,data);
+		require('./addtogroup.js').exec(sessionId,data);
 	});
 	socket.on('leaveGrp', (data) => {
 		logger.logDeb('User with sessionId ' + sessionId + 'remove user to existing group');
-		require('./leavegroupchat.js').exec(sessionId,data);
+		require('./leavegroup.js').exec(sessionId,data);
 	});
 	socket.on('infoGroup', (data) =>{
 		logger.logDeb('User with sessionId ' + sessionId + 'requests info of group');
-		require('./infogroupchat.js').exec(sessionId,data);
+		require('./infogroup.js').exec(sessionId,data);
 	});	
 	socket.on('message', (data) => {
 		logger.logDeb('User with sessionId ' + sessionId + 'sends message');
-		require('./messagechat.js').exec(sessionId, data);
+		require('./message.js').exec(sessionId, data);
 	});
 	socket.on('logout',() => {
 		logger.logDeb('User with sessionId ' + sessionId + 'loggout requested');
-		require('./logoutchat.js').exec(sessionId);
+		require('./logout.js').exec(sessionId);
 	});
 	ss(socket).on('sendMedia', function(stream, data) {
 		logger.logDeb('User with sessionId ' + sessionId + 'sends media');
-		require('./sendmediachat.js').exec(sessionId, stream, data);
+		require('./sendmedia.js').exec(sessionId, stream, data);
 	});
 }
 

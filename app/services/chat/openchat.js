@@ -38,7 +38,7 @@ function chatsByContactsLoaded(user, chat){
 			participants.sort();
 			//Search for chat, if it already exists emit to user
 			allStoredChats.forEach((c) => {
-				if(JSON.stringify(participants) === JSON.stringify(c.participants.sort())){
+				if(!chat.isGroup && JSON.stringify(participants) === JSON.stringify(c.participants.sort())){
 					logger.logDeb("Chat found and loaded");
 					adaptChatToReceiver(user, c, (user, chat) => {
 						sockets.emit(user.sid, 'loadChat',{chat: chat});
@@ -68,6 +68,7 @@ function chatsByContactsLoaded(user, chat){
 }
 
 function adaptChatToReceiver(user, chat, callback){
+	logger.logDeb('Openchat adapting chat to receiver ' + JSON.stringify(chat));
 	if(chat.isPrivate){
 		chat.name = chat.participants[0] === user.username ? chat.participants[1] : chat.participants[0];
 	}
@@ -84,6 +85,7 @@ function adaptChatToReceiver(user, chat, callback){
 function chatLoaded(user, clientChat){
 	this.callback = function(storedChat){
 		if(storedChat){
+			logger.logDeb('Openchat loading stored chat' + clientChat.name);
 			adaptChatToReceiver(user, storedChat, (user, chat) => {
 				sockets.emit(user.sid, 'loadChat',{chat: chat});	
 			});
@@ -98,8 +100,10 @@ function userLoadedChat(chat){
 		if(user){
 			logger.logDeb("Loading chat by chatid " + chat.token);
 			if(chat.token){
+				logger.logDeb('Openchat chat exists and is loaded');
 				db.read('chats', {token: chat.token},new chatLoaded(user, chat).callback);
 			}else{
+				logger.logDeb('Openchat chat will be created');
 				db.readAll('chats', new chatsByContactsLoaded(user, chat).callback);
 			}
 		} else {
