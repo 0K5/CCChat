@@ -1,7 +1,9 @@
-let logger = require('../../modules/logger.js');
-let db = require('../../modules/database.js');
-let sockets = require('../../modules/sockets.js');
+let logger = require('../../../modules/logger.js');
+let db = require('../../../modules/database.js');
+let sockets = require('../../../modules/sockets.js');
 let ss = require('socket.io-stream');
+let moment = require('moment');
+moment.locale('de');
 
 function participantLoaded(user, stream, data, pName){
 	this.callback = function(participant){
@@ -10,6 +12,7 @@ function participantLoaded(user, stream, data, pName){
 				require('crypto').randomBytes(48, function(err, buffer) {
 					let token = buffer.toString('hex');
 					data.stid = token;
+					data.timestamp = moment().format('LLLL');
 					sockets.emitStream(participant.sid, 'openStream', stream, data);
 				});
 			}

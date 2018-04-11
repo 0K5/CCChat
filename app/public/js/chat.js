@@ -127,6 +127,7 @@ $(document).ready(function() {
             stid = data.stid || '',
             fileName = data.fileName || '',
             link = data.link || '',
+			timestamp = data.timestamp || '',
             finished = data.finished || '';
         let content = '<li style="width:100%;">';
         let innerContent = '';
@@ -140,6 +141,7 @@ $(document).ready(function() {
             content += '<div class="text text-l">';
             content += innerContent ? '<div class="msgText" id=' + data.stid + '>' + innerContent + '</div>' : '';
             content += fileName !== "You're" ? '<p class="msgUser"><small>' + origin + '</small></p>' : '';
+            content += timestamp ? '<p class="msgDate"><small>' + timestamp + '</small></p>' : '';
             content += '</div></div></li>';
             $("#msgs").append(content).scrollTop($("#msgs").prop('scrollHeight'));
         } else {
@@ -304,6 +306,7 @@ $(document).ready(function() {
     socket.on('addToGrp', function(data) {
 		if(!($('#'+data.chat.token).length)){
 			appendChat(data.chat);
+			chat = data.chat;
 		}
 		if($('#tokenChat').val() === data.chat.token){
 			appendMessage(data.msg);

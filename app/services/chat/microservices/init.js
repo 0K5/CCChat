@@ -1,7 +1,7 @@
 /*Initalizes chats for the chat list on client side.*/
-let logger = require('../../modules/logger.js');
-let db = require('../../modules/database.js');
-let sockets = require('../../modules/sockets.js');
+let logger = require('../../../modules/logger.js');
+let db = require('../../../modules/database.js');
+let sockets = require('../../../modules/sockets.js');
 
 /*As soon as the users that participate on the new chat are loaded we emit the information about the new chat, so it can be added to the chats list*/
 function usersLoaded(user) {

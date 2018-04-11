@@ -1,6 +1,6 @@
-let logger = require('../../modules/logger.js');
-let db = require('../../modules/database.js');
-let sockets = require('../../modules/sockets.js');
+let logger = require('../../../modules/logger.js');
+let db = require('../../../modules/database.js');
+let sockets = require('../../../modules/sockets.js');
 let moment = require('moment');
 
 function participantLoaded(user, msg, participantName){

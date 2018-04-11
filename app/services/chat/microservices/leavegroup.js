@@ -1,6 +1,6 @@
-let logger = require('../../modules/logger.js');
-let db = require('../../modules/database.js');
-let sockets = require('../../modules/sockets.js');
+let logger = require('../../../modules/logger.js');
+let db = require('../../../modules/database.js');
+let sockets = require('../../../modules/sockets.js');
 let moment = require('moment');
 moment.locale('de');
 
@@ -8,7 +8,7 @@ function emitGroupAdd(msg, p){
 	this.callback = function(user){
 		if(user){
 			logger.logDeb('Emitting message ' + JSON.stringify(msg) + ' to user ' + user.username);
-			sockets.emit(user.sid, 'addToGrp', {msg: msg});	
+			sockets.emit(user.sid, 'leaveGrp', {msg: msg});	
 		} else {
 			logger.logErr('Remove contact to chat. Loading user ' + p + ' failed');
 		}
