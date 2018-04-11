@@ -3,23 +3,13 @@ let db = require('../../helpers/database.js');
 let express = require('express');
 let router = express.Router();
 
-function loadedChatMessaging(sessionId, data){
-	this.callback = function(chat){
-		if(chat){
-				
-		} else {
-			logger.logDeb("Chat for messaging couldn't be loaded");
-		}
-	};
-}
-
-
 function VerifySession (req, res, next){
 	this.callback = function(user){
 		if(user && user.loggedIn === 1){
 			logger.logDeb("User : " + user.username + " tries to access the chat");
 			res.render('chat.view.hbs', {
 				title: 'CCChat',
+				user: user.username
 			});
 		}else{
 			res.redirect('https://' + req.get('host') + '/login');

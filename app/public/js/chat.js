@@ -4,6 +4,7 @@ $(document).ready(function() {
         transports: ['websocket'],
         upgrade: false
     });
+	let username = $('#username').val();
     let chat = {};
     let contacts = [];
 	let streams = {};
@@ -260,9 +261,11 @@ $(document).ready(function() {
 		$("#fileImport").hide();
         if (chat.isGroup) {
             $("#addToGrp").show();
+			$("#leaveGrp").show();
             $("#infoGrp").show();
         } else {
             $("#addToGrp").hide();
+			$("#leaveGrp").hide();
             $("#infoGrp").hide();
         }
         if (chat.messages) {
@@ -283,6 +286,10 @@ $(document).ready(function() {
         appendChat(data.chat);
     });
 
+	socket.on('removeChat', function(data) {
+		$('#'+data.token).closest('li').remove();
+	});	
+
     $(document).on('click', '.chat', function(e) {
         let token = e.target.closest(".chat").id
         socket.emit('openChat', {
@@ -293,8 +300,17 @@ $(document).ready(function() {
     // All group functionalities
 
     socket.on('addToGrp', function(data) {
-        appendMessage(data.msg);
+		if(!($('#'+data.chat.token).length)){
+			appendChat(data.chat);
+		}
+		if($('#tokenChat').val() === data.chat.token){
+			appendMessage(data.msg);
+		}
     });
+
+	socket.on('leaveGrp', function(data) {
+		appendMessage(data.msg);
+	});
 
     $(document).on('click', '#createGrp', function(e) {
         if (!$('#addGrpInput').val()) {
@@ -307,6 +323,21 @@ $(document).ready(function() {
             }
             $('#chatModal').modal('show');
         }
+    });
+
+    $(document).on('click', '#leaveGrp', function(e) {
+		let token = $("#tokenChat").val();
+		$("#tokenChat").val('xxx');
+        $("#msgInput").hide();
+        $("#sendMedia").hide();
+        $("#sendMsg").hide();
+		$("#fileImport").hide();
+        $("#addToGrp").hide();
+		$("#leaveGrp").hide();
+        $("#infoGrp").hide();
+		$("#msgs").empty();
+		$('#'+token).closest('li').remove();
+		socket.emit('leaveGrp',{token: token});
     });
 
     $(document).on('click', '#infoGrp', function(e) {

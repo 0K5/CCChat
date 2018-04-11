@@ -21,6 +21,10 @@ function setOns(sessionId, io, socket) {
 		logger.logDeb('User with sessionId ' + sessionId + 'adds user to existing group');
 		require('./addtogroupchat.js').exec(sessionId,data);
 	});
+	socket.on('leaveGrp', (data) => {
+		logger.logDeb('User with sessionId ' + sessionId + 'remove user to existing group');
+		require('./leavegroupchat.js').exec(sessionId,data);
+	});
 	socket.on('infoGroup', (data) =>{
 		logger.logDeb('User with sessionId ' + sessionId + 'requests info of group');
 		require('./infogroupchat.js').exec(sessionId,data);

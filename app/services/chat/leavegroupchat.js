@@ -4,29 +4,27 @@ let sockets = require('../../helpers/sockets.js');
 let moment = require('moment');
 moment.locale('de');
 
-function emitGroupAdd(chat, msg, p){
+function emitGroupAdd(msg, p){
 	this.callback = function(user){
 		if(user){
 			logger.logDeb('Emitting message ' + JSON.stringify(msg) + ' to user ' + user.username);
-			sockets.emit(user.sid, 'addToGrp', {msg: msg, chat: chat});	
+			sockets.emit(user.sid, 'addToGrp', {msg: msg});	
 		} else {
-			logger.logErr('Add contact to chat loading user ' + p + ' failed');
+			logger.logErr('Remove contact to chat. Loading user ' + p + ' failed');
 		}
 	};
 }
 
-function chatUpdated(user, addCnt, chat){
+function chatUpdated(chat){
 	this.callback = function(c){
 		if(c){
-			for(let i=(chat.messages.length-addCnt); i<chat.messages.length; i++){
-				let msg = chat.messages[i];
+			let msg = chat.messages[chat.messages.length-1];
 				chat.participants.forEach((p) => {
-					logger.logDeb('Add contact to chat emitting msg to ' + p);
-					db.read('users',{username: p}, new emitGroupAdd(chat, msg, p).callback);
+					logger.logDeb('Remove contact from chat emitting msg to ' + p);
+					db.read('users',{username: p}, new emitGroupAdd(msg, p).callback);
 				});
-			}
 		} else {
-			logger.logErr('Add contact on chat ' + chatName + ' failed on chat update');
+			logger.logErr('Remove contact on chat ' + chatName + ' failed on chat update');
 		}
 	};
 }
@@ -34,28 +32,22 @@ function chatUpdated(user, addCnt, chat){
 function chatLoaded(user, sendChat){
 	this.callback = function(storedChat){
 		if(storedChat){
-			let addCnt = 0;
-			sendChat.participants.forEach((p) => {
-				let isInChat = false;
-				storedChat.participants.forEach((sp) =>{
-					if(p === sp){
-						isInChat = true;
-					}
-				});
-				if(!isInChat){
-					addCnt++;
-					storedChat.participants.push(p);
+			let tmpParticipants = [];
+			delete storedChat.participants[storedChat.participants.indexOf(user.username)];
+			logger.logDeb('Remove contact from group chat participants after remove ' + storedChat.participants);
+			storedChat.participants.forEach((p) => {
+				if(p){
+					tmpParticipants.push(p);
 					storedChat.messages.push({
 						token: storedChat.token,
-						text: p + ' added to chat by ' + user.username,
-						timestamp: moment().format('LLLL'),
+						text: user.username + ' left chat',
+						timestamp: moment().format('LLLL')
 					});
 				}
 			});
-			if(addCnt > 0){
-				logger.logDeb('Add contact to chat update on chat ' + storedChat.name);
-				db.update('chats',{token: storedChat.token}, storedChat, new chatUpdated(user, addCnt, storedChat).callback);
-			}
+			storedChat.participants = tmpParticipants;
+			logger.logDeb('Remove contact to chat update on chat ' + storedChat.name);
+			db.update('chats',{token: storedChat.token}, storedChat, new chatUpdated(storedChat).callback);
 		} else {
 			logger.logErr('Chat with name ' + sendChat.name + ' not in database');
 		}

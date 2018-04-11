@@ -8,15 +8,7 @@ let ExpressBrute = require('express-brute');
 let MemCacheStore = require('express-brute-memcached');
 let moment = require('moment');
 let store = new ExpressBrute.MemoryStore();
-let dateOptions = {
-	weekday: 'long', 
-	year: 'numeric', 
-	month: 'numeric', 
-	day: 'numeric',
-	hour12: false,
-	hour: 'numeric',
-	minute: 'numeric'
-}
+moment.locale('de');
 
 let failCallback = function(req, res, next, nextValidRequestDate) {
     res.send({
@@ -57,16 +49,16 @@ function loginAttempt(req, res, next) {
                         }, {
                             sid: req.session.id,
                             loggedIn: 1,
-							lastLogin: (new Date()).toLocaleString('de-DE', dateOptions)
+                            lastLogin: moment().format('LLLL')
                         }, (user) => {
-							if(user){
-								logger.logDeb("Login successful redirect to chat");
-                            	res.send({
-                            	    url: 'chat'
-                            	});
-							}else{
-								logger.logErr("User Login failed on user update");
-							}
+                            if (user) {
+                                logger.logDeb("Login successful redirect to chat");
+                                res.send({
+                                    url: 'chat'
+                                });
+                            } else {
+                                logger.logErr("User Login failed on user update");
+                            }
                         });
                     });
                 } else {
@@ -102,34 +94,40 @@ function registerAttempt(req, res, next) {
             res.send({
                 err: 'The email is already registered'
             });
+        } else if (req.body.password !== req.body.passwordrep) {
+            res.send({
+                err: 'The passwords do not match'
+            });
         } else {
-            bcrypt.hash(req.body.password, 31, function(err, hash) {
+            logger.logDeb("Creating hash from password");
+            bcrypt.hash(req.body.password, 10, function(err, hash) {
                 if (err) {
-                    logger.logErr(err);
+                    logger.logErr('Error on password hash creation ' + err);
                 } else {
+                    logger.logDeb('Register create new user');
                     db.create('users', {
                         sid: req.session.id,
-					}, {
+                    }, {
                         sid: req.session.id,
                         username: req.body.username,
                         password: hash,
                         loggedIn: 1,
-						lastLogin: (new Date()).toLocaleString('de-DE', dateOptions)
+                        lastLogin: moment().format('LLLL')
                     }, (user) => {
-						if(user){
+                        if (user) {
                             logger.logDeb("Register successful redirect to chat");
-							res.send({
-                        	    url: 'chat'
-                        	});
-							sockets.broadcast(user.sid, 'newContact', {
-								contact: {
-									name: user.username,
-									lastLogin: user.lastLogin
-								}
-							});
-						}else{
-							logger.logErr("User Register failed on user creation");
-						}
+                            res.send({
+                                url: 'chat'
+                            });
+                            sockets.broadcast(user.sid, 'newContact', {
+                                contact: {
+                                    name: user.username,
+                                    lastLogin: user.lastLogin
+                                }
+                            });
+                        } else {
+                            logger.logErr("User Register failed on user creation");
+                        }
                     });
                 }
             });
