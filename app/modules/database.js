@@ -102,11 +102,7 @@ let read = (coll, id, callback) => {
  * @return callback Function passes false on fail : passes updated item on success*/
 let update = (coll, id, data, callback) => {
     if (coll, id, data, callback, database) {
-        database.collection(coll).findOneAndUpdate(id, {
-            $set: data
-        }, {
-            new: true
-        }, function(err, res) {
+        database.collection(coll).findOneAndUpdate(id, {$set: data}, {"new": true}, function(err, res) {
             if (err) {
                 logger.logWarn("Document with id " + JSON.stringify(id) + " couldn't be updated");
                 logger.logErr(err);

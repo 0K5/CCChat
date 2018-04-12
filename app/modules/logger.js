@@ -6,7 +6,7 @@
  * */
 let fs = require('fs-extra');
 let path = require('path');
-let isDebug = false;
+let isDebug = true;
 
 /*Creates logger by given and supported loglevel and returns a function that can be called with a log-message.<br>
  * Logs will also be stored within ./tmp/logs/ folder<br>

@@ -82,6 +82,39 @@ function loginAttempt(req, res, next) {
     };
 }
 
+function userLoggedOut(req, res, next, isLast){
+	this.callback = function(user){
+		if(user){
+			logger.logDeb('User Login. User to logout ' + JSON.stringify(user) + ' sessionId is ' + user.sid);
+			if(isLast){
+				db.read('users', {username: req.body.username}, new loginAttempt(req, res, next).callback);
+			}
+		} else {
+			logger.logError('Login user to logout with same session id update failed');
+		}
+	};
+}
+
+function logoutUsers(req, res, next){
+	this.callback = function(users){
+		if(users && Array.isArray(users)){
+			logger.logDeb('Users will be logged out before login ' + users);
+			let userHadToBeLoggedOut = false;
+			for(let i=0 ; i<users.length ; i++){
+				if(users[i] && users[i].username && users[i].sid === req.session.id){
+					userHadToBeLoggedOut = true;
+					db.update('users',{username: users[i].username},{sid: 'xxx', loggedIn: 0},new userLoggedOut(req, res, next, i===users.length-1).callback);
+				}
+			}
+			if(!userHadToBeLoggedOut){
+				db.read('users', {username: req.body.username}, new loginAttempt(req, res, next).callback);
+			}
+		} else {
+			db.read('users', {username: req.body.username}, new loginAttempt(req, res, next).callback);
+		}
+	};
+}
+
 router.post('/attempt',
     userBruteforce.getMiddleware({
         key: function(req, res, next) {
@@ -89,9 +122,8 @@ router.post('/attempt',
         }
     }),
     function(req, res, next) {
-        db.read('users', {
-            username: req.body.username
-        }, new loginAttempt(req, res, next).callback);
+		logger.logDeb('Login user read all users with sessionId ' + req.session.id + ' to them out');
+        db.readAll('users', new logoutUsers(req, res, next).callback);
     }
 );
 

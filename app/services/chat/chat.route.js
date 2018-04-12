@@ -9,7 +9,7 @@ let router = express.Router();
 /*Verfies user and loggedIn status. If user is invalid or logged out redirect to <<baseUrl>>/login*/
 function VerifySession (req, res, next){
 	this.callback = function(user){
-		if(user && user.loggedIn === 1){
+		if(user){
 			logger.logDeb("User : " + user.username + " tries to access the chat");
 			res.render('chat.view.hbs', {
 				title: 'CCChat',

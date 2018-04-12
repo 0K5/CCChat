@@ -36,11 +36,13 @@ function updatedChat(user, msg) {
     this.callback = function(chat) {
         if (chat) {
             //TODO: Replace with socket rooms
-            chat.participants.forEach((p) => {
-                db.read('users', {
-                    username: p
-                }, new participantLoaded(user, msg, p).callback);
+			if(chat.participants){
+				chat.participants.forEach((p) => {
+				    db.read('users', {
+				        username: p
+					}, new participantLoaded(user, msg, p).callback);
             });
+			}
         } else {
             logger.logErr('Chat with token ' + msg.token + " couldn't be updated");
         }
