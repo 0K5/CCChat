@@ -61,7 +61,7 @@ function chatsByContactsLoaded(user, chat) {
             participants.sort();
             //Search for chat, if it already exists emit to user
             allStoredChats.forEach((c) => {
-                if (!chat.isGroup && chat.name !== chat.name && JSON.stringify(participants) === JSON.stringify(c.participants.sort())) {
+                if (!chat.isGroup && JSON.stringify(participants) === JSON.stringify(c.participants.sort())) {
                     logger.logDeb("Chat found and loaded");
                     adaptChatToReceiver(user, c, (user, chat) => {
                         sockets.emit(user.sid, 'loadChat', {
