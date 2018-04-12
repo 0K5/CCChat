@@ -434,7 +434,7 @@ $(document).ready(function() {
     socket.on('newContact', function(data) {
         contacts.push(data.contact);
         appendContact(data.contact, 'contacts', false);
-		updateOnlineStatus(contact);
+		updateOnlineStatus(data.contact);
     });
 
     socket.on('statusContact', function(data) {
