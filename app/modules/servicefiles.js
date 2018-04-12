@@ -1,9 +1,11 @@
-/*Returns all files in ./services by given file extension*/
+/*
+ * Returns all files in ./services by given file extension
+ * */
 let logger = require('./logger.js');
 let fs = require('fs-extra');
 let path = require('path');
 
-/*Returns all files in ./services by given file extension
+/*Returns all files in ./services by given file extension<br>
  * @param fileExtension String file extension to search for f.e. ".route.js"
  * @param callback Function passes array of found files*/
 let getServiceFiles = (fileExtension, callback) => {

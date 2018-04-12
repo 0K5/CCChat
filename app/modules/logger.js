@@ -1,12 +1,14 @@
-/* Module for logging any sort of data
- * All logs are also saved in ./tmp/logs/
- * usage let logger = require('./modules/logger.js);
- * logger.logInfo(message)*/
+/* 
+ * Module for logging any sort of data<br>
+ * All logs are also saved in ./tmp/logs/<br>
+ * usage let logger = require('./modules/logger.js);<br>
+ * logger.logInfo(message)
+ * */
 let fs = require('fs-extra');
 let path = require('path');
 
 /*Creates logger by given and supported loglevel and returns a function that can be called with a log-message.<br>
- * Logs will also be stored within ./tmp/logs/ folder 
+ * Logs will also be stored within ./tmp/logs/ folder<br>
  * @param logLevel String loglevel of upcoming log*/
 let log = (logLevel) => {
     let winston = require('winston');

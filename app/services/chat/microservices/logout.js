@@ -1,8 +1,12 @@
+/*
+ * Called when a user logs out of the chat.
+ */
 let logger = require('../../../modules/logger.js');
 let db = require('../../../modules/database.js');
 let sockets = require('../../../modules/sockets.js');
 
-/*Emit successful logout back to user*/
+/*Emit successful logout back to user
+ * @param sessionId String sessionId of the user that wants to logout*/
 function userLoaded(sessionId) {
     this.callback = function(user) {
         if (user) {
@@ -13,8 +17,9 @@ function userLoaded(sessionId) {
     };
 }
 
-/*sid (sessionId) is resetted, so that the user won't be recognized anymore and will be redirected to /login page*/
-function exec(sessionId, chat) {
+/*sid (sessionId) is resetted, so that the user won't be recognized anymore and will be redirected to /login page<br>
+ * @param sessionId String sessionId of the user that tries to logout*/
+function exec(sessionId) {
     logger.logDeb("User with sessionId " + sessionId + "logs out");
     db.update('users', {
         sid: sessionId

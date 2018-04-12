@@ -1,18 +1,22 @@
-/*Initalizes chats for the chat list on client side.*/
+/*
+ * Initalizes chats for the chat list on client side.
+ * */
 let logger = require('../../../modules/logger.js');
 let db = require('../../../modules/database.js');
 let sockets = require('../../../modules/sockets.js');
 
-/*As soon as the users that participate on the new chat are loaded we emit the information about the new chat, so it can be added to the chats list*/
-function usersLoaded(user) {
-    this.callback = function(users) {
-        if (users && Object.keys(users).length !== 0) {
+/*As soon as the contacts of the user are loaded, we emit the information about the new contacts to that user.<br>
+ * So the contacts will be added to the chats list of user 
+ * @param user Object user that receives the contacts*/
+function contactsLoaded(user) {
+    this.callback = function(contacts) {
+        if (contacts && Object.keys(contacts).length !== 0) {
             let contacts = [];
-            for (ui in users) {
-                if (users[ui].sid !== user.sid) {
+            for (ui in contacts) {
+                if (contacts[ui].sid !== user.sid) {
                     contacts.push({
-                        name: users[ui].username,
-                        lastLogin: users[ui].lastLogin
+                        name: contacts[ui].username,
+                        lastLogin: contacts[ui].lastLogin
                     });
                 }
             }
@@ -26,7 +30,9 @@ function usersLoaded(user) {
     }
 }
 
-/*Chats get filtered. User only receives chats when he is a participant.*/
+/*Chats get filtered: User only receives chats when he is a participant.<br>
+ * Then the chats are send to the user to be added to his chatlist<br>
+ * @param user Object user that receives chats*/
 function chatsLoaded(user) {
     this.callback = function(chats) {
         if (chats) {
@@ -37,7 +43,7 @@ function chatsLoaded(user) {
                     if (p === user.username) {
                         filteredChats.push(chats[ki]);
                         let fc = filteredChats[filteredChats.length - 1];
-                        //If there are only two users within the chat. The chat name becomes the name of the other party.
+                        //If there are only two contacts within the chat. The chat name becomes the name of the other party.
                         if (fc.participants.length === 2) {
                             fc.name = fc.participants[0] === user.username ? fc.participants[1] : fc.participants[0];
                         }
@@ -51,7 +57,7 @@ function chatsLoaded(user) {
         } else {
             logger.logDeb("No chats to load and emit");
         }
-        db.readAll('users', new usersLoaded(user).callback);
+        db.readAll('users', new contactsLoaded(user).callback);
     }
 }
 

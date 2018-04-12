@@ -1,9 +1,14 @@
+/*
+ * Maintains all socket.on functions for chat. Automatically loaded into ./modules/sockets.js when a new socket connects.
+ * */
 let sockets = require('../../modules/sockets.js');
 let logger = require('../../modules/logger.js');
 let ss = require('socket.io-stream');
 let fs = require('fs-extra');
 let path = require('path');
 
+/*all socket.on functions for chat<br>
+	* @param sessionId String sessionId of the socket client*/
 function setOns(sessionId, io, socket) {
     socket.on('init', () => {
         logger.logDeb('User with sessionId ' + sessionId + 'initialises chat');

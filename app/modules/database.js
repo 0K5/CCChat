@@ -1,5 +1,5 @@
 /*
- *	All interactions with mongodb database
+ *All interactions with mongodb database
  * */
 let logger = require('./logger.js');
 let fs = require('fs');
@@ -8,9 +8,7 @@ let mongodb = require('mongodb').MongoClient;
 let localstorage = require('node-localstorage').LocalStorage;
 let database = undefined;
 
-/*
- * Initializes the database. If the connection to mlab can't be established it falls back to the local mongodb.
- * */
+/* Initializes the database. If the connection to mlab can't be established it falls back to the local mongodb.*/
 let initDatabase = (app, server, callback) => {
     mongoose.Promise = global.Promise;
     if (mongoose.connection.readyState == 0) {

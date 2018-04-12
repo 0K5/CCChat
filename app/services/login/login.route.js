@@ -1,4 +1,6 @@
-/*Route for <<baseUrl>>/login */
+/*
+ * Route for <<baseUrl>>/login 
+ * */
 let logger = require('../../modules/logger.js');
 let db = require('../../modules/database.js');
 let sockets = require('../../modules/sockets.js');
@@ -11,7 +13,8 @@ let moment = require('moment');
 let store = new ExpressBrute.MemoryStore();
 moment.locale('de');
 
-/*Callback on to much dismissed login attempts to prevent bruteforce attacks*/
+/*Callback on to much dismissed login attempts to prevent bruteforce attacks<br>
+ * @param nextPossibleLoginTime Object date when the next login is possible*/
 let failCallback = function(req, res, next, nextPossibleLoginTime) {
     res.send({
         err: "Too many failed attempts in a short period of time, please try again " + moment(nextPossibleLoginTime).fromNow()
@@ -40,7 +43,8 @@ router.get('/', (req, res, next) => {
     });
 });
 
-/*On Login attempt bcrypt compare saved passwords, update the user session and on success redirect to <<baseUrl>>/chat */
+/*On Login attempt bcrypt modules compares saved passwords.<br>
+ * Then the users sessionId is updated and the user is logs in with redirect to <<baseUrl>>/chat */
 function loginAttempt(req, res, next) {
     this.callback = function(user) {
         if (user) {
@@ -91,6 +95,11 @@ router.post('/attempt',
     }
 );
 
+/*Called when a new user tries to register. <br>
+ * Checks for equality of password and password repitition.<br>
+ * Creates bcrypt hashed password to save in database.<br>
+ * Saves user to database, logs in user by redirect to <<baseurl>>/chat<br> 
+ * and informs everyone that a new contact exists*/
 function registerAttempt(req, res, next) {
     this.callback = function(user) {
         if (user) {

@@ -1,6 +1,8 @@
-/*Module to initialize and handle sockets
- * all sockets are saved on connection with the given sessionId
- * all modules within ./services with the file extension .sockets.js will be loaded as available functions on sockets*/
+/*
+ * Module to initialize and handle sockets<br>
+ * all sockets are saved on connection with the given sessionId<br>
+ * all modules within ./services with the file extension .sockets.js will be loaded as available functions on sockets<br>
+ * */
 let io = undefined;
 let logger = require('./logger.js');
 let servicefiles = require('./servicefiles.js');
@@ -15,8 +17,6 @@ let setUpSockets = (app, server, session, sessionStore, next) => {
     io.set('authorization', function(handshake, callback) {
         if (handshake.headers.cookie) {
             cookieParser(handshake, null, function(err) {
-                // Use depends on whether you have signed cookies
-                // handshake.sessionID = handshake.cookies[session_key];
                 handshake.sessionID = handshake.signedCookies['CCChat2017'];
                 sessionStore.get(handshake.sessionID, function(err, session) {
                     if (err || !session) {

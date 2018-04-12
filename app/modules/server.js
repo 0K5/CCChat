@@ -1,9 +1,11 @@
-/*Sets up server on start*/
+/*
+ * Sets up server on start
+ * */
 let server = undefined;
 let logger = require('./logger.js');
 let https = true;
 
-/*Initializes https server. If the cert file isn't available it falls back to http.
+/*Initializes https server. If the cert file isn't available it falls back to http.<br>
  * @param app Object application created in ./app.js
  * @param next Function to be called on success*/
 let initServers = (app, next) => {

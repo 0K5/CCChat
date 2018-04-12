@@ -1,4 +1,6 @@
-/*Initializes sessions for application*/
+/*
+ * Initializes sessions for application
+ * */
 let logger = require('./logger.js');
 let certificates = require('./certificates.js');
 let session = require('express-session');
@@ -20,7 +22,7 @@ let ssl = {
 let options = {};
 let client = undefined;
 
-/*Sets up the session
+/*Sets up the session<br>
  * @param storage Object the storage used to save the session
  * @param session Object the session 
  * @param app Object the application
