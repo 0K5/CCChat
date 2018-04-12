@@ -16,13 +16,15 @@ function contactsLoaded(user) {
                 if (contacts[ui].sid !== user.sid) {
                     tmpContacts.push({
                         name: contacts[ui].username,
-                        lastLogin: contacts[ui].lastLogin
+                        lastLogin: contacts[ui].lastLogin,
+						loggedIn: contacts[ui].loggedIn
                     });
                 }
             }
             sockets.emit(user.sid, 'allContacts', {
                 contacts: tmpContacts
             });
+			sockets.broadcast(user.sid, 'statusContact', {name: user.username, loggedIn: 1});
             logger.logDeb("Contacts loaded and emitted " + JSON.stringify(contacts));
         } else {
             logger.logDeb("No contacts to load and emit");

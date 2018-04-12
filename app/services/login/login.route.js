@@ -33,7 +33,7 @@ router.get('/', (req, res, next) => {
     db.read('users', {
         sid: req.session.id
     }, function(user) {
-        if (user) {
+        if (user && user.loggedIn === 1) {
             res.redirect('chat');
         } else {
             res.render('login.view.hbs', {
