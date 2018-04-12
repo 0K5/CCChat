@@ -358,8 +358,17 @@ $(document).ready(function() {
     $(document).on('click', '#addToGrp', function(e) {
         $('#modalList').empty();
         $('#modalHidden').val('addToGrp');
+		let isAlreadyInGroup = false;
         for (ci in contacts) {
-            appendContact(contacts[ci], 'modalList', true);
+			isAlreadyInGroup = false;
+			for(chp in chat.participants){
+				if(contacts[ci].name === chat.participants[chp]){
+					isAlreadyInGroup = true;
+				}
+			}
+			if(!isAlreadyInGroup){
+				appendContact(contacts[ci], 'modalList', true);
+			}
         }
         $('#chatModal').modal('show');
     });
