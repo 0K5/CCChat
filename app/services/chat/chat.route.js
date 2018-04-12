@@ -1,8 +1,12 @@
-let logger = require('../../helpers/logger.js');
-let db = require('../../helpers/database.js');
+/*
+ * Initializes route for <<baseUrl>>/chat
+ */
+let logger = require('../../modules/logger.js');
+let db = require('../../modules/database.js');
 let express = require('express');
 let router = express.Router();
 
+/*Verfies user and loggedIn status. If user is invalid or logged out redirect to <<baseUrl>>/login*/
 function VerifySession (req, res, next){
 	this.callback = function(user){
 		if(user && user.loggedIn === 1){
@@ -20,9 +24,5 @@ function VerifySession (req, res, next){
 router.get('/', (req, res, next) => {
 	db.read('users', {sid : req.session.id}, new VerifySession(req, res).callback);
 });
-
-router.use('/messages', require('../messages/messages.route.js'));
-
-router.use('/contacts', require('../contacts/contacts.route.js'));
 
 module.exports = router;

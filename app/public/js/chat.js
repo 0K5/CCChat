@@ -7,7 +7,7 @@ $(document).ready(function() {
 	let username = $('#username').val();
     let chat = {};
     let contacts = [];
-	let streams = {};
+    let streams = {};
     let dateOptions = {
         weekday: 'long',
         year: 'numeric',
@@ -17,8 +17,8 @@ $(document).ready(function() {
         hour: 'numeric',
         minute: 'numeric'
     };
-	let uploading = false;
-    
+    let uploading = false;
+
     // Generic functions
 
     function infoModal(title, message) {
@@ -120,114 +120,118 @@ $(document).ready(function() {
     $("#msgGroupActions").addClass('hidden');
 
 
-	// Send media functionalities
+    // Send media functionalities
     function updateMedia(data) {
         let origin = data.origin || '',
             loadStatus = data.loadStatus || '',
-			stid = data.stid || '',
-			fileName = data.fileName || '',
-			link = data.link || '',
-			finished = data.finished || '';
+            stid = data.stid || '',
+            fileName = data.fileName || '',
+            link = data.link || '',
+			timestamp = data.timestamp || '',
+            finished = data.finished || '';
         let content = '<li style="width:100%;">';
-		let innerContent = '';
-		if(link){
-			innerContent = '<a id="'+stid+'" style="width:100%;" href="' + link + '" download="'+fileName+'">Download '+fileName+'</a>';
-		}else{
-			innerContent = origin  + ' sending file ' + fileName + '. Loading ' + loadStatus;
-		}
-		if(!($('#'+data.stid).length)){
-			content += '<div class="msj macro">';
-        	content += '<div class="text text-l">';
-        	content += innerContent ? '<div class="msgText" id='+data.stid+'>' + innerContent + '</div>' : '';
-        	content += fileName !== "You're" ? '<p class="msgUser"><small>' + origin + '</small></p>' : '';
-        	content += '</div></div></li>';
-			$("#msgs").append(content).scrollTop($("#msgs").prop('scrollHeight'));
-		}else{
-			$('#'+data.stid).html(innerContent);
-		}
+        let innerContent = '';
+        if (link) {
+            innerContent = '<a id="' + stid + '" style="width:100%;" href="' + link + '" download="' + fileName + '">Download ' + fileName + '</a>';
+        } else {
+            innerContent = origin + ' sending file ' + fileName + '. Loading ' + loadStatus;
+        }
+        if (!($('#' + data.stid).length)) {
+            content += '<div class="msj macro">';
+            content += '<div class="text text-l">';
+            content += innerContent ? '<div class="msgText" id=' + data.stid + '>' + innerContent + '</div>' : '';
+            content += fileName !== "You're" ? '<p class="msgUser"><small>' + origin + '</small></p>' : '';
+            content += timestamp ? '<p class="msgDate"><small>' + timestamp + '</small></p>' : '';
+            content += '</div></div></li>';
+            $("#msgs").append(content).scrollTop($("#msgs").prop('scrollHeight'));
+        } else {
+            $('#' + data.stid).html(innerContent);
+        }
     }
 
-	function streamTransmitter(data){
-		this.blob = [];
-		this.size = 0;
-		this.load = function(){
-			return Math.floor(this.size/ data.size*100)+ '%';
-		};
-		this.on = function(){
-			data.loadStatus = this.load();
-			updateMedia(data);	
-		};
-		this.once = function(){};
-		this.write = function(chunk){
-			this.size += chunk.length;
-			this.blob.push(chunk);
-			data.loadStatus = this.load();
-			setTimeout(updateMedia(data), data.loadStatus * 100);
-		};
-		this.end = function(){
-			let b = new Blob(this.blob,{type: data.type});
-			let url = window.URL.createObjectURL(b);
-			data.link = url;
-			data.fileName = data.name;
-			updateMedia(data);
-			$('#'+data.stid).on('click', function(e) {
-				setTimeout(function(){
-					window.URL.revokeObjectURL(url);
-				},10000);
-			});
-		};
-		this.emit = function(){};
-		this.prependListener = function(){};
-	}
+    function streamTransmitter(data) {
+        this.blob = [];
+        this.size = 0;
+        this.load = function() {
+            return Math.floor(this.size / data.size * 100) + '%';
+        };
+        this.on = function() {
+            data.loadStatus = this.load();
+            updateMedia(data);
+        };
+        this.once = function() {};
+        this.write = function(chunk) {
+            this.size += chunk.length;
+            this.blob.push(chunk);
+            data.loadStatus = this.load();
+            setTimeout(updateMedia(data), data.loadStatus * 100);
+        };
+        this.end = function() {
+            let b = new Blob(this.blob, {
+                type: data.type
+            });
+            let url = window.URL.createObjectURL(b);
+            data.link = url;
+            data.fileName = data.name;
+            updateMedia(data);
+            $('#' + data.stid).on('click', function(e) {
+                setTimeout(function() {
+                    window.URL.revokeObjectURL(url);
+                }, 10000);
+            });
+        };
+        this.emit = function() {};
+        this.prependListener = function() {};
+    }
 
-	ss(socket).on('openStream', function(stream, data){
-		stream.pipe(new streamTransmitter(data))
-	});
+    ss(socket).on('openStream', function(stream, data) {
+        stream.pipe(new streamTransmitter(data))
+    });
 
-	$(document).on('click', '#sendMedia', function(e) {
-		if(!uploading){
-			$('#fileImport').trigger('change');
-		} else {
-			infoModal('Still uploading' , 'Wait for file transfer to finish');
-		}
-	});
+    $(document).on('click', '#sendMedia', function(e) {
+        if (!uploading) {
+            $('#fileImport').trigger('change');
+        } else {
+            infoModal('Still uploading', 'Wait for file transfer to finish');
+        }
+    });
 
-	$('#fileImport').on('change', function() {
-		let fi  = document.getElementById('fileImport');
-		if(fi.files && fi.files[0] && !uploading){
-			let file = fi.files[0];
-			if(file.size < 50000000){
-				uploading = true;
-				streams[file.name]  = $('#tokenChat').val();
-				let stream = ss.createStream();
-				ss(socket).emit('sendMedia', stream, {
-					name: file.name,
-					size: file.size,
-					type: file.type,
-					token: $('#tokenChat').val()
-				});
-				let blopStream = ss.createBlobReadStream(file);
-				let size = 0;
-				let stid = '_' + Math.random().toString(36).substr(2, 9);
-				blopStream.on('data', function(chunk){
-					size += chunk.length;
-					updateMedia({
-						fileName: file.name,
-						loadStatus: Math.floor(size/ file.size*100)+ '%',
-						origin: "You're",
-						stid: stid
-					});
-					if(size === file.size){
-						uploading = false;
-						document.getElementById('fileImport').value = null;
-					}
-				});
-				blopStream.pipe(stream);
-			}else{
-				infoModal('File upload', 'You can only send files under 50MB');
-			}
-		}
-	});
+    $('#fileImport').on('change', function() {
+        let fi = document.getElementById('fileImport');
+        if (fi.files && fi.files[0] && !uploading) {
+            let file = fi.files[0];
+            if (file.size < 50000000) {
+                uploading = true;
+                streams[file.name] = $('#tokenChat').val();
+                let stream = ss.createStream();
+                ss(socket).emit('sendMedia', stream, {
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    token: $('#tokenChat').val()
+                });
+                let blopStream = ss.createBlobReadStream(file);
+                let size = 0;
+                let stid = '_' + Math.random().toString(36).substr(2, 9);
+                blopStream.on('data', function(chunk) {
+                    size += chunk.length;
+                    updateMedia({
+                        fileName: file.name,
+                        loadStatus: Math.floor(size / file.size * 100) + '%',
+                        origin: "You're",
+                        stid: stid
+                    });
+                    if (size === file.size) {
+                        uploading = false;
+                        document.getElementById('fileImport').value = null;
+                    }
+                });
+                blopStream.pipe(stream);
+            } else {
+                infoModal('File upload', 'You can only send files under 50MB');
+            }
+        }
+    });
 
     // All chat functionalities
 
@@ -235,7 +239,7 @@ $(document).ready(function() {
         let name = chat.name || '',
             token = chat.token || '',
             notification = chat.notification || '',
-			isGroup = chat.isGroup || '';
+            isGroup = chat.isGroup || '';
         if (token && name) {
             let content = '<li style="width:100%">' +
                 '<div class="msj macro chat" ';
@@ -258,7 +262,7 @@ $(document).ready(function() {
         $("#msgInput").show();
         $("#sendMedia").show();
         $("#sendMsg").show();
-		$("#fileImport").hide();
+        $("#fileImport").hide();
         if (chat.isGroup) {
             $("#addToGrp").show();
 			$("#leaveGrp").show();
@@ -302,6 +306,7 @@ $(document).ready(function() {
     socket.on('addToGrp', function(data) {
 		if(!($('#'+data.chat.token).length)){
 			appendChat(data.chat);
+			chat = data.chat;
 		}
 		if($('#tokenChat').val() === data.chat.token){
 			appendMessage(data.msg);

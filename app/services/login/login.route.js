@@ -1,8 +1,11 @@
-let logger = require('../../helpers/logger.js');
+/*
+ * Route for <<baseUrl>>/login 
+ * */
+let logger = require('../../modules/logger.js');
+let db = require('../../modules/database.js');
+let sockets = require('../../modules/sockets.js');
 let express = require('express');
 let bcrypt = require('bcrypt');
-let db = require('../../helpers/database.js');
-let sockets = require('../../helpers/sockets.js');
 let router = express.Router();
 let ExpressBrute = require('express-brute');
 let MemCacheStore = require('express-brute-memcached');
@@ -10,13 +13,15 @@ let moment = require('moment');
 let store = new ExpressBrute.MemoryStore();
 moment.locale('de');
 
-let failCallback = function(req, res, next, nextValidRequestDate) {
+/*Callback on to much dismissed login attempts to prevent bruteforce attacks<br>
+ * @param nextPossibleLoginTime Object date when the next login is possible*/
+let failCallback = function(req, res, next, nextPossibleLoginTime) {
     res.send({
-        err: "Too many failed attempts in a short period of time, please try again " + moment(nextValidRequestDate).fromNow()
+        err: "Too many failed attempts in a short period of time, please try again " + moment(nextPossibleLoginTime).fromNow()
     });
 };
 
-// Start slowing requests after 5 failed attempts to do something for the same user
+/* Bruteforce prevention will start slowing down requests after 5 failed attempts */
 let userBruteforce = new ExpressBrute(store, {
     freeRetries: 5,
     minWait: 5 * 60 * 1000, // 5 minutes
@@ -38,6 +43,8 @@ router.get('/', (req, res, next) => {
     });
 });
 
+/*On Login attempt bcrypt modules compares saved passwords.<br>
+ * Then the users sessionId is updated and the user is logs in with redirect to <<baseUrl>>/chat */
 function loginAttempt(req, res, next) {
     this.callback = function(user) {
         if (user) {
@@ -88,6 +95,11 @@ router.post('/attempt',
     }
 );
 
+/*Called when a new user tries to register. <br>
+ * Checks for equality of password and password repitition.<br>
+ * Creates bcrypt hashed password to save in database.<br>
+ * Saves user to database, logs in user by redirect to <<baseurl>>/chat<br> 
+ * and informs everyone that a new contact exists*/
 function registerAttempt(req, res, next) {
     this.callback = function(user) {
         if (user) {

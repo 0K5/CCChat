@@ -1,5 +1,6 @@
 (() => {
-    let logger = require('./helpers/logger.js');
+    let logger = require('./modules/logger.js');
+    let servicefiles = require('./modules/servicefiles.js');
     let server = undefined;
     let express = require('express')
     let app = express();
@@ -23,81 +24,71 @@
     };
     express.static.mime.define(mimeTypes);
 
-	let getServiceFiles = (fileExtension) => {
-        let allFiles = fs.readdirSync('./services');
-        allFiles = allFiles.filter((dir) => fs.statSync('./services/' + dir).isDirectory());
-        allFiles = allFiles.filter((dir) => {
-			try{
-				fs.readFileSync('./services/'+dir+'/'+dir+fileExtension);
-				return true;
-			}catch(err){
-				logger.logErr('No '+fileExtension+' in service "./services/'+dir+'/"');
-				return false;
-			}
-		});
-        allFiles = allFiles.map((dir) => './services/' + dir + '/' +dir+fileExtension);
-		return allFiles;
-	};
-
+    /*Set up express an routes, so that f.e. https://localhost:3000/login is called the route will be in 
+     * ./services/login/login.route.js*/
     let setUpExpress = (app, server) => {
         logger.logInfo('Initializing express application');
         app.use(express.static(path.join(__dirname, '/public')));
         app.use('/', require('./services/index/index.route.js'));
-		let allRoutes = getServiceFiles('.route.js');
-		allRoutes.forEach((routeFile) => {
-			let route = routeFile.substring(routeFile.lastIndexOf('/'));
-			route = route.substring(0, route.indexOf('.'));
-			app.use(route, require(routeFile));
-		});
-    };
-
-    let setUpHandlebars = (app, server) => {
-        logger.logInfo('Setting up handlebars');
-        let handlebars = require('express-handlebars');
-		let allViews = getServiceFiles('.view.hbs');
-        let copyCount = allViews.length;
-        let setViewsToTmp = () => {
-            allViews = allViews.map((dir) => path.join(__dirname + 'services/' + dir));
-            app.engine('hbs', handlebars({
-                extname: 'hbs',
-                defaultLayout: 'main',
-                layoutsDir: __dirname + '/layouts/'
-            }));
-            app.set('views', path.join(__dirname + '/tmp/views/'));
-            app.set('view engine', '.hbs');
-            setUpExpress(app, server);
-		};
-		let tmpViews = path.resolve(__dirname + '/tmp/views');
-		if(!fs.existsSync(tmpViews)){
-			fs.ensureDirSync(tmpViews);
-		}
-        allViews.forEach((dir) => {
-            if (dir.endsWith('.view.hbs')) {
-                fs.copy(dir, './tmp/views/' + dir.substring(dir.lastIndexOf('/')), (err) => {
-                    if (err) {
-                        logger.logErr(err);
-                    }
-                    copyCount--;
-                    if (copyCount === 0) {
-                        setViewsToTmp(app, server);
-                    }
-                })
-            }
+        servicefiles.get('.route.js', (allRoutes) => {
+            allRoutes.forEach((routeFile) => {
+                let route = routeFile.substring(routeFile.lastIndexOf('/'));
+                route = route.substring(0, route.indexOf('.'));
+                app.use(route, require(routeFile));
+            });
         });
     };
 
-	let setUpDatabase = (app, server) => {
-		require('./helpers/database.js').init(app,server, setUpHandlebars);
-	};
+    /*Set up handlebars, all handlebar files need to be in one folder... this corrupts the service folder structure
+     * so the .views.hbs files for handlebars are copied to ./tmp/views on start*/
+    let setUpHandlebars = (app, server) => {
+        logger.logInfo('Setting up handlebars');
+        let handlebars = require('express-handlebars');
+        servicefiles.get('.view.hbs', (allViews) => {
+            let copyCount = allViews.length;
+            let setViewsToTmp = () => {
+                allViews = allViews.map((dir) => path.join(__dirname + 'services/' + dir));
+                app.engine('hbs', handlebars({
+                    extname: 'hbs',
+                    defaultLayout: 'main',
+                    layoutsDir: __dirname + '/layouts/'
+                }));
+                app.set('views', path.join(__dirname + '/tmp/views/'));
+                app.set('view engine', '.hbs');
+                setUpExpress(app, server);
+            };
+            let tmpViews = path.resolve(__dirname + '/tmp/views');
+            if (!fs.existsSync(tmpViews)) {
+                fs.ensureDirSync(tmpViews);
+            }
+            //Copies files from services folder to ./tmp/views/
+            allViews.forEach((dir) => {
+                if (dir.endsWith('.view.hbs')) {
+                    fs.copy(dir, './tmp/views/' + dir.substring(dir.lastIndexOf('/')), (err) => {
+                        if (err) {
+                            logger.logErr(err);
+                        }
+                        copyCount--;
+                        if (copyCount === 0) {
+                            setViewsToTmp(app, server);
+                        }
+                    })
+                }
+            });
+        });
+    };
+
+    let setUpDatabase = (app, server) => {
+        require('./modules/database.js').init(app, server, setUpHandlebars);
+    };
 
     let setUpSockets = (app, server, session, storage) => {
-        require('./helpers/sockets.js').init(app, server, session, storage, setUpDatabase);
+        require('./modules/sockets.js').init(app, server, session, storage, setUpDatabase);
     };
 
     let setUpSessions = (app, server) => {
-        require('./helpers/sessions.js').init(app, server, setUpSockets);
+        require('./modules/sessions.js').init(app, server, setUpSockets);
     };
 
-    require('./helpers/server.js').init(app, setUpSessions);
+    require('./modules/server.js').init(app, setUpSessions);
 })();
-

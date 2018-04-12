@@ -6,12 +6,12 @@ $(document).ready(function() {
     $('#useremailRegister').val('');
     $('#passwordRegister').val('');
     $('#passwordRegisterRep').val('');
-	
-	function infoModal(title, message){
-		$('#infoModal-title').html(title);
-		$('#infoModal-message').html(message);
-		$('#infoModal').modal('show');
-	}
+
+    function infoModal(title, message) {
+        $('#infoModal-title').html(title);
+        $('#infoModal-message').html(message);
+        $('#infoModal').modal('show');
+    }
 
     $('#submitLogin').click(function(e) {
         $.ajax({
@@ -24,7 +24,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(data) {
                 if (data.err) {
-					infoModal('Login failed', data.err);
+                    infoModal('Login failed', data.err);
                 } else {
                     window.location = baseUrl + data.url
                 }
@@ -44,7 +44,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(data) {
                 if (data.err) {
-					infoModal("Register failed", data.err);
+                    infoModal("Register failed", data.err);
                 } else {
                     window.location = baseUrl + data.url
                 }

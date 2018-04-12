@@ -2,9 +2,9 @@
   "name": "ccchat",
   "version": "1.0.0",
   "description": "chat for cloud computing class",
-  "main": "modules/index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "app.js",
+    "start": "node app.js",
     "test": "mocha ./**/*.spec.js"
   },
   "repository": {
