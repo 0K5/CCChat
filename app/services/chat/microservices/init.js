@@ -11,17 +11,17 @@ let sockets = require('../../../modules/sockets.js');
 function contactsLoaded(user) {
     this.callback = function(contacts) {
         if (contacts && Object.keys(contacts).length !== 0) {
-            let contacts = [];
+            let tmpContacts = [];
             for (ui in contacts) {
                 if (contacts[ui].sid !== user.sid) {
-                    contacts.push({
+                    tmpContacts.push({
                         name: contacts[ui].username,
                         lastLogin: contacts[ui].lastLogin
                     });
                 }
             }
             sockets.emit(user.sid, 'allContacts', {
-                contacts: contacts
+                contacts: tmpContacts
             });
             logger.logDeb("Contacts loaded and emitted " + JSON.stringify(contacts));
         } else {

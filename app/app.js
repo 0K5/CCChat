@@ -37,6 +37,7 @@
                 app.use(route, require(routeFile));
             });
         });
+		logger.logInfo('Server started and ready');
     };
 
     /*Set up handlebars, all handlebar files need to be in one folder... this corrupts the service folder structure

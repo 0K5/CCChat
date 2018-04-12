@@ -5,7 +5,6 @@ let logger = require('./logger.js');
 let fs = require('fs');
 let mongoose = require('mongoose');
 let mongodb = require('mongodb').MongoClient;
-let localstorage = require('node-localstorage').LocalStorage;
 let database = undefined;
 
 /* Initializes the database. If the connection to mlab can't be established it falls back to the local mongodb.*/

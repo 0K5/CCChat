@@ -6,13 +6,14 @@
  * */
 let fs = require('fs-extra');
 let path = require('path');
+let isDebug = false;
 
 /*Creates logger by given and supported loglevel and returns a function that can be called with a log-message.<br>
  * Logs will also be stored within ./tmp/logs/ folder<br>
  * @param logLevel String loglevel of upcoming log*/
 let log = (logLevel) => {
     let winston = require('winston');
-    let dir = path.join(__dirname, '../tmp/logs/');
+    let dir = path.resolve(__dirname, '../tmp/logs/');
     if (!fs.existsSync(dir)) {
         fs.ensureDirSync(dir);
     }
@@ -20,7 +21,7 @@ let log = (logLevel) => {
         transports: [
             new winston.transports.File({
                 level: 'info',
-                filename: typeof global.it === 'function' ? dir + 'test.log' : dir + 'all.log',
+                filename: typeof global.it === 'function' ? dir + '/test.log' : dir + '/all.log',
                 handleExceptions: true,
                 json: true,
                 maxsize: 5242880,
@@ -39,7 +40,11 @@ let log = (logLevel) => {
     /*Function for logging on given logLevel
      * @param message String to be logged on console and in ./tmp/logs/foo.log file*/
     return (message) => {
-        logger.log(logLevel, message);
+        if (logLevel === 'debug' && !isDebug) {
+            return false;
+        } else {
+            logger.log(logLevel, message);
+        }
     }
 };
 
