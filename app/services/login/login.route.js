@@ -102,6 +102,7 @@ router.post('/attempt',
  * and informs everyone that a new contact exists*/
 function registerAttempt(req, res, next) {
     this.callback = function(user) {
+		var passwordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
         if (user) {
             res.send({
                 err: 'The email is already registered'
@@ -109,6 +110,10 @@ function registerAttempt(req, res, next) {
         } else if (req.body.password !== req.body.passwordrep) {
             res.send({
                 err: 'The passwords do not match'
+            });
+		} else if (!passwordRegex.test(req.body.password)){
+            res.send({
+                err: 'The password is not strong enough. It has to contain a small and a large letter.<br> At least one number, one special character (!,@,#,\$,%,\^,&,\*) and has to be 8 characters long.'
             });
         } else {
             logger.logDeb("Creating hash from password");

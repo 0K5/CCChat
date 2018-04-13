@@ -1,0 +1,70 @@
+{"level":"info","message":"Setting up App","timestamp":"2018-04-13T06:09:58.764Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-13T06:09:58.772Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-13T06:09:58.771Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-13T06:09:58.777Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-13T06:09:58.895Z"}
+{"level":"warn","message":"Connection to redislabs could'nt be established","timestamp":"2018-04-13T06:09:59.102Z"}
+{"message":"Redis connection to redis-11379.c11.us-east-1-2.ec2.cloud.redislabs.com:11379 failed - connect ECONNREFUSED 54.91.215.131:11379","stack":"Error: Redis connection to redis-11379.c11.us-east-1-2.ec2.cloud.redislabs.com:11379 failed - connect ECONNREFUSED 54.91.215.131:11379\n    at Object.exports._errnoException (util.js:1008:11)\n    at exports._exceptionWithHostPort (util.js:1031:20)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1080:14)","code":"ECONNREFUSED","errno":"ECONNREFUSED","syscall":"connect","address":"54.91.215.131","port":11379,"level":"warn","timestamp":"2018-04-13T06:09:59.103Z"}
+{"level":"warn","message":"Connection to redislab couldn't be established","timestamp":"2018-04-13T06:09:59.105Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-13T06:09:59.116Z"}
+{"level":"warn","message":"Couldn't connect to mlab.com. Fallback to local mongodb","timestamp":"2018-04-13T06:09:59.546Z"}
+{"level":"info","message":"Connection to local mongodb succeeded","timestamp":"2018-04-13T06:09:59.569Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-13T06:09:59.570Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-13T06:09:59.634Z"}
+{"level":"info","message":"Server started and ready","timestamp":"2018-04-13T06:09:59.725Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-13T06:13:48.378Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-13T06:13:48.386Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-13T06:13:48.384Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-13T06:13:48.390Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-13T06:13:48.513Z"}
+{"level":"warn","message":"Connection to redislabs could'nt be established","timestamp":"2018-04-13T06:13:48.644Z"}
+{"message":"Redis connection to redis-11379.c11.us-east-1-2.ec2.cloud.redislabs.com:11379 failed - connect ECONNREFUSED 54.91.215.131:11379","stack":"Error: Redis connection to redis-11379.c11.us-east-1-2.ec2.cloud.redislabs.com:11379 failed - connect ECONNREFUSED 54.91.215.131:11379\n    at Object.exports._errnoException (util.js:1008:11)\n    at exports._exceptionWithHostPort (util.js:1031:20)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1080:14)","code":"ECONNREFUSED","errno":"ECONNREFUSED","syscall":"connect","address":"54.91.215.131","port":11379,"level":"warn","timestamp":"2018-04-13T06:13:48.645Z"}
+{"level":"warn","message":"Connection to redislab couldn't be established","timestamp":"2018-04-13T06:13:48.647Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-13T06:13:48.656Z"}
+{"level":"warn","message":"Couldn't connect to mlab.com. Fallback to local mongodb","timestamp":"2018-04-13T06:13:49.087Z"}
+{"level":"info","message":"Connection to local mongodb succeeded","timestamp":"2018-04-13T06:13:49.108Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-13T06:13:49.109Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-13T06:13:49.170Z"}
+{"level":"info","message":"Server started and ready","timestamp":"2018-04-13T06:13:49.259Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-13T06:20:34.477Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-13T06:20:34.488Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-13T06:20:34.487Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-13T06:20:34.493Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-13T06:20:34.608Z"}
+{"level":"warn","message":"Connection to redislabs could'nt be established","timestamp":"2018-04-13T06:20:34.918Z"}
+{"message":"Redis connection to redis-11379.c11.us-east-1-2.ec2.cloud.redislabs.com:11379 failed - connect ECONNREFUSED 54.91.215.131:11379","stack":"Error: Redis connection to redis-11379.c11.us-east-1-2.ec2.cloud.redislabs.com:11379 failed - connect ECONNREFUSED 54.91.215.131:11379\n    at Object.exports._errnoException (util.js:1008:11)\n    at exports._exceptionWithHostPort (util.js:1031:20)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1080:14)","code":"ECONNREFUSED","errno":"ECONNREFUSED","syscall":"connect","address":"54.91.215.131","port":11379,"level":"warn","timestamp":"2018-04-13T06:20:34.919Z"}
+{"level":"warn","message":"Connection to redislab couldn't be established","timestamp":"2018-04-13T06:20:34.921Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-13T06:20:34.932Z"}
+{"level":"warn","message":"Couldn't connect to mlab.com. Fallback to local mongodb","timestamp":"2018-04-13T06:20:35.370Z"}
+{"level":"info","message":"Connection to local mongodb succeeded","timestamp":"2018-04-13T06:20:35.392Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-13T06:20:35.393Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-13T06:20:35.459Z"}
+{"level":"info","message":"Server started and ready","timestamp":"2018-04-13T06:20:35.548Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-13T06:25:56.720Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-13T06:25:56.729Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-13T06:25:56.728Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-13T06:25:56.735Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-13T06:25:56.849Z"}
+{"level":"warn","message":"Connection to redislabs could'nt be established","timestamp":"2018-04-13T06:25:57.142Z"}
+{"message":"Redis connection to redis-11379.c11.us-east-1-2.ec2.cloud.redislabs.com:11379 failed - connect ECONNREFUSED 54.91.215.131:11379","stack":"Error: Redis connection to redis-11379.c11.us-east-1-2.ec2.cloud.redislabs.com:11379 failed - connect ECONNREFUSED 54.91.215.131:11379\n    at Object.exports._errnoException (util.js:1008:11)\n    at exports._exceptionWithHostPort (util.js:1031:20)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1080:14)","code":"ECONNREFUSED","errno":"ECONNREFUSED","syscall":"connect","address":"54.91.215.131","port":11379,"level":"warn","timestamp":"2018-04-13T06:25:57.142Z"}
+{"level":"warn","message":"Connection to redislab couldn't be established","timestamp":"2018-04-13T06:25:57.145Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-13T06:25:57.156Z"}
+{"level":"warn","message":"Couldn't connect to mlab.com. Fallback to local mongodb","timestamp":"2018-04-13T06:25:57.585Z"}
+{"level":"info","message":"Connection to local mongodb succeeded","timestamp":"2018-04-13T06:25:57.607Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-13T06:25:57.608Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-13T06:25:57.669Z"}
+{"level":"info","message":"Server started and ready","timestamp":"2018-04-13T06:25:57.758Z"}
+{"level":"info","message":"Setting up App","timestamp":"2018-04-13T06:27:01.906Z"}
+{"level":"warn","message":"Certificates ca-file not loaded","timestamp":"2018-04-13T06:27:01.915Z"}
+{"level":"info","message":"Setting up Server","timestamp":"2018-04-13T06:27:01.914Z"}
+{"level":"info","message":"Using https","timestamp":"2018-04-13T06:27:01.920Z"}
+{"level":"info","message":"Setting up storage for sessions","timestamp":"2018-04-13T06:27:02.037Z"}
+{"level":"warn","message":"Connection to redislabs could'nt be established","timestamp":"2018-04-13T06:27:02.177Z"}
+{"message":"Redis connection to redis-11379.c11.us-east-1-2.ec2.cloud.redislabs.com:11379 failed - connect ECONNREFUSED 54.91.215.131:11379","stack":"Error: Redis connection to redis-11379.c11.us-east-1-2.ec2.cloud.redislabs.com:11379 failed - connect ECONNREFUSED 54.91.215.131:11379\n    at Object.exports._errnoException (util.js:1008:11)\n    at exports._exceptionWithHostPort (util.js:1031:20)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1080:14)","code":"ECONNREFUSED","errno":"ECONNREFUSED","syscall":"connect","address":"54.91.215.131","port":11379,"level":"warn","timestamp":"2018-04-13T06:27:02.178Z"}
+{"level":"warn","message":"Connection to redislab couldn't be established","timestamp":"2018-04-13T06:27:02.180Z"}
+{"level":"info","message":"Setting up sockets","timestamp":"2018-04-13T06:27:02.191Z"}
+{"level":"warn","message":"Couldn't connect to mlab.com. Fallback to local mongodb","timestamp":"2018-04-13T06:27:02.594Z"}
+{"level":"info","message":"Connection to local mongodb succeeded","timestamp":"2018-04-13T06:27:02.617Z"}
+{"level":"info","message":"Setting up handlebars","timestamp":"2018-04-13T06:27:02.618Z"}
+{"level":"info","message":"Initializing express application","timestamp":"2018-04-13T06:27:02.680Z"}
+{"level":"info","message":"Server started and ready","timestamp":"2018-04-13T06:27:02.772Z"}
