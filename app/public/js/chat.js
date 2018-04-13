@@ -4,7 +4,7 @@ $(document).ready(function() {
         transports: ['websocket'],
         upgrade: false
     });
-	let username = $('#username').val();
+    let username = $('#username').val();
     let chat = {};
     let contacts = [];
     let streams = {};
@@ -40,7 +40,8 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '#logout', function(e) {
-        socket.emit('logout');
+		socket.emit('logout',{isLogout: true});
+		socket.disconnect();
     });
 
     socket.on('connect', function() {
@@ -49,6 +50,7 @@ $(document).ready(function() {
             window.location = baseUrl + 'login';
         });
     });
+
 
     // All messaging functionalities
 
@@ -127,7 +129,7 @@ $(document).ready(function() {
             stid = data.stid || '',
             fileName = data.fileName || '',
             link = data.link || '',
-			timestamp = data.timestamp || '',
+            timestamp = data.timestamp || '',
             finished = data.finished || '';
         let content = '<li style="width:100%;">';
         let innerContent = '';
@@ -242,7 +244,7 @@ $(document).ready(function() {
             isGroup = chat.isGroup || '';
         if (token && name) {
             let content = '<li style="width:100%">' +
-                '<div class="msj macro chat" ';
+                '<div class="chat msj macro" ';
             content += 'id="' + token + '">';
             content += '<div class="text text-l';
             content += '<p class="cntName">' + name + '</p>';
@@ -265,11 +267,11 @@ $(document).ready(function() {
         $("#fileImport").hide();
         if (chat.isGroup) {
             $("#addToGrp").show();
-			$("#leaveGrp").show();
+            $("#leaveGrp").show();
             $("#infoGrp").show();
         } else {
             $("#addToGrp").hide();
-			$("#leaveGrp").hide();
+            $("#leaveGrp").hide();
             $("#infoGrp").hide();
         }
         if (chat.messages) {
@@ -290,9 +292,9 @@ $(document).ready(function() {
         appendChat(data.chat);
     });
 
-	socket.on('removeChat', function(data) {
-		$('#'+data.token).closest('li').remove();
-	});	
+    socket.on('removeChat', function(data) {
+        $('#' + data.token).closest('li').remove();
+    });
 
     $(document).on('click', '.chat', function(e) {
         let token = e.target.closest(".chat").id
@@ -304,18 +306,18 @@ $(document).ready(function() {
     // All group functionalities
 
     socket.on('addToGrp', function(data) {
-		if(!($('#'+data.chat.token).length)){
-			appendChat(data.chat);
-			chat = data.chat;
-		}
-		if($('#tokenChat').val() === data.chat.token){
-			appendMessage(data.msg);
-		}
+        if (!($('#' + data.chat.token).length)) {
+            appendChat(data.chat);
+            chat = data.chat;
+        }
+        if ($('#tokenChat').val() === data.chat.token) {
+            appendMessage(data.msg);
+        }
     });
 
-	socket.on('leaveGrp', function(data) {
-		appendMessage(data.msg);
-	});
+    socket.on('leaveGrp', function(data) {
+        appendMessage(data.msg);
+    });
 
     $(document).on('click', '#createGrp', function(e) {
         if (!$('#addGrpInput').val()) {
@@ -331,18 +333,20 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '#leaveGrp', function(e) {
-		let token = $("#tokenChat").val();
-		$("#tokenChat").val('xxx');
+        let token = $("#tokenChat").val();
+        $("#tokenChat").val('xxx');
         $("#msgInput").hide();
         $("#sendMedia").hide();
         $("#sendMsg").hide();
-		$("#fileImport").hide();
+        $("#fileImport").hide();
         $("#addToGrp").hide();
-		$("#leaveGrp").hide();
+        $("#leaveGrp").hide();
         $("#infoGrp").hide();
-		$("#msgs").empty();
-		$('#'+token).closest('li').remove();
-		socket.emit('leaveGrp',{token: token});
+        $("#msgs").empty();
+        $('#' + token).closest('li').remove();
+        socket.emit('leaveGrp', {
+            token: token
+        });
     });
 
     $(document).on('click', '#infoGrp', function(e) {
@@ -358,8 +362,17 @@ $(document).ready(function() {
     $(document).on('click', '#addToGrp', function(e) {
         $('#modalList').empty();
         $('#modalHidden').val('addToGrp');
+        let isAlreadyInGroup = false;
         for (ci in contacts) {
-            appendContact(contacts[ci], 'modalList', true);
+            isAlreadyInGroup = false;
+            for (chp in chat.participants) {
+                if (contacts[ci].name === chat.participants[chp]) {
+                    isAlreadyInGroup = true;
+                }
+            }
+            if (!isAlreadyInGroup) {
+                appendContact(contacts[ci], 'modalList', true);
+            }
         }
         $('#chatModal').modal('show');
     });
@@ -384,13 +397,18 @@ $(document).ready(function() {
 
     // All contact functionalities
 
+    function updateOnlineStatus(contact) {
+        let color = contact.loggedIn === 1 ? 'green' : 'red';
+        $('#' + contact.name).css("background-color", color);
+    }
+
     function appendContact(contact, containerId, withCheckbox) {
         let name = contact.name || '',
             lastLogin = contact.lastLogin || '';
         if (name) {
             let content = '<li style="width:100%">' +
-                '<div class="msj macro contact" ';
-            content += 'id="' + name + '">';
+                '<div class="contact msj macro" ';
+            content += 'id="' + name + '" >';
             content += '<div class="text text-l';
             content += '<p class="cntName">' + name + '</p>';
             content += lastLogin ? '<p class="lastOnline"><small>' + lastLogin + '</small></p>' : '';
@@ -409,12 +427,18 @@ $(document).ready(function() {
         contacts = data.contacts;
         contacts.forEach((contact) => {
             appendContact(contact, 'contacts', false);
+			updateOnlineStatus(contact);
         });
     });
 
     socket.on('newContact', function(data) {
         contacts.push(data.contact);
         appendContact(data.contact, 'contacts', false);
+		updateOnlineStatus(data.contact);
+    });
+
+    socket.on('statusContact', function(data) {
+        updateOnlineStatus(data);
     });
 
     $(document).on('click', '.contact', function(e) {

@@ -38,13 +38,17 @@ function setOns(sessionId, io, socket) {
 		logger.logDeb('User with sessionId ' + sessionId + 'sends message');
 		require('./microservices/message.js').exec(sessionId, data);
 	});
-	socket.on('logout',() => {
-		logger.logDeb('User with sessionId ' + sessionId + 'loggout requested');
-		require('./microservices/logout.js').exec(sessionId);
-	});
 	ss(socket).on('sendMedia', function(stream, data) {
 		logger.logDeb('User with sessionId ' + sessionId + 'sends media');
 		require('./microservices/sendmedia.js').exec(sessionId, stream, data);
+	});
+	socket.on('logout',(data) => {
+		logger.logDeb('User with sessionId ' + sessionId + 'loggout requested');
+		require('./microservices/logout.js').exec(sessionId, data);
+	});
+	socket.on('disconnect',() => {
+		logger.logDeb('User with sessionId ' + sessionId + 'loggout requested');
+		require('./microservices/logout.js').exec(sessionId);
 	});
 }
 
