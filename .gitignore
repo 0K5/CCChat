@@ -59,3 +59,9 @@ typings/
 
 # ignore tmp folder
 /tmp/*/**
+
+# ignore configpassw
+configpassw.txt
+
+# ignore unenc configfile
+config.json

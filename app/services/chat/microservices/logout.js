@@ -27,6 +27,7 @@ function exec(sessionId, data) {
     db.update('users', {
         sid: sessionId
     }, {
+		sid: '',
 		loggedIn: data && data.isLogout ? 0 : 1,
     }, new userLoaded(sessionId, data).callback);
 }

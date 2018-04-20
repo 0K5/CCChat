@@ -79,10 +79,10 @@ $(document).ready(function() {
     }
 
     function messageNotification(token) {
-        let notification = $('#contacts').find('#' + token).find('.notification');
-        let current = parseInt((notification.val() || '0'));
+        let notification = $('#'+token).find('.notification');
+        let current = parseInt(notification.val());
         notification.val(++current);
-    }
+    };
 
     socket.on('message', function(chat) {
         if ($('#tokenChat').val() === chat.token) {
@@ -240,7 +240,7 @@ $(document).ready(function() {
     function appendChat(chat) {
         let name = chat.name || '',
             token = chat.token || '',
-            notification = chat.notification || '',
+            notification = chat.notification || '0',
             isGroup = chat.isGroup || '';
         if (token && name) {
             let content = '<li style="width:100%">' +

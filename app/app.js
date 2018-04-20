@@ -4,6 +4,7 @@
     let server = undefined;
     let express = require('express')
     let app = express();
+	
 
     logger.logInfo('Setting up App');
     let fs = require('fs-extra');
@@ -90,6 +91,10 @@
     let setUpSessions = (app, server) => {
         require('./modules/sessions.js').init(app, server, setUpSockets);
     };
+	
+	let setUpServer = (app) => {
+		require('./modules/server.js').init(app, setUpSessions);
+	};
 
-    require('./modules/server.js').init(app, setUpSessions);
+	require('./modules/config.js').init(app, setUpServer);
 })();
