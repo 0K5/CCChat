@@ -2,6 +2,10 @@
  *All interactions with mongodb database
  * */
 let logger = require('./logger.js');
+let config = undefined;
+require('./config.js').get((conf) => {
+	config = conf;
+});
 let fs = require('fs');
 let mongoose = require('mongoose');
 let mongodb = require('mongodb').MongoClient;
@@ -12,11 +16,11 @@ let initDatabase = (app, server, callback) => {
     mongoose.Promise = global.Promise;
     if (mongoose.connection.readyState == 0) {
         mongoose
-            .connect('mongodb://feEIRHHR34943fojwlscnlkwKNMCKSP3eio24890u38xlm:ojrKJSCMsekowkcE4038ruiefkmCLfmo5u494u2jdoijcr@ds131989.mlab.com:31989/ccchat');
+            .connect('mongodb://'+config.mongo.user+':'+config.mongo.password+'@'+config.mongo.ds+'.mlab.com:31989/ccchat');
         let mdb = mongoose.connection;
         mdb.on("error", function() {
             logger.logWarn("Couldn't connect to mlab.com. Fallback to local mongodb");
-            mongodb.connect('mongodb://localhost:27017/', function(err, db) {
+            mongodb.connect('mongodb://'+config.app.host+':27017/', function(err, db) {
                 if (err) {
                     logger.logErr("Couldn't connect to local mongodb. Fallback to local filestore");
                 } else {

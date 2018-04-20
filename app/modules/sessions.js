@@ -2,13 +2,17 @@
  * Initializes sessions for application
  * */
 let logger = require('./logger.js');
+let config = undefined;
+require('./config.js').get((conf) => {
+	config = conf;
+});
 let certificates = require('./certificates.js');
 let session = require('express-session');
 let redisStore = require('connect-redis')(session);
 let redis = require('redis');
 let FileStore = require('session-file-store')(session);
 let storage = new FileStore({
-    path: './tmp/sessions/',
+    path: config.session.fallback,
     useAsync: 6479,
     reapInterval: 5000,
     maxAge: 10000
@@ -31,8 +35,8 @@ let client = undefined;
  * */
 let setUpSession = (storage, session, app, server, next) => {
     let sess = session({
-        key: 'CCChat2017',
-        secret: '14gty8i9oph1q45o;pgh3p0[987oui2dh3q2l4iugfrh',
+        key: config.session.key,
+        secret: config.session.secret,
         store: storage,
         saveUninitialized: true,
         resave: true,
@@ -64,9 +68,9 @@ let setUpSessionStorage = (app, server, next) => {
         };
     }
     client = redis.createClient(11379,
-        'redis-11379.c11.us-east-1-2.ec2.cloud.redislabs.com',
+        config.redis.user,
         options);
-    client.auth('UUJKCfW3vEClG6Zh6dvE9FfggYtBcYvi', function(err) {
+    client.auth(config.redis.password, function(err) {
         if (err) {
             logger.logWarn("Connection to redislab couldn't be established");
         }
@@ -76,7 +80,7 @@ let setUpSessionStorage = (app, server, next) => {
         logger.logWarn(e);
         client.end(true);
         client = redis.createClient({
-            host: 'localhost',
+            host: config.app.host,
             port: 6379
         });
         client.on('error', function(e) {
@@ -87,7 +91,7 @@ let setUpSessionStorage = (app, server, next) => {
         });
         client.on('connect', function() {
             storage = new redisStore({
-                host: 'localhost',
+                host: config.app.host,
                 port: 6479,
                 client
             });
@@ -96,7 +100,7 @@ let setUpSessionStorage = (app, server, next) => {
     });
     client.on('connect', function() {
         storage = new redisStore({
-            host: 'localhost',
+            host: config.app.host,
             port: 6479,
             client,
             ttl: 260
